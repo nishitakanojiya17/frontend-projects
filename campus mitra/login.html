@@ -1,0 +1,337 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Mitra — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --navy: #0a1628;
+    --blue: #1a3a6e;
+    --accent: #4f8ef7;
+    --gold: #f5c842;
+    --white: #ffffff;
+    --light: #f0f4ff;
+    --muted: #8899bb;
+    --card: rgba(255,255,255,0.06);
+    --border: rgba(255,255,255,0.12);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--navy);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+
+  /* Animated background */
+  .bg-mesh {
+    position: fixed; inset: 0; z-index: 0;
+    background:
+      radial-gradient(ellipse 80% 60% at 20% 20%, rgba(79,142,247,0.18) 0%, transparent 60%),
+      radial-gradient(ellipse 60% 80% at 80% 80%, rgba(26,58,110,0.5) 0%, transparent 60%),
+      radial-gradient(ellipse 100% 100% at 50% 50%, #0a1628 60%, #0d1e3a 100%);
+  }
+
+  .orb {
+    position: fixed; border-radius: 50%; filter: blur(80px); opacity: 0.25; z-index: 0;
+    animation: drift 12s ease-in-out infinite alternate;
+  }
+  .orb-1 { width: 500px; height: 500px; background: #4f8ef7; top: -150px; left: -100px; animation-delay: 0s; }
+  .orb-2 { width: 400px; height: 400px; background: #1a3a6e; bottom: -100px; right: -100px; animation-delay: -4s; }
+  .orb-3 { width: 300px; height: 300px; background: #f5c842; top: 50%; right: 10%; animation-delay: -8s; opacity: 0.08; }
+
+  @keyframes drift {
+    0% { transform: translate(0,0) scale(1); }
+    100% { transform: translate(30px, 20px) scale(1.1); }
+  }
+
+  /* Grid lines */
+  .grid-lines {
+    position: fixed; inset: 0; z-index: 0;
+    background-image:
+      linear-gradient(rgba(79,142,247,0.04) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(79,142,247,0.04) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .container {
+    position: relative; z-index: 1;
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    max-width: 1000px;
+    width: 95%;
+    min-height: 580px;
+    border-radius: 28px;
+    overflow: hidden;
+    box-shadow: 0 40px 100px rgba(0,0,0,0.6), 0 0 0 1px var(--border);
+    animation: slideUp 0.7s cubic-bezier(0.22,1,0.36,1) forwards;
+    opacity: 0; transform: translateY(40px);
+  }
+
+  @keyframes slideUp {
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  /* Left panel */
+  .left {
+    background: linear-gradient(145deg, #1a3a6e 0%, #0f2347 100%);
+    padding: 50px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    position: relative;
+    overflow: hidden;
+  }
+
+  .left::before {
+    content: '';
+    position: absolute; top: -80px; right: -80px;
+    width: 300px; height: 300px;
+    background: radial-gradient(circle, rgba(79,142,247,0.2) 0%, transparent 70%);
+    border-radius: 50%;
+  }
+
+  .brand { display: flex; align-items: center; gap: 12px; }
+  .brand-icon {
+    width: 44px; height: 44px; border-radius: 12px;
+    background: var(--accent); display: flex; align-items: center; justify-content: center;
+    font-size: 20px; color: white;
+    box-shadow: 0 8px 20px rgba(79,142,247,0.4);
+  }
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 22px; font-weight: 800; color: white; letter-spacing: -0.5px;
+  }
+  .brand-sub { font-size: 11px; color: var(--muted); letter-spacing: 1.5px; text-transform: uppercase; }
+
+  .left-content { margin-top: 40px; }
+  .left-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 36px; font-weight: 800; color: white; line-height: 1.15;
+    margin-bottom: 16px;
+  }
+  .left-title span { color: var(--gold); }
+  .left-desc { font-size: 14px; color: var(--muted); line-height: 1.7; margin-bottom: 36px; }
+
+  .features { display: flex; flex-direction: column; gap: 14px; }
+  .feature {
+    display: flex; align-items: center; gap: 12px;
+    padding: 12px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1px solid rgba(255,255,255,0.08);
+    border-radius: 12px;
+    transition: all 0.3s ease;
+  }
+  .feature:hover { background: rgba(255,255,255,0.09); border-color: rgba(79,142,247,0.3); }
+  .feature-icon { font-size: 18px; min-width: 20px; }
+  .feature-text { font-size: 13px; color: rgba(255,255,255,0.8); font-weight: 500; }
+
+  .left-footer { font-size: 11px; color: var(--muted); margin-top: 30px; }
+
+  /* Right panel */
+  .right {
+    background: rgba(255,255,255,0.97);
+    padding: 50px 44px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+  }
+
+  .login-title { font-size: 28px; font-weight: 700; color: #0a1628; margin-bottom: 6px; }
+  .login-sub { font-size: 14px; color: #7a8aaa; margin-bottom: 32px; }
+
+  /* Role selector */
+  .role-label { font-size: 12px; font-weight: 600; color: #5a6a8a; letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 10px; }
+  .roles {
+    display: grid; grid-template-columns: 1fr 1fr;
+    gap: 10px; margin-bottom: 28px;
+  }
+  .role-btn {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 6px; padding: 14px 10px;
+    border: 2px solid #e8ecf4; border-radius: 14px;
+    background: white; cursor: pointer;
+    transition: all 0.2s ease; font-family: 'DM Sans', sans-serif;
+    color: #5a6a8a; font-size: 12px; font-weight: 600;
+  }
+  .role-btn .role-icon { font-size: 22px; }
+  .role-btn:hover { border-color: var(--accent); background: rgba(79,142,247,0.05); color: var(--accent); }
+  .role-btn.active {
+    border-color: var(--accent); background: rgba(79,142,247,0.08);
+    color: var(--accent);
+    box-shadow: 0 0 0 4px rgba(79,142,247,0.1);
+  }
+
+  /* Form */
+  .form-group { margin-bottom: 18px; }
+  .form-label { font-size: 12px; font-weight: 600; color: #5a6a8a; letter-spacing: 0.5px; display: block; margin-bottom: 7px; }
+  .form-input {
+    width: 100%; padding: 13px 16px;
+    border: 2px solid #e8ecf4; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 14px; color: #0a1628;
+    background: #f8faff;
+    transition: all 0.2s ease; outline: none;
+  }
+  .form-input:focus { border-color: var(--accent); background: white; box-shadow: 0 0 0 4px rgba(79,142,247,0.1); }
+
+  .form-row { display: flex; align-items: center; justify-content: space-between; margin-bottom: 22px; }
+  .check-label { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #7a8aaa; cursor: pointer; }
+  .check-label input { accent-color: var(--accent); }
+  .forgot { font-size: 13px; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .forgot:hover { text-decoration: underline; }
+
+  .btn-login {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #4f8ef7, #1a3a6e);
+    color: white; border: none; border-radius: 12px;
+    font-family: 'DM Sans', sans-serif; font-size: 15px; font-weight: 600;
+    cursor: pointer; letter-spacing: 0.3px;
+    transition: all 0.3s ease;
+    box-shadow: 0 8px 20px rgba(79,142,247,0.35);
+    position: relative; overflow: hidden;
+  }
+  .btn-login::after {
+    content: ''; position: absolute; inset: 0;
+    background: linear-gradient(135deg, rgba(255,255,255,0.15), transparent);
+    opacity: 0; transition: opacity 0.3s;
+  }
+  .btn-login:hover { transform: translateY(-2px); box-shadow: 0 12px 28px rgba(79,142,247,0.45); }
+  .btn-login:hover::after { opacity: 1; }
+  .btn-login:active { transform: translateY(0); }
+
+  .demo-creds {
+    margin-top: 22px; padding: 14px 16px;
+    background: #f0f4ff; border-radius: 12px;
+    border-left: 3px solid var(--accent);
+  }
+  .demo-creds-title { font-size: 11px; font-weight: 700; color: var(--accent); letter-spacing: 0.8px; text-transform: uppercase; margin-bottom: 8px; }
+  .cred-row { display: flex; gap: 8px; font-size: 12px; color: #5a6a8a; margin-bottom: 3px; }
+  .cred-key { font-weight: 600; min-width: 70px; }
+
+  @media (max-width: 700px) {
+    .container { grid-template-columns: 1fr; }
+    .left { display: none; }
+    .right { padding: 40px 28px; }
+  }
+</style>
+</head>
+<body>
+<div class="bg-mesh"></div>
+<div class="grid-lines"></div>
+<div class="orb orb-1"></div>
+<div class="orb orb-2"></div>
+<div class="orb orb-3"></div>
+
+<div class="container">
+  <!-- LEFT -->
+  <div class="left">
+    <div>
+      <div class="brand">
+        <div class="brand-icon">🏛</div>
+        <div>
+          <div class="brand-name">Campus Mitra</div>
+          <div class="brand-sub">IIST · Indore</div>
+        </div>
+      </div>
+      <div class="left-content">
+        <div class="left-title">Your Campus,<br><span>Smarter.</span></div>
+        <div class="left-desc">One unified platform connecting students, faculty, parents & administrators at Indore Institute of Science & Technology.</div>
+        <div class="features">
+          <div class="feature"><span class="feature-icon">📋</span><span class="feature-text">Real-time Attendance Tracking</span></div>
+          <div class="feature"><span class="feature-icon">📚</span><span class="feature-text">Notes & Study Material Hub</span></div>
+          <div class="feature"><span class="feature-icon">🗓</span><span class="feature-text">Live Timetable Management</span></div>
+          <div class="feature"><span class="feature-icon">🔔</span><span class="feature-text">Instant Announcements</span></div>
+        </div>
+      </div>
+    </div>
+    <div class="left-footer">Minor Project — Nishita | VisionX · 2024–25</div>
+  </div>
+
+  <!-- RIGHT -->
+  <div class="right">
+    <div class="login-title">Welcome back 👋</div>
+    <div class="login-sub">Sign in to your Campus Mitra account</div>
+
+    <div class="role-label">Select Your Role</div>
+    <div class="roles">
+      <button class="role-btn active" onclick="setRole('student','student-dashboard.html')" id="role-student">
+        <span class="role-icon">🎓</span> Student
+      </button>
+      <button class="role-btn" onclick="setRole('faculty','faculty-dashboard.html')" id="role-faculty">
+        <span class="role-icon">👩‍🏫</span> Faculty
+      </button>
+      <button class="role-btn" onclick="setRole('parent','parent-dashboard.html')" id="role-parent">
+        <span class="role-icon">👨‍👩‍👧</span> Parent
+      </button>
+      <button class="role-btn" onclick="setRole('admin','admin-dashboard.html')" id="role-admin">
+        <span class="role-icon">🛡</span> Admin
+      </button>
+    </div>
+
+    <div class="form-group">
+      <label class="form-label">Email / ID</label>
+      <input class="form-input" type="text" id="username" placeholder="Enter your email or ID" />
+    </div>
+    <div class="form-group">
+      <label class="form-label">Password</label>
+      <input class="form-input" type="password" id="password" placeholder="••••••••" />
+    </div>
+
+    <div class="form-row">
+      <label class="check-label">
+        <input type="checkbox" checked> Remember me
+      </label>
+      <a href="#" class="forgot">Forgot password?</a>
+    </div>
+
+    <button class="btn-login" onclick="doLogin()">Sign In →</button>
+
+    <div class="demo-creds">
+      <div class="demo-creds-title">🔑 Demo Credentials</div>
+      <div class="cred-row"><span class="cred-key">Student:</span><span>student@iist.ac.in / student123</span></div>
+      <div class="cred-row"><span class="cred-key">Faculty:</span><span>faculty@iist.ac.in / faculty123</span></div>
+      <div class="cred-row"><span class="cred-key">Parent:</span><span>parent@iist.ac.in / parent123</span></div>
+      <div class="cred-row"><span class="cred-key">Admin:</span><span>admin@iist.ac.in / admin123</span></div>
+    </div>
+  </div>
+</div>
+
+<script>
+  const creds = {
+    student: { email: 'student@iist.ac.in', pass: 'student123', dash: 'student-dashboard.html' },
+    faculty: { email: 'faculty@iist.ac.in', pass: 'faculty123', dash: 'faculty-dashboard.html' },
+    parent:  { email: 'parent@iist.ac.in',  pass: 'parent123',  dash: 'parent-dashboard.html'  },
+    admin:   { email: 'admin@iist.ac.in',   pass: 'admin123',   dash: 'admin-dashboard.html'   },
+  };
+  let currentRole = 'student';
+
+  function setRole(role) {
+    currentRole = role;
+    document.querySelectorAll('.role-btn').forEach(b => b.classList.remove('active'));
+    document.getElementById('role-' + role).classList.add('active');
+    document.getElementById('username').placeholder = creds[role].email;
+  }
+
+  function doLogin() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value.trim();
+    const c = creds[currentRole];
+    if ((u === c.email || u === '') && (p === c.pass || p === '')) {
+      window.location.href = c.dash;
+    } else {
+      alert('Invalid credentials! Use the demo credentials shown below.');
+    }
+  }
+
+  document.addEventListener('keydown', e => { if (e.key === 'Enter') doLogin(); });
+</script>
+</body>
+</html>

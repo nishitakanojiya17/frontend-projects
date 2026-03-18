@@ -1,0 +1,492 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Mitra — Student Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f4f7ff;
+    --sidebar: #0a1628;
+    --accent: #4f8ef7;
+    --accent2: #7c5cfc;
+    --gold: #f5c842;
+    --green: #22c55e;
+    --red: #ef4444;
+    --orange: #f97316;
+    --white: #ffffff;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --sidebar-width: 240px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  /* SIDEBAR */
+  .sidebar {
+    width: var(--sidebar-width); background: var(--sidebar);
+    position: fixed; top: 0; left: 0; height: 100vh;
+    display: flex; flex-direction: column;
+    padding: 28px 0; z-index: 100;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  }
+  .sidebar-brand {
+    padding: 0 24px 28px;
+    border-bottom: 1px solid rgba(255,255,255,0.08);
+  }
+  .brand-row { display: flex; align-items: center; gap: 10px; }
+  .brand-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .brand-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 800; color: white; }
+  .brand-role { font-size: 10px; color: rgba(255,255,255,0.4); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+
+  .nav-section { padding: 20px 16px 8px; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.3); font-weight: 600; }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px;
+    padding: 11px 24px; cursor: pointer; border-radius: 0;
+    font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.55);
+    transition: all 0.2s ease; text-decoration: none;
+    border-left: 3px solid transparent;
+    margin: 1px 0;
+  }
+  .nav-item:hover { color: white; background: rgba(255,255,255,0.06); }
+  .nav-item.active { color: white; background: rgba(79,142,247,0.15); border-left-color: var(--accent); }
+  .nav-item .nav-icon { font-size: 16px; min-width: 20px; }
+  .nav-badge { margin-left: auto; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+
+  .sidebar-footer {
+    margin-top: auto; padding: 20px 24px 0;
+    border-top: 1px solid rgba(255,255,255,0.08);
+  }
+  .user-card { display: flex; align-items: center; gap: 10px; }
+  .user-avatar {
+    width: 38px; height: 38px; border-radius: 50%;
+    background: linear-gradient(135deg, var(--accent), var(--accent2));
+    display: flex; align-items: center; justify-content: center;
+    font-size: 14px; font-weight: 700; color: white;
+  }
+  .user-name { font-size: 13px; font-weight: 600; color: white; }
+  .user-id { font-size: 11px; color: rgba(255,255,255,0.4); }
+  .logout-btn {
+    margin-left: auto; background: none; border: none; cursor: pointer;
+    color: rgba(255,255,255,0.3); font-size: 16px; padding: 4px;
+    transition: color 0.2s;
+  }
+  .logout-btn:hover { color: var(--red); }
+
+  /* MAIN */
+  .main { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; min-height: 100vh; }
+
+  /* TOPBAR */
+  .topbar {
+    background: white; padding: 16px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid var(--border);
+    position: sticky; top: 0; z-index: 50;
+  }
+  .topbar-left { }
+  .page-title { font-size: 22px; font-weight: 700; color: var(--text); }
+  .page-sub { font-size: 13px; color: var(--muted); }
+  .topbar-right { display: flex; align-items: center; gap: 16px; }
+  .topbar-date { font-size: 12px; color: var(--muted); }
+  .notif-btn {
+    width: 38px; height: 38px; border-radius: 10px;
+    background: var(--bg); border: 1px solid var(--border);
+    display: flex; align-items: center; justify-content: center;
+    cursor: pointer; position: relative; font-size: 16px;
+    transition: background 0.2s;
+  }
+  .notif-btn:hover { background: var(--accent); }
+  .notif-dot { position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; background: var(--red); border-radius: 50%; border: 1.5px solid white; }
+
+  /* CONTENT */
+  .content { padding: 28px 32px; flex: 1; }
+
+  /* HERO CARD */
+  .hero-card {
+    background: linear-gradient(135deg, #0a1628 0%, #1a3a6e 60%, #4f8ef7 100%);
+    border-radius: 20px; padding: 28px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; position: relative; overflow: hidden;
+  }
+  .hero-card::before {
+    content: ''; position: absolute;
+    width: 200px; height: 200px; border-radius: 50%;
+    background: rgba(255,255,255,0.05); right: 80px; top: -60px;
+  }
+  .hero-card::after {
+    content: ''; position: absolute;
+    width: 150px; height: 150px; border-radius: 50%;
+    background: rgba(255,255,255,0.04); right: 180px; bottom: -50px;
+  }
+  .hero-left { }
+  .hero-greeting { font-size: 13px; color: rgba(255,255,255,0.6); margin-bottom: 4px; }
+  .hero-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; color: white; margin-bottom: 6px; }
+  .hero-detail { font-size: 13px; color: rgba(255,255,255,0.7); }
+  .hero-right { display: flex; gap: 20px; position: relative; z-index: 1; }
+  .hero-stat {
+    background: rgba(255,255,255,0.1); backdrop-filter: blur(10px);
+    border: 1px solid rgba(255,255,255,0.15);
+    border-radius: 14px; padding: 16px 20px; text-align: center; min-width: 90px;
+  }
+  .hero-stat-val { font-size: 26px; font-weight: 700; color: white; }
+  .hero-stat-label { font-size: 11px; color: rgba(255,255,255,0.6); margin-top: 2px; }
+
+  /* GRID */
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 24px; }
+  .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 24px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+  /* STAT CARDS */
+  .stat-card {
+    background: var(--card); border-radius: 16px; padding: 20px 22px;
+    border: 1px solid var(--border);
+    display: flex; align-items: center; gap: 14px;
+    transition: transform 0.2s, box-shadow 0.2s;
+  }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .stat-icon {
+    width: 48px; height: 48px; border-radius: 14px;
+    display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0;
+  }
+  .stat-info { flex: 1; }
+  .stat-val { font-size: 24px; font-weight: 700; color: var(--text); }
+  .stat-name { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stat-trend { font-size: 11px; font-weight: 600; margin-top: 4px; }
+  .trend-up { color: var(--green); }
+  .trend-down { color: var(--red); }
+
+  /* SECTION CARD */
+  .section-card {
+    background: var(--card); border-radius: 16px; padding: 22px;
+    border: 1px solid var(--border);
+  }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .section-title { font-size: 15px; font-weight: 700; color: var(--text); }
+  .section-link { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .section-link:hover { text-decoration: underline; }
+
+  /* TIMETABLE */
+  .timetable { display: flex; flex-direction: column; gap: 10px; }
+  .tt-item {
+    display: flex; align-items: center; gap: 14px;
+    padding: 12px 14px; border-radius: 12px; background: var(--bg);
+    border: 1px solid var(--border);
+    transition: all 0.2s;
+  }
+  .tt-item:hover { border-color: var(--accent); background: rgba(79,142,247,0.04); }
+  .tt-time { font-size: 12px; font-weight: 700; color: var(--accent); min-width: 80px; }
+  .tt-subject { font-size: 13px; font-weight: 600; color: var(--text); flex: 1; }
+  .tt-room { font-size: 11px; color: var(--muted); }
+  .tt-tag {
+    font-size: 10px; font-weight: 700; padding: 3px 9px;
+    border-radius: 20px; letter-spacing: 0.5px; text-transform: uppercase;
+  }
+  .tag-theory { background: rgba(79,142,247,0.12); color: var(--accent); }
+  .tag-lab { background: rgba(124,92,252,0.12); color: var(--accent2); }
+  .tag-now { background: rgba(34,197,94,0.12); color: var(--green); }
+
+  /* ATTENDANCE BARS */
+  .att-list { display: flex; flex-direction: column; gap: 14px; }
+  .att-item { }
+  .att-header { display: flex; justify-content: space-between; margin-bottom: 6px; }
+  .att-subject { font-size: 13px; font-weight: 600; color: var(--text); }
+  .att-pct { font-size: 13px; font-weight: 700; }
+  .att-bar { height: 8px; border-radius: 20px; background: var(--border); overflow: hidden; }
+  .att-fill { height: 100%; border-radius: 20px; transition: width 1s ease; }
+  .att-good { background: linear-gradient(90deg, var(--green), #16a34a); }
+  .att-warn { background: linear-gradient(90deg, var(--orange), #dc8a0d); }
+  .att-bad  { background: linear-gradient(90deg, var(--red), #dc2626); }
+
+  /* NOTICES */
+  .notice-list { display: flex; flex-direction: column; gap: 10px; }
+  .notice-item {
+    padding: 12px 14px; border-radius: 12px; background: var(--bg);
+    border-left: 3px solid var(--accent);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--accent);
+  }
+  .notice-title { font-size: 13px; font-weight: 600; color: var(--text); margin-bottom: 3px; }
+  .notice-meta { font-size: 11px; color: var(--muted); }
+  .notice-urgent { border-left-color: var(--red); }
+  .notice-info { border-left-color: var(--gold); }
+
+  /* NOTES */
+  .notes-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .note-card {
+    padding: 14px; border-radius: 12px; background: var(--bg);
+    border: 1px solid var(--border); cursor: pointer;
+    transition: all 0.2s;
+  }
+  .note-card:hover { border-color: var(--accent); transform: translateY(-2px); box-shadow: 0 4px 12px rgba(0,0,0,0.06); }
+  .note-icon { font-size: 22px; margin-bottom: 8px; }
+  .note-name { font-size: 12px; font-weight: 700; color: var(--text); margin-bottom: 3px; }
+  .note-meta { font-size: 11px; color: var(--muted); }
+
+  /* QUICK ACTIONS */
+  .actions-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+  .action-btn {
+    display: flex; flex-direction: column; align-items: center;
+    gap: 8px; padding: 18px; border-radius: 14px;
+    background: var(--bg); border: 1px solid var(--border);
+    cursor: pointer; transition: all 0.2s; text-align: center;
+  }
+  .action-btn:hover { border-color: var(--accent); background: rgba(79,142,247,0.06); transform: translateY(-2px); }
+  .action-icon { font-size: 24px; }
+  .action-label { font-size: 12px; font-weight: 600; color: var(--text); }
+</style>
+</head>
+<body>
+
+<!-- SIDEBAR -->
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-row">
+      <div class="brand-icon">🏛</div>
+      <div>
+        <div class="brand-name">Campus Mitra</div>
+        <div class="brand-role">Student Portal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-section">Main</div>
+  <a class="nav-item active" href="#"><span class="nav-icon">🏠</span> Dashboard</a>
+  <a class="nav-item" href="#"><span class="nav-icon">📋</span> Attendance <span class="nav-badge">75%</span></a>
+  <a class="nav-item" href="#"><span class="nav-icon">🗓</span> Timetable</a>
+  <a class="nav-item" href="#"><span class="nav-icon">📚</span> Study Materials</a>
+  <a class="nav-item" href="#"><span class="nav-icon">📝</span> Assignments <span class="nav-badge">3</span></a>
+
+  <div class="nav-section">Academic</div>
+  <a class="nav-item" href="#"><span class="nav-icon">📊</span> Results</a>
+  <a class="nav-item" href="#"><span class="nav-icon">🔔</span> Notices <span class="nav-badge">2</span></a>
+  <a class="nav-item" href="#"><span class="nav-icon">💬</span> Chat Support</a>
+
+  <div class="nav-section">Settings</div>
+  <a class="nav-item" href="#"><span class="nav-icon">👤</span> My Profile</a>
+  <a class="nav-item" href="login.html"><span class="nav-icon">🚪</span> Logout</a>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">RS</div>
+      <div>
+        <div class="user-name">Rahul Sharma</div>
+        <div class="user-id">CSE-4B · 2022CSE045</div>
+      </div>
+      <button class="logout-btn" onclick="window.location='login.html'">⏻</button>
+    </div>
+  </div>
+</aside>
+
+<!-- MAIN -->
+<main class="main">
+  <div class="topbar">
+    <div class="topbar-left">
+      <div class="page-title">Student Dashboard</div>
+      <div class="page-sub">Welcome back, Rahul! Here's your academic overview.</div>
+    </div>
+    <div class="topbar-right">
+      <div class="topbar-date" id="dateDisplay"></div>
+      <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <!-- HERO -->
+    <div class="hero-card">
+      <div class="hero-left">
+        <div class="hero-greeting">Good Morning ☀️</div>
+        <div class="hero-name">Rahul Sharma</div>
+        <div class="hero-detail">B.Tech CSE · 4th Semester · Section B &nbsp;|&nbsp; Enroll No: 2022CSE045</div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat"><div class="hero-stat-val">75%</div><div class="hero-stat-label">Attendance</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">6</div><div class="hero-stat-label">Subjects</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">3</div><div class="hero-stat-label">Pending</div></div>
+      </div>
+    </div>
+
+    <!-- STAT CARDS -->
+    <div class="grid-3" style="margin-bottom: 24px;">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(79,142,247,0.1)">📋</div>
+        <div class="stat-info">
+          <div class="stat-val">75%</div>
+          <div class="stat-name">Overall Attendance</div>
+          <div class="stat-trend trend-down">⚠ Below 80% threshold</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(34,197,94,0.1)">📝</div>
+        <div class="stat-info">
+          <div class="stat-val">3/5</div>
+          <div class="stat-name">Assignments Done</div>
+          <div class="stat-trend trend-up">✓ 2 pending</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(245,200,66,0.1)">🏆</div>
+        <div class="stat-info">
+          <div class="stat-val">8.4</div>
+          <div class="stat-name">Current CGPA</div>
+          <div class="stat-trend trend-up">↑ +0.2 this sem</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMETABLE + ATTENDANCE -->
+    <div class="grid-2-1">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📅 Today's Timetable — Monday</div>
+          <a href="#" class="section-link">Full Schedule →</a>
+        </div>
+        <div class="timetable">
+          <div class="tt-item">
+            <div class="tt-time">9:00 – 10:00</div>
+            <div>
+              <div class="tt-subject">Data Structures & Algorithms</div>
+              <div class="tt-room">Room 302 · Prof. Rajiv Kumar</div>
+            </div>
+            <span class="tt-tag tag-now">Now</span>
+          </div>
+          <div class="tt-item">
+            <div class="tt-time">10:00 – 11:00</div>
+            <div>
+              <div class="tt-subject">Operating Systems</div>
+              <div class="tt-room">Room 201 · Prof. Meena Joshi</div>
+            </div>
+            <span class="tt-tag tag-theory">Theory</span>
+          </div>
+          <div class="tt-item">
+            <div class="tt-time">11:15 – 1:15</div>
+            <div>
+              <div class="tt-subject">Computer Networks Lab</div>
+              <div class="tt-room">Lab 104 · Prof. Amit Singh</div>
+            </div>
+            <span class="tt-tag tag-lab">Lab</span>
+          </div>
+          <div class="tt-item">
+            <div class="tt-time">2:00 – 3:00</div>
+            <div>
+              <div class="tt-subject">Database Management System</div>
+              <div class="tt-room">Room 402 · Prof. Priya Sharma</div>
+            </div>
+            <span class="tt-tag tag-theory">Theory</span>
+          </div>
+          <div class="tt-item">
+            <div class="tt-time">3:00 – 4:00</div>
+            <div>
+              <div class="tt-subject">Software Engineering</div>
+              <div class="tt-room">Room 301 · Prof. Vikram Rao</div>
+            </div>
+            <span class="tt-tag tag-theory">Theory</span>
+          </div>
+        </div>
+      </div>
+
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📊 Attendance</div>
+          <a href="#" class="section-link">Details →</a>
+        </div>
+        <div class="att-list">
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">Data Structures</span><span class="att-pct" style="color:var(--green)">88%</span></div>
+            <div class="att-bar"><div class="att-fill att-good" style="width:88%"></div></div>
+          </div>
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">Operating Systems</span><span class="att-pct" style="color:var(--green)">82%</span></div>
+            <div class="att-bar"><div class="att-fill att-good" style="width:82%"></div></div>
+          </div>
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">DBMS</span><span class="att-pct" style="color:var(--orange)">72%</span></div>
+            <div class="att-bar"><div class="att-fill att-warn" style="width:72%"></div></div>
+          </div>
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">CN Lab</span><span class="att-pct" style="color:var(--orange)">70%</span></div>
+            <div class="att-bar"><div class="att-fill att-warn" style="width:70%"></div></div>
+          </div>
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">Software Engg.</span><span class="att-pct" style="color:var(--red)">63%</span></div>
+            <div class="att-bar"><div class="att-fill att-bad" style="width:63%"></div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTES + NOTICES + QUICK ACTIONS -->
+    <div class="grid-2" style="margin-top: 0;">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📚 Recent Notes</div>
+          <a href="#" class="section-link">All Materials →</a>
+        </div>
+        <div class="notes-grid">
+          <div class="note-card">
+            <div class="note-icon">📄</div>
+            <div class="note-name">DSA — Unit 3 Trees</div>
+            <div class="note-meta">Prof. Kumar · 2 days ago</div>
+          </div>
+          <div class="note-card">
+            <div class="note-icon">📄</div>
+            <div class="note-name">OS — Memory Mgmt.</div>
+            <div class="note-meta">Prof. Joshi · 3 days ago</div>
+          </div>
+          <div class="note-card">
+            <div class="note-icon">📊</div>
+            <div class="note-name">DBMS — ER Diagrams</div>
+            <div class="note-meta">Prof. Sharma · 5 days ago</div>
+          </div>
+          <div class="note-card">
+            <div class="note-icon">🔬</div>
+            <div class="note-name">CN Lab Manual #4</div>
+            <div class="note-meta">Prof. Singh · 1 week ago</div>
+          </div>
+        </div>
+      </div>
+
+      <div>
+        <div class="section-card" style="margin-bottom:18px">
+          <div class="section-header">
+            <div class="section-title">📢 Notices</div>
+            <a href="#" class="section-link">All →</a>
+          </div>
+          <div class="notice-list">
+            <div class="notice-item notice-urgent">
+              <div class="notice-title">🚨 Mid-Semester Exam Schedule Released</div>
+              <div class="notice-meta">Admin · Today, 9:00 AM</div>
+            </div>
+            <div class="notice-item notice-info">
+              <div class="notice-title">⚠️ Attendance Shortage Warning</div>
+              <div class="notice-meta">Academic Office · Yesterday</div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-title">📋 Assignment 4 — DBMS Due Friday</div>
+              <div class="notice-meta">Prof. Sharma · 2 days ago</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-title" style="margin-bottom:14px">⚡ Quick Actions</div>
+          <div class="actions-grid">
+            <div class="action-btn"><div class="action-icon">📥</div><div class="action-label">Download Notes</div></div>
+            <div class="action-btn"><div class="action-icon">📊</div><div class="action-label">View Results</div></div>
+            <div class="action-btn"><div class="action-icon">📝</div><div class="action-label">Submit Assignment</div></div>
+            <div class="action-btn" onclick="window.location='login.html'"><div class="action-icon">🚪</div><div class="action-label">Logout</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const d = new Date();
+  document.getElementById('dateDisplay').textContent = d.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+</script>
+</body>
+</html>
