@@ -1,0 +1,383 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Mitra — Parent Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f4f7ff;
+    --sidebar: #1a0a2e;
+    --accent: #7c5cfc;
+    --accent2: #a78bfa;
+    --green: #22c55e;
+    --red: #ef4444;
+    --orange: #f97316;
+    --gold: #f5c842;
+    --blue: #4f8ef7;
+    --white: #ffffff;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --sidebar-width: 240px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  .sidebar { width: var(--sidebar-width); background: var(--sidebar); position: fixed; top: 0; left: 0; height: 100vh; display: flex; flex-direction: column; padding: 28px 0; z-index: 100; box-shadow: 4px 0 24px rgba(0,0,0,0.15); }
+  .sidebar-brand { padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .brand-row { display: flex; align-items: center; gap: 10px; }
+  .brand-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .brand-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 800; color: white; }
+  .brand-role { font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+  .nav-section { padding: 20px 16px 8px; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.25); font-weight: 600; }
+  .nav-item { display: flex; align-items: center; gap: 12px; padding: 11px 24px; cursor: pointer; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.5); transition: all 0.2s; text-decoration: none; border-left: 3px solid transparent; margin: 1px 0; }
+  .nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
+  .nav-item.active { color: white; background: rgba(124,92,252,0.15); border-left-color: var(--accent); }
+  .nav-icon { font-size: 16px; min-width: 20px; }
+  .nav-badge { margin-left: auto; background: var(--red); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+  .sidebar-footer { margin-top: auto; padding: 20px 24px 0; border-top: 1px solid rgba(255,255,255,0.07); }
+  .user-card { display: flex; align-items: center; gap: 10px; }
+  .user-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--accent2)); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white; }
+  .user-name { font-size: 13px; font-weight: 600; color: white; }
+  .user-id { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .logout-btn { margin-left: auto; background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.3); font-size: 16px; transition: color 0.2s; }
+  .logout-btn:hover { color: var(--red); }
+
+  .main { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; }
+  .topbar { background: white; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+  .page-title { font-size: 22px; font-weight: 700; }
+  .page-sub { font-size: 13px; color: var(--muted); }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .topbar-date { font-size: 12px; color: var(--muted); }
+  .notif-btn { width: 38px; height: 38px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; font-size: 16px; }
+  .notif-dot { position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; background: var(--red); border-radius: 50%; border: 1.5px solid white; }
+  .content { padding: 28px 32px; flex: 1; }
+
+  .hero-card {
+    background: linear-gradient(135deg, #1a0a2e 0%, #2d1060 60%, #7c5cfc 100%);
+    border-radius: 20px; padding: 28px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; position: relative; overflow: hidden;
+  }
+  .hero-card::before { content:''; position:absolute; width:250px; height:250px; border-radius:50%; background:rgba(255,255,255,0.04); right:60px; top:-80px; }
+  .hero-greeting { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 4px; }
+  .hero-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; color: white; margin-bottom: 6px; }
+  .hero-detail { font-size: 13px; color: rgba(255,255,255,0.65); }
+  .hero-right { display: flex; gap: 16px; position: relative; z-index: 1; }
+  .hero-stat { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 14px; padding: 14px 18px; text-align: center; min-width: 80px; }
+  .hero-stat-val { font-size: 24px; font-weight: 700; color: white; }
+  .hero-stat-label { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 24px; }
+  .grid-2-1 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; margin-bottom: 24px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+  .stat-card { background: white; border-radius: 16px; padding: 20px 22px; border: 1px solid var(--border); display: flex; align-items: center; gap: 14px; transition: transform 0.2s, box-shadow 0.2s; }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .stat-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .stat-val { font-size: 24px; font-weight: 700; }
+  .stat-name { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stat-trend { font-size: 11px; font-weight: 600; margin-top: 4px; }
+  .trend-up { color: var(--green); }
+  .trend-down { color: var(--red); }
+  .trend-warn { color: var(--orange); }
+
+  .section-card { background: white; border-radius: 16px; padding: 22px; border: 1px solid var(--border); }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .section-title { font-size: 15px; font-weight: 700; }
+  .section-link { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 500; }
+
+  /* Child card */
+  .child-profile {
+    display: flex; align-items: center; gap: 18px;
+    padding: 20px; background: var(--bg); border-radius: 16px;
+    border: 1px solid var(--border); margin-bottom: 24px;
+  }
+  .child-avatar { width: 64px; height: 64px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 24px; font-weight: 700; color: white; flex-shrink: 0; }
+  .child-name { font-size: 18px; font-weight: 700; color: var(--text); }
+  .child-detail { font-size: 13px; color: var(--muted); margin-top: 3px; }
+  .child-tags { display: flex; gap: 8px; margin-top: 8px; }
+  .child-tag { padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .tag-sem { background: rgba(79,142,247,0.12); color: var(--blue); }
+  .tag-sec { background: rgba(124,92,252,0.12); color: var(--accent); }
+  .tag-cgpa { background: rgba(34,197,94,0.12); color: var(--green); }
+  .child-stats { margin-left: auto; display: flex; gap: 16px; }
+  .child-stat { text-align: center; }
+  .child-stat-val { font-size: 22px; font-weight: 700; color: var(--text); }
+  .child-stat-label { font-size: 11px; color: var(--muted); }
+
+  /* Subject attendance */
+  .att-list { display: flex; flex-direction: column; gap: 14px; }
+  .att-item {}
+  .att-header { display: flex; justify-content: space-between; margin-bottom: 6px; align-items: center; }
+  .att-subject { font-size: 13px; font-weight: 600; }
+  .att-pct { font-size: 13px; font-weight: 700; }
+  .att-bar { height: 8px; border-radius: 20px; background: var(--border); overflow: hidden; }
+  .att-fill { height: 100%; border-radius: 20px; }
+  .att-good { background: linear-gradient(90deg, var(--green), #16a34a); }
+  .att-warn { background: linear-gradient(90deg, var(--orange), #dc8a0d); }
+  .att-bad  { background: linear-gradient(90deg, var(--red), #dc2626); }
+  .att-warning { display: flex; gap: 6px; align-items: center; margin-top: 4px; font-size: 11px; font-weight: 600; color: var(--red); }
+
+  /* Notices */
+  .notice-list { display: flex; flex-direction: column; gap: 10px; }
+  .notice-item { padding: 12px 14px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); border-left: 3px solid var(--accent); }
+  .notice-item.urgent { border-left-color: var(--red); }
+  .notice-item.warn { border-left-color: var(--orange); }
+  .notice-title { font-size: 13px; font-weight: 600; margin-bottom: 3px; }
+  .notice-meta { font-size: 11px; color: var(--muted); }
+
+  /* Results */
+  .result-table { width: 100%; border-collapse: collapse; }
+  .result-table th { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; border-bottom: 2px solid var(--border); text-align: left; }
+  .result-table td { padding: 11px 12px; border-bottom: 1px solid var(--border); font-size: 13px; }
+  .result-table tr:last-child td { border-bottom: none; }
+  .grade-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .grade-a { background: rgba(34,197,94,0.12); color: var(--green); }
+  .grade-b { background: rgba(79,142,247,0.12); color: var(--blue); }
+  .grade-c { background: rgba(249,115,22,0.12); color: var(--orange); }
+
+  /* Contact teacher */
+  .teacher-list { display: flex; flex-direction: column; gap: 10px; }
+  .teacher-item { display: flex; align-items: center; gap: 12px; padding: 12px 14px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); }
+  .teacher-avatar { width: 36px; height: 36px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), var(--blue)); display: flex; align-items: center; justify-content: center; font-size: 12px; font-weight: 700; color: white; flex-shrink: 0; }
+  .teacher-name { font-size: 13px; font-weight: 600; }
+  .teacher-subject { font-size: 11px; color: var(--muted); }
+  .teacher-contact { margin-left: auto; padding: 5px 12px; background: rgba(124,92,252,0.1); color: var(--accent); border: 1px solid rgba(124,92,252,0.2); border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-row">
+      <div class="brand-icon">🏛</div>
+      <div>
+        <div class="brand-name">Campus Mitra</div>
+        <div class="brand-role">Parent Portal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-section">Monitor</div>
+  <a class="nav-item active" href="#"><span class="nav-icon">🏠</span> Dashboard</a>
+  <a class="nav-item" href="#"><span class="nav-icon">📋</span> Attendance Report</a>
+  <a class="nav-item" href="#"><span class="nav-icon">🏆</span> Academic Results</a>
+  <a class="nav-item" href="#"><span class="nav-icon">🗓</span> Timetable</a>
+
+  <div class="nav-section">Communication</div>
+  <a class="nav-item" href="#"><span class="nav-icon">🔔</span> Notices <span class="nav-badge">3</span></a>
+  <a class="nav-item" href="#"><span class="nav-icon">👩‍🏫</span> Contact Faculty</a>
+  <a class="nav-item" href="#"><span class="nav-icon">📊</span> Progress Report</a>
+
+  <div class="nav-section">Navigation</div>
+  <a class="nav-item" href="index.html"><span class="nav-icon">🌐</span> Public Site</a>
+
+  <div class="nav-section">Account</div>
+  <a class="nav-item" href="#"><span class="nav-icon">👤</span> My Profile</a>
+  <a class="nav-item" href="login.html"><span class="nav-icon">🚪</span> Logout</a>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">SV</div>
+      <div>
+        <div class="user-name">Sunita Verma</div>
+        <div class="user-id">Parent · Rahul's Guardian</div>
+      </div>
+      <button class="logout-btn" onclick="window.location='login.html'">⏻</button>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">Parent Dashboard</div>
+      <div class="page-sub">Monitor your child's academic progress at IIST.</div>
+    </div>
+    <div class="topbar-right">
+      <a href="login.html" style="font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;transition:all 0.2s;" onmouseover="this.style.background='var(--accent)';this.style.color='white';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='';this.style.color='var(--muted)';this.style.borderColor='var(--border)'">⏻ Logout</a>
+      <div class="topbar-date" id="dateDisplay"></div>
+      <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="hero-card">
+      <div>
+        <div class="hero-greeting">Welcome, Sunita Ji 🙏</div>
+        <div class="hero-name">Child Progress Overview</div>
+        <div class="hero-detail">Monitoring: Rahul Sharma &nbsp;|&nbsp; B.Tech CSE · 4th Semester, IIST Indore</div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat"><div class="hero-stat-val">75%</div><div class="hero-stat-label">Attendance</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">8.4</div><div class="hero-stat-label">CGPA</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">3</div><div class="hero-stat-label">Pending</div></div>
+      </div>
+    </div>
+
+    <!-- CHILD PROFILE -->
+    <div class="child-profile">
+      <div class="child-avatar">RS</div>
+      <div>
+        <div class="child-name">Rahul Sharma</div>
+        <div class="child-detail">Enroll No: 2022CSE045 &nbsp;|&nbsp; Date of Birth: 12 March 2004</div>
+        <div class="child-tags">
+          <span class="child-tag tag-sem">B.Tech CSE — Sem 4</span>
+          <span class="child-tag tag-sec">Section B</span>
+          <span class="child-tag tag-cgpa">CGPA: 8.4</span>
+        </div>
+      </div>
+      <div class="child-stats">
+        <div class="child-stat"><div class="child-stat-val" style="color:var(--orange)">75%</div><div class="child-stat-label">Attendance</div></div>
+        <div class="child-stat"><div class="child-stat-val" style="color:var(--green)">8.4</div><div class="child-stat-label">CGPA</div></div>
+        <div class="child-stat"><div class="child-stat-val" style="color:var(--blue)">6</div><div class="child-stat-label">Subjects</div></div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(249,115,22,0.1)">📋</div>
+        <div>
+          <div class="stat-val" style="color:var(--orange)">75%</div>
+          <div class="stat-name">Overall Attendance</div>
+          <div class="stat-trend trend-warn">⚠ Below 80% — Action needed</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(34,197,94,0.1)">🏆</div>
+        <div>
+          <div class="stat-val" style="color:var(--green)">8.4</div>
+          <div class="stat-name">Current CGPA</div>
+          <div class="stat-trend trend-up">↑ +0.2 this semester</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(239,68,68,0.1)">🚨</div>
+        <div>
+          <div class="stat-val" style="color:var(--red)">2</div>
+          <div class="stat-name">Shortage Alerts</div>
+          <div class="stat-trend trend-down">SE & DBMS critical</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2-1">
+      <!-- ATTENDANCE DETAILS -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📊 Subject-wise Attendance</div>
+          <a href="#" class="section-link">Full Report →</a>
+        </div>
+        <div class="att-list">
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">Data Structures & Algorithms</span><span class="att-pct" style="color:var(--green)">88%</span></div>
+            <div class="att-bar"><div class="att-fill att-good" style="width:88%"></div></div>
+          </div>
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">Operating Systems</span><span class="att-pct" style="color:var(--green)">82%</span></div>
+            <div class="att-bar"><div class="att-fill att-good" style="width:82%"></div></div>
+          </div>
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">Database Management System</span><span class="att-pct" style="color:var(--orange)">72%</span></div>
+            <div class="att-bar"><div class="att-fill att-warn" style="width:72%"></div></div>
+            <div class="att-warning">⚠ Needs 8 more classes to reach 75%</div>
+          </div>
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">Computer Networks Lab</span><span class="att-pct" style="color:var(--orange)">70%</span></div>
+            <div class="att-bar"><div class="att-fill att-warn" style="width:70%"></div></div>
+            <div class="att-warning">⚠ Risk of detention in lab</div>
+          </div>
+          <div class="att-item">
+            <div class="att-header"><span class="att-subject">Software Engineering</span><span class="att-pct" style="color:var(--red)">63%</span></div>
+            <div class="att-bar"><div class="att-fill att-bad" style="width:63%"></div></div>
+            <div class="att-warning">🚨 Critical! Detention risk in exams</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTICES + CONTACT -->
+      <div>
+        <div class="section-card" style="margin-bottom:18px">
+          <div class="section-header">
+            <div class="section-title">📢 School Notices</div>
+            <a href="#" class="section-link">All →</a>
+          </div>
+          <div class="notice-list">
+            <div class="notice-item urgent">
+              <div class="notice-title">🚨 Mid-Semester Exam — Nov 15–22</div>
+              <div class="notice-meta">Academic Office · Today</div>
+            </div>
+            <div class="notice-item warn">
+              <div class="notice-title">⚠️ Attendance Shortage — Rahul Sharma</div>
+              <div class="notice-meta">Dept. CSE · Yesterday</div>
+            </div>
+            <div class="notice-item">
+              <div class="notice-title">📋 Parent-Teacher Meeting — Nov 20</div>
+              <div class="notice-meta">Principal Office · 2 days ago</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">👩‍🏫 Contact Teachers</div>
+          </div>
+          <div class="teacher-list">
+            <div class="teacher-item">
+              <div class="teacher-avatar">MJ</div>
+              <div><div class="teacher-name">Prof. Meena Joshi</div><div class="teacher-subject">Operating Systems</div></div>
+              <button class="teacher-contact">📩 Message</button>
+            </div>
+            <div class="teacher-item">
+              <div class="teacher-avatar">PS</div>
+              <div><div class="teacher-name">Prof. Priya Sharma</div><div class="teacher-subject">DBMS</div></div>
+              <button class="teacher-contact">📩 Message</button>
+            </div>
+            <div class="teacher-item">
+              <div class="teacher-avatar">VR</div>
+              <div><div class="teacher-name">Prof. Vikram Rao</div><div class="teacher-subject">Software Engg.</div></div>
+              <button class="teacher-contact">📩 Message</button>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS TABLE -->
+    <div class="section-card">
+      <div class="section-header">
+        <div class="section-title">🏆 Semester Results — Sem 3 (Last Semester)</div>
+        <a href="#" class="section-link">Download Report Card →</a>
+      </div>
+      <table class="result-table">
+        <thead>
+          <tr>
+            <th>Subject</th>
+            <th>Internal (30)</th>
+            <th>External (70)</th>
+            <th>Total (100)</th>
+            <th>Grade</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td>Data Structures</td><td>27</td><td>62</td><td>89</td><td><span class="grade-badge grade-a">A+</span></td></tr>
+          <tr><td>Computer Organization</td><td>24</td><td>58</td><td>82</td><td><span class="grade-badge grade-a">A</span></td></tr>
+          <tr><td>Discrete Mathematics</td><td>22</td><td>55</td><td>77</td><td><span class="grade-badge grade-b">B+</span></td></tr>
+          <tr><td>Theory of Computation</td><td>20</td><td>50</td><td>70</td><td><span class="grade-badge grade-b">B</span></td></tr>
+          <tr><td>Python Programming Lab</td><td>28</td><td>60</td><td>88</td><td><span class="grade-badge grade-a">A+</span></td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</main>
+
+<script>
+  const d = new Date();
+  document.getElementById('dateDisplay').textContent = d.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+</script>
+</body>
+</html>

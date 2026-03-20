@@ -1,0 +1,425 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Mitra — Faculty Dashboard</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --bg: #f4f7ff;
+    --sidebar: #0f1f0f;
+    --sidebar2: #1a3320;
+    --accent: #22c55e;
+    --accent2: #16a34a;
+    --purple: #7c5cfc;
+    --blue: #4f8ef7;
+    --gold: #f5c842;
+    --red: #ef4444;
+    --orange: #f97316;
+    --white: #ffffff;
+    --card: #ffffff;
+    --text: #1e293b;
+    --muted: #64748b;
+    --border: #e2e8f0;
+    --sidebar-width: 240px;
+  }
+  body { font-family: 'DM Sans', sans-serif; background: var(--bg); color: var(--text); display: flex; min-height: 100vh; }
+
+  .sidebar {
+    width: var(--sidebar-width); background: var(--sidebar);
+    position: fixed; top: 0; left: 0; height: 100vh;
+    display: flex; flex-direction: column; padding: 28px 0; z-index: 100;
+    box-shadow: 4px 0 24px rgba(0,0,0,0.15);
+  }
+  .sidebar-brand { padding: 0 24px 28px; border-bottom: 1px solid rgba(255,255,255,0.07); }
+  .brand-row { display: flex; align-items: center; gap: 10px; }
+  .brand-icon { width: 36px; height: 36px; background: var(--accent); border-radius: 10px; display: flex; align-items: center; justify-content: center; font-size: 16px; }
+  .brand-name { font-family: 'Playfair Display', serif; font-size: 16px; font-weight: 800; color: white; }
+  .brand-role { font-size: 10px; color: rgba(255,255,255,0.35); letter-spacing: 1.5px; text-transform: uppercase; margin-top: 2px; }
+  .nav-section { padding: 20px 16px 8px; font-size: 10px; letter-spacing: 1.5px; text-transform: uppercase; color: rgba(255,255,255,0.25); font-weight: 600; }
+  .nav-item {
+    display: flex; align-items: center; gap: 12px; padding: 11px 24px;
+    cursor: pointer; font-size: 14px; font-weight: 500; color: rgba(255,255,255,0.5);
+    transition: all 0.2s; text-decoration: none; border-left: 3px solid transparent; margin: 1px 0;
+  }
+  .nav-item:hover { color: white; background: rgba(255,255,255,0.05); }
+  .nav-item.active { color: white; background: rgba(34,197,94,0.12); border-left-color: var(--accent); }
+  .nav-icon { font-size: 16px; min-width: 20px; }
+  .nav-badge { margin-left: auto; background: var(--accent); color: white; font-size: 10px; font-weight: 700; padding: 2px 7px; border-radius: 20px; }
+  .sidebar-footer { margin-top: auto; padding: 20px 24px 0; border-top: 1px solid rgba(255,255,255,0.07); }
+  .user-card { display: flex; align-items: center; gap: 10px; }
+  .user-avatar { width: 38px; height: 38px; border-radius: 50%; background: linear-gradient(135deg, var(--accent), #0f9e3f); display: flex; align-items: center; justify-content: center; font-size: 14px; font-weight: 700; color: white; }
+  .user-name { font-size: 13px; font-weight: 600; color: white; }
+  .user-id { font-size: 11px; color: rgba(255,255,255,0.35); }
+  .logout-btn { margin-left: auto; background: none; border: none; cursor: pointer; color: rgba(255,255,255,0.3); font-size: 16px; transition: color 0.2s; }
+  .logout-btn:hover { color: var(--red); }
+
+  .main { margin-left: var(--sidebar-width); flex: 1; display: flex; flex-direction: column; }
+  .topbar { background: white; padding: 16px 32px; display: flex; align-items: center; justify-content: space-between; border-bottom: 1px solid var(--border); position: sticky; top: 0; z-index: 50; }
+  .page-title { font-size: 22px; font-weight: 700; }
+  .page-sub { font-size: 13px; color: var(--muted); }
+  .topbar-right { display: flex; align-items: center; gap: 12px; }
+  .topbar-date { font-size: 12px; color: var(--muted); }
+  .notif-btn { width: 38px; height: 38px; border-radius: 10px; background: var(--bg); border: 1px solid var(--border); display: flex; align-items: center; justify-content: center; cursor: pointer; position: relative; font-size: 16px; }
+  .notif-dot { position: absolute; top: 8px; right: 8px; width: 7px; height: 7px; background: var(--red); border-radius: 50%; border: 1.5px solid white; }
+  .content { padding: 28px 32px; flex: 1; }
+
+  .hero-card {
+    background: linear-gradient(135deg, #0f1f0f 0%, #1a4020 60%, #22c55e 100%);
+    border-radius: 20px; padding: 28px 32px;
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 28px; position: relative; overflow: hidden;
+  }
+  .hero-card::before { content:''; position:absolute; width:200px; height:200px; border-radius:50%; background:rgba(255,255,255,0.04); right:80px; top:-60px; }
+  .hero-greeting { font-size: 13px; color: rgba(255,255,255,0.55); margin-bottom: 4px; }
+  .hero-name { font-family: 'Playfair Display', serif; font-size: 26px; font-weight: 800; color: white; margin-bottom: 6px; }
+  .hero-detail { font-size: 13px; color: rgba(255,255,255,0.65); }
+  .hero-right { display: flex; gap: 16px; position: relative; z-index: 1; }
+  .hero-stat { background: rgba(255,255,255,0.1); backdrop-filter: blur(10px); border: 1px solid rgba(255,255,255,0.15); border-radius: 14px; padding: 14px 18px; text-align: center; min-width: 80px; }
+  .hero-stat-val { font-size: 24px; font-weight: 700; color: white; }
+  .hero-stat-label { font-size: 10px; color: rgba(255,255,255,0.55); margin-top: 2px; }
+
+  .grid-3 { display: grid; grid-template-columns: repeat(3,1fr); gap: 18px; margin-bottom: 24px; }
+  .grid-2-1 { display: grid; grid-template-columns: 2fr 1fr; gap: 18px; margin-bottom: 24px; }
+  .grid-2 { display: grid; grid-template-columns: 1fr 1fr; gap: 18px; }
+
+  .stat-card { background: white; border-radius: 16px; padding: 20px 22px; border: 1px solid var(--border); display: flex; align-items: center; gap: 14px; transition: transform 0.2s, box-shadow 0.2s; }
+  .stat-card:hover { transform: translateY(-3px); box-shadow: 0 8px 24px rgba(0,0,0,0.08); }
+  .stat-icon { width: 48px; height: 48px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 22px; flex-shrink: 0; }
+  .stat-val { font-size: 24px; font-weight: 700; }
+  .stat-name { font-size: 12px; color: var(--muted); margin-top: 2px; }
+  .stat-trend { font-size: 11px; font-weight: 600; margin-top: 4px; }
+  .trend-up { color: var(--accent); }
+  .trend-down { color: var(--red); }
+
+  .section-card { background: white; border-radius: 16px; padding: 22px; border: 1px solid var(--border); }
+  .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; }
+  .section-title { font-size: 15px; font-weight: 700; }
+  .section-link { font-size: 12px; color: var(--accent); text-decoration: none; font-weight: 500; }
+  .section-link:hover { text-decoration: underline; }
+
+  /* Attendance marking table */
+  .att-table { width: 100%; border-collapse: collapse; }
+  .att-table th { font-size: 11px; font-weight: 700; color: var(--muted); text-transform: uppercase; letter-spacing: 0.5px; padding: 8px 12px; text-align: left; border-bottom: 2px solid var(--border); }
+  .att-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); font-size: 13px; vertical-align: middle; }
+  .att-table tr:last-child td { border-bottom: none; }
+  .att-table tr:hover td { background: var(--bg); }
+  .status-pill { display: inline-flex; align-items: center; gap: 5px; padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 700; }
+  .pill-present { background: rgba(34,197,94,0.12); color: var(--accent); }
+  .pill-absent { background: rgba(239,68,68,0.12); color: var(--red); }
+  .pill-late { background: rgba(249,115,22,0.12); color: var(--orange); }
+  .mark-btn { padding: 5px 12px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.15s; }
+  .mark-p { background: rgba(34,197,94,0.1); color: var(--accent); border-color: transparent; }
+  .mark-p:hover { background: var(--accent); color: white; }
+  .mark-a { background: rgba(239,68,68,0.1); color: var(--red); border-color: transparent; }
+  .mark-a:hover { background: var(--red); color: white; }
+
+  /* Classes today */
+  .class-list { display: flex; flex-direction: column; gap: 10px; }
+  .class-item { display: flex; align-items: center; gap: 14px; padding: 12px 14px; border-radius: 12px; background: var(--bg); border: 1px solid var(--border); transition: all 0.2s; }
+  .class-item:hover { border-color: var(--accent); }
+  .class-time { font-size: 12px; font-weight: 700; color: var(--accent); min-width: 85px; }
+  .class-info { flex: 1; }
+  .class-name { font-size: 13px; font-weight: 600; }
+  .class-meta { font-size: 11px; color: var(--muted); }
+  .class-count { font-size: 12px; font-weight: 600; background: rgba(34,197,94,0.1); color: var(--accent); padding: 3px 9px; border-radius: 20px; }
+
+  /* Upload */
+  .upload-area { border: 2px dashed var(--border); border-radius: 14px; padding: 24px; text-align: center; cursor: pointer; transition: all 0.2s; }
+  .upload-area:hover { border-color: var(--accent); background: rgba(34,197,94,0.04); }
+  .upload-icon { font-size: 28px; margin-bottom: 8px; }
+  .upload-text { font-size: 13px; font-weight: 600; color: var(--text); }
+  .upload-sub { font-size: 11px; color: var(--muted); margin-top: 4px; }
+  .upload-btn { margin-top: 14px; padding: 9px 20px; background: var(--accent); color: white; border: none; border-radius: 10px; font-size: 13px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+
+  /* Recent uploads */
+  .upload-list { display: flex; flex-direction: column; gap: 9px; margin-top: 14px; }
+  .upload-item { display: flex; align-items: center; gap: 10px; padding: 10px 12px; background: var(--bg); border-radius: 10px; border: 1px solid var(--border); }
+  .upload-item-icon { font-size: 18px; }
+  .upload-item-name { font-size: 12px; font-weight: 600; flex: 1; }
+  .upload-item-meta { font-size: 11px; color: var(--muted); }
+
+  /* Announcements */
+  .post-area { display: flex; flex-direction: column; gap: 10px; }
+  .post-input { width: 100%; padding: 12px 14px; border: 1.5px solid var(--border); border-radius: 12px; font-family: 'DM Sans', sans-serif; font-size: 14px; resize: none; outline: none; transition: border-color 0.2s; }
+  .post-input:focus { border-color: var(--accent); }
+  .post-footer { display: flex; gap: 8px; justify-content: flex-end; }
+  .post-tag { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: white; }
+  .post-send { padding: 7px 18px; border-radius: 8px; border: none; background: var(--accent); color: white; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+</style>
+</head>
+<body>
+
+<aside class="sidebar">
+  <div class="sidebar-brand">
+    <div class="brand-row">
+      <div class="brand-icon">🏛</div>
+      <div>
+        <div class="brand-name">Campus Mitra</div>
+        <div class="brand-role">Faculty Portal</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="nav-section">Teaching</div>
+  <a class="nav-item active" href="#"><span class="nav-icon">🏠</span> Dashboard</a>
+  <a class="nav-item" href="#"><span class="nav-icon">📋</span> Mark Attendance <span class="nav-badge">Today</span></a>
+  <a class="nav-item" href="#"><span class="nav-icon">📚</span> Upload Notes</a>
+  <a class="nav-item" href="#"><span class="nav-icon">📝</span> Assignments</a>
+  <a class="nav-item" href="#"><span class="nav-icon">🗓</span> My Timetable</a>
+
+  <div class="nav-section">Communication</div>
+  <a class="nav-item" href="#"><span class="nav-icon">📢</span> Announcements <span class="nav-badge">2</span></a>
+  <a class="nav-item" href="#"><span class="nav-icon">👥</span> Student List</a>
+  <a class="nav-item" href="#"><span class="nav-icon">📊</span> Reports</a>
+
+  <div class="nav-section">Navigation</div>
+  <a class="nav-item" href="index.html"><span class="nav-icon">🌐</span> Public Site</a>
+
+  <div class="nav-section">Account</div>
+  <a class="nav-item" href="#"><span class="nav-icon">👤</span> My Profile</a>
+  <a class="nav-item" href="login.html"><span class="nav-icon">🚪</span> Logout</a>
+
+  <div class="sidebar-footer">
+    <div class="user-card">
+      <div class="user-avatar">MJ</div>
+      <div>
+        <div class="user-name">Prof. Meena Joshi</div>
+        <div class="user-id">Dept. of CSE · Faculty</div>
+      </div>
+      <button class="logout-btn" onclick="window.location='login.html'">⏻</button>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title">Faculty Dashboard</div>
+      <div class="page-sub">Manage your classes, materials and attendance.</div>
+    </div>
+    <div class="topbar-right">
+      <a href="login.html" style="font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;transition:all 0.2s;" onmouseover="this.style.background='var(--accent)';this.style.color='white';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='';this.style.color='var(--muted)';this.style.borderColor='var(--border)'">⏻ Logout</a>
+      <div class="topbar-date" id="dateDisplay"></div>
+      <div class="notif-btn">🔔<div class="notif-dot"></div></div>
+    </div>
+  </div>
+
+  <div class="content">
+    <div class="hero-card">
+      <div>
+        <div class="hero-greeting">Good Morning 🌿</div>
+        <div class="hero-name">Prof. Meena Joshi</div>
+        <div class="hero-detail">Department of Computer Science &amp; Engineering &nbsp;|&nbsp; Faculty ID: FAC-CSE-017</div>
+      </div>
+      <div class="hero-right">
+        <div class="hero-stat"><div class="hero-stat-val">4</div><div class="hero-stat-label">Classes Today</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">120</div><div class="hero-stat-label">Students</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">18</div><div class="hero-stat-label">Notes Uploaded</div></div>
+        <div class="hero-stat"><div class="hero-stat-val">92%</div><div class="hero-stat-label">Avg. Att.</div></div>
+      </div>
+    </div>
+
+    <div class="grid-3">
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(34,197,94,0.1)">📋</div>
+        <div>
+          <div class="stat-val">3/4</div>
+          <div class="stat-name">Attendance Marked Today</div>
+          <div class="stat-trend trend-up">1 class remaining</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(79,142,247,0.1)">📝</div>
+        <div>
+          <div class="stat-val">48/60</div>
+          <div class="stat-name">Assignments Submitted</div>
+          <div class="stat-trend trend-down">12 not submitted</div>
+        </div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-icon" style="background:rgba(245,200,66,0.1)">📢</div>
+        <div>
+          <div class="stat-val">2</div>
+          <div class="stat-name">Pending Announcements</div>
+          <div class="stat-trend trend-up">Draft saved</div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2-1">
+      <!-- ATTENDANCE MARKING -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📋 Mark Attendance — Operating Systems (CSE 4B)</div>
+          <a href="#" class="section-link">Save All →</a>
+        </div>
+        <table class="att-table">
+          <thead>
+            <tr>
+              <th>Student</th>
+              <th>Enroll No.</th>
+              <th>Status</th>
+              <th>Action</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><strong>Rahul Sharma</strong></td>
+              <td>2022CSE045</td>
+              <td><span class="status-pill pill-present">✓ Present</span></td>
+              <td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td>
+            </tr>
+            <tr>
+              <td><strong>Priya Patel</strong></td>
+              <td>2022CSE046</td>
+              <td><span class="status-pill pill-absent">✗ Absent</span></td>
+              <td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td>
+            </tr>
+            <tr>
+              <td><strong>Aman Gupta</strong></td>
+              <td>2022CSE047</td>
+              <td><span class="status-pill pill-present">✓ Present</span></td>
+              <td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td>
+            </tr>
+            <tr>
+              <td><strong>Sneha Verma</strong></td>
+              <td>2022CSE048</td>
+              <td><span class="status-pill pill-late">⏰ Late</span></td>
+              <td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td>
+            </tr>
+            <tr>
+              <td><strong>Karan Singh</strong></td>
+              <td>2022CSE049</td>
+              <td><span class="status-pill pill-present">✓ Present</span></td>
+              <td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td>
+            </tr>
+          </tbody>
+        </table>
+        <div style="margin-top:14px; display:flex; gap:10px;">
+          <button style="padding:9px 20px; background:var(--accent); color:white; border:none; border-radius:10px; font-size:13px; font-weight:700; cursor:pointer; font-family:'DM Sans',sans-serif;">💾 Save Attendance</button>
+          <button style="padding:9px 20px; background:var(--bg); border:1px solid var(--border); border-radius:10px; font-size:13px; font-weight:600; cursor:pointer; font-family:'DM Sans',sans-serif;">Mark All Present</button>
+        </div>
+      </div>
+
+      <!-- TODAY'S CLASSES -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📅 Today's Classes</div>
+          <a href="#" class="section-link">Full Schedule →</a>
+        </div>
+        <div class="class-list">
+          <div class="class-item">
+            <div class="class-time">9:00–10:00</div>
+            <div class="class-info">
+              <div class="class-name">Operating Systems</div>
+              <div class="class-meta">CSE 4B · Room 201</div>
+            </div>
+            <span class="class-count">58 students</span>
+          </div>
+          <div class="class-item">
+            <div class="class-time">11:00–12:00</div>
+            <div class="class-info">
+              <div class="class-name">OS Lab</div>
+              <div class="class-meta">CSE 4A · Lab 102</div>
+            </div>
+            <span class="class-count">30 students</span>
+          </div>
+          <div class="class-item">
+            <div class="class-time">2:00–3:00</div>
+            <div class="class-info">
+              <div class="class-name">Operating Systems</div>
+              <div class="class-meta">CSE 4A · Room 302</div>
+            </div>
+            <span class="class-count">60 students</span>
+          </div>
+          <div class="class-item">
+            <div class="class-time">3:00–4:00</div>
+            <div class="class-info">
+              <div class="class-name">Research Project Review</div>
+              <div class="class-meta">Seminar Hall</div>
+            </div>
+            <span class="class-count">15 students</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="grid-2">
+      <!-- UPLOAD NOTES -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📚 Upload Study Materials</div>
+          <a href="#" class="section-link">All Materials →</a>
+        </div>
+        <div class="upload-area" ondragover="event.preventDefault()" ondrop="event.preventDefault()">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Drop files here or click to browse</div>
+          <div class="upload-sub">PDF, PPT, DOCX · Max 20MB</div>
+          <button class="upload-btn">Choose File</button>
+        </div>
+        <div class="upload-list">
+          <div class="upload-item">
+            <span class="upload-item-icon">📄</span>
+            <span class="upload-item-name">OS Unit 4 — Virtual Memory.pdf</span>
+            <span class="upload-item-meta">Today</span>
+          </div>
+          <div class="upload-item">
+            <span class="upload-item-icon">📊</span>
+            <span class="upload-item-name">Process Scheduling Slides.pptx</span>
+            <span class="upload-item-meta">Yesterday</span>
+          </div>
+          <div class="upload-item">
+            <span class="upload-item-icon">📄</span>
+            <span class="upload-item-name">OS Lab Manual — Experiment 6.pdf</span>
+            <span class="upload-item-meta">3 days ago</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- POST ANNOUNCEMENT -->
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📢 Post Announcement</div>
+        </div>
+        <div class="post-area">
+          <select style="padding:10px 12px; border:1.5px solid var(--border); border-radius:10px; font-family:'DM Sans',sans-serif; font-size:13px; outline:none; width:100%;">
+            <option>📣 All Students (CSE Dept.)</option>
+            <option>👥 CSE 4A only</option>
+            <option>👥 CSE 4B only</option>
+          </select>
+          <textarea class="post-input" rows="4" placeholder="Type your announcement here...&#10;&#10;e.g. Mid-semester exam on November 15. Syllabus: Unit 1-3..."></textarea>
+          <div class="post-footer">
+            <button class="post-tag">📎 Attach</button>
+            <button class="post-tag">🔴 Urgent</button>
+            <button class="post-send">📢 Post Now</button>
+          </div>
+        </div>
+        <div style="margin-top:16px; padding-top:16px; border-top:1px solid var(--border);">
+          <div style="font-size:12px; font-weight:700; color:var(--muted); text-transform:uppercase; letter-spacing:0.5px; margin-bottom:10px;">Recent Posts</div>
+          <div class="upload-list">
+            <div class="upload-item" style="border-left:3px solid var(--red);">
+              <span class="upload-item-icon">🚨</span>
+              <span class="upload-item-name">Mid-Sem Exam — Nov 15</span>
+              <span class="upload-item-meta">Today</span>
+            </div>
+            <div class="upload-item" style="border-left:3px solid var(--gold);">
+              <span class="upload-item-icon">📋</span>
+              <span class="upload-item-name">Assignment 5 due Friday</span>
+              <span class="upload-item-meta">Yesterday</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</main>
+
+<script>
+  const d = new Date();
+  document.getElementById('dateDisplay').textContent = d.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+</script>
+</body>
+</html>
