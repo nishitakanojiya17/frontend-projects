@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Campus Mitra — Login</title>
+<link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+  :root {
+    --bg: #07091a;
+    --card: #0e1228;
+    --border: rgba(255,255,255,0.08);
+    --text: #f1f5ff;
+    --muted: rgba(255,255,255,0.45);
+  }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--bg);
+    color: var(--text);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .bg-orbs { position: fixed; inset: 0; pointer-events: none; overflow: hidden; }
+  .orb { position: absolute; border-radius: 50%; filter: blur(80px); opacity: 0.22; animation: float 8s ease-in-out infinite; }
+  .orb-1 { width: 500px; height: 500px; background: #4f8ef7; top: -200px; left: -150px; animation-delay: 0s; }
+  .orb-2 { width: 400px; height: 400px; background: #7c5cfc; bottom: -100px; right: -100px; animation-delay: -3s; }
+  .orb-3 { width: 300px; height: 300px; background: #22c55e; top: 50%; left: 60%; animation-delay: -5s; }
+  .orb-4 { width: 200px; height: 200px; background: #f5c842; bottom: 20%; left: 10%; animation-delay: -2s; }
+  @keyframes float {
+    0%,100% { transform: translateY(0) scale(1); }
+    50% { transform: translateY(-30px) scale(1.05); }
+  }
+
+  .bg-grid {
+    position: fixed; inset: 0; pointer-events: none;
+    background-image: linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
+                      linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-size: 60px 60px;
+  }
+
+  .wrapper {
+    position: relative; z-index: 10;
+    width: 100%; max-width: 480px; padding: 24px;
+    animation: fadeUp 0.6s ease both;
+  }
+  @keyframes fadeUp {
+    from { opacity: 0; transform: translateY(24px); }
+    to   { opacity: 1; transform: translateY(0); }
+  }
+
+  .brand { text-align: center; margin-bottom: 36px; }
+  .brand-icon {
+    width: 60px; height: 60px; border-radius: 18px;
+    background: linear-gradient(135deg, #4f8ef7, #7c5cfc);
+    display: inline-flex; align-items: center; justify-content: center;
+    font-size: 28px; margin-bottom: 14px;
+    box-shadow: 0 8px 32px rgba(79,142,247,0.4);
+  }
+  .brand-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 34px; font-weight: 800; color: white;
+    display: block; line-height: 1;
+  }
+  .brand-tagline { font-size: 13px; color: var(--muted); margin-top: 8px; letter-spacing: 0.3px; }
+
+  .login-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 24px;
+    padding: 36px 32px;
+    box-shadow: 0 24px 80px rgba(0,0,0,0.5), 0 1px 0 rgba(255,255,255,0.05) inset;
+  }
+
+  .card-title { font-size: 20px; font-weight: 700; color: var(--text); margin-bottom: 4px; }
+  .card-sub { font-size: 13px; color: var(--muted); margin-bottom: 28px; }
+
+  .role-label {
+    font-size: 11px; font-weight: 700; color: var(--muted);
+    text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 12px; display: block;
+  }
+  .role-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 26px; }
+
+  .role-btn {
+    display: flex; flex-direction: column; align-items: center; justify-content: center;
+    gap: 7px; padding: 16px 10px;
+    background: rgba(255,255,255,0.04);
+    border: 1.5px solid var(--border);
+    border-radius: 14px; cursor: pointer;
+    transition: all 0.2s ease; position: relative; overflow: hidden;
+  }
+  .role-btn::after {
+    content: ''; position: absolute; inset: 0;
+    opacity: 0; transition: opacity 0.2s; border-radius: 12px;
+  }
+  .role-btn:hover { border-color: rgba(255,255,255,0.18); background: rgba(255,255,255,0.07); transform: translateY(-2px); }
+  .role-btn.selected { transform: translateY(-2px); }
+  .role-btn.selected::after { opacity: 0.1; }
+
+  .role-btn[data-role="student"].selected { border-color: #4f8ef7; box-shadow: 0 0 0 3px rgba(79,142,247,0.2); }
+  .role-btn[data-role="student"].selected::after { background: #4f8ef7; }
+  .role-btn[data-role="faculty"].selected { border-color: #22c55e; box-shadow: 0 0 0 3px rgba(34,197,94,0.2); }
+  .role-btn[data-role="faculty"].selected::after { background: #22c55e; }
+  .role-btn[data-role="parent"].selected  { border-color: #7c5cfc; box-shadow: 0 0 0 3px rgba(124,92,252,0.2); }
+  .role-btn[data-role="parent"].selected::after  { background: #7c5cfc; }
+  .role-btn[data-role="admin"].selected   { border-color: #f5c842; box-shadow: 0 0 0 3px rgba(245,200,66,0.2); }
+  .role-btn[data-role="admin"].selected::after   { background: #f5c842; }
+
+  .role-icon { font-size: 26px; position: relative; z-index: 1; }
+  .role-name { font-size: 13px; font-weight: 700; color: var(--text); position: relative; z-index: 1; }
+  .role-desc { font-size: 10px; color: var(--muted); position: relative; z-index: 1; line-height: 1.3; text-align: center; }
+
+  .field { margin-bottom: 16px; }
+  .field label {
+    display: block; font-size: 11px; font-weight: 700;
+    color: var(--muted); text-transform: uppercase; letter-spacing: 1.2px; margin-bottom: 8px;
+  }
+  .field input {
+    width: 100%; padding: 13px 16px;
+    background: rgba(255,255,255,0.05);
+    border: 1.5px solid var(--border);
+    border-radius: 12px; color: white;
+    font-size: 14px; font-family: 'DM Sans', sans-serif;
+    transition: border-color 0.2s, box-shadow 0.2s; outline: none;
+  }
+  .field input::placeholder { color: rgba(255,255,255,0.2); }
+  .field input:focus { border-color: rgba(79,142,247,0.6); box-shadow: 0 0 0 3px rgba(79,142,247,0.1); }
+
+  .forgot {
+    display: block; text-align: right; font-size: 12px;
+    color: var(--muted); text-decoration: none;
+    margin-top: -8px; margin-bottom: 22px; transition: color 0.2s;
+  }
+  .forgot:hover { color: white; }
+
+  .error-msg {
+    background: rgba(239,68,68,0.1); border: 1px solid rgba(239,68,68,0.25);
+    color: #f87171; border-radius: 10px; padding: 10px 14px;
+    font-size: 13px; margin-bottom: 16px; display: none;
+  }
+  .error-msg.show { display: block; animation: shake 0.3s ease; }
+  @keyframes shake {
+    0%,100% { transform: translateX(0); }
+    25% { transform: translateX(-5px); }
+    75% { transform: translateX(5px); }
+  }
+
+  .login-btn {
+    width: 100%; padding: 14px;
+    background: linear-gradient(135deg, #4f8ef7, #7c5cfc);
+    border: none; border-radius: 12px;
+    color: white; font-size: 15px; font-weight: 700;
+    font-family: 'DM Sans', sans-serif;
+    cursor: pointer; transition: all 0.25s;
+    box-shadow: 0 6px 24px rgba(79,142,247,0.3);
+  }
+  .login-btn:hover { transform: translateY(-2px); box-shadow: 0 10px 32px rgba(79,142,247,0.4); }
+  .login-btn:active { transform: translateY(0); }
+  .login-btn.loading { pointer-events: none; opacity: 0.75; }
+
+  .login-btn.rs { background: linear-gradient(135deg, #3679e8, #4f8ef7); box-shadow: 0 6px 20px rgba(79,142,247,0.3); }
+  .login-btn.rf { background: linear-gradient(135deg, #16a34a, #22c55e); box-shadow: 0 6px 20px rgba(34,197,94,0.3); }
+  .login-btn.rp { background: linear-gradient(135deg, #6d4bfc, #7c5cfc); box-shadow: 0 6px 20px rgba(124,92,252,0.3); }
+  .login-btn.ra { background: linear-gradient(135deg, #d4970a, #f5c842); color: #1c1c2e; box-shadow: 0 6px 20px rgba(245,200,66,0.3); }
+
+  .demo-hint {
+    text-align: center; margin-top: 18px;
+    font-size: 11px; color: rgba(255,255,255,0.25);
+  }
+  .demo-hint strong { color: rgba(255,255,255,0.4); font-weight: 600; }
+
+  .login-footer {
+    text-align: center; margin-top: 22px;
+    font-size: 11px; color: rgba(255,255,255,0.15); letter-spacing: 0.3px;
+  }
+</style>
+</head>
+<body>
+
+<div class="bg-orbs">
+  <div class="orb orb-1"></div>
+  <div class="orb orb-2"></div>
+  <div class="orb orb-3"></div>
+  <div class="orb orb-4"></div>
+</div>
+<div class="bg-grid"></div>
+
+<div class="wrapper">
+  <div class="brand">
+    <div class="brand-icon">🎓</div>
+    <span class="brand-name">Campus Mitra</span>
+    <p class="brand-tagline">Your campus companion — sign in to continue</p>
+  </div>
+
+  <div class="login-card">
+    <h2 class="card-title">Welcome 👋</h2>
+    <p class="card-sub">Select your role and sign in to your dashboard</p>
+
+    <span class="role-label">I am a</span>
+    <div class="role-grid">
+      <button class="role-btn selected" data-role="student" onclick="selectRole('student')">
+        <span class="role-icon">🎒</span>
+        <span class="role-name">Student</span>
+        <span class="role-desc">Classes, grades & attendance</span>
+      </button>
+      <button class="role-btn" data-role="faculty" onclick="selectRole('faculty')">
+        <span class="role-icon">📚</span>
+        <span class="role-name">Faculty</span>
+        <span class="role-desc">Courses, marks & schedule</span>
+      </button>
+      <button class="role-btn" data-role="parent" onclick="selectRole('parent')">
+        <span class="role-icon">👨‍👩‍👧</span>
+        <span class="role-name">Parent</span>
+        <span class="role-desc">Monitor your child's progress</span>
+      </button>
+      <button class="role-btn" data-role="admin" onclick="selectRole('admin')">
+        <span class="role-icon">🛡️</span>
+        <span class="role-name">Admin</span>
+        <span class="role-desc">Manage the institution</span>
+      </button>
+    </div>
+
+    <div class="field">
+      <label>Email / ID</label>
+      <input type="text" id="username" placeholder="Enter your email or ID" autocomplete="username">
+    </div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="password" placeholder="Enter your password" autocomplete="current-password"
+             onkeydown="if(event.key==='Enter') doLogin()">
+    </div>
+
+    <a href="#" class="forgot">Forgot password?</a>
+
+    <div class="error-msg" id="errorMsg">⚠️ Please enter your email/ID and password to continue.</div>
+
+    <button class="login-btn rs" id="loginBtn" onclick="doLogin()">
+      Sign in as Student →
+    </button>
+
+    <p class="demo-hint">Demo mode — enter any credentials to explore the dashboards</p>
+  </div>
+
+  <p class="login-footer">© 2025 Campus Mitra · All rights reserved</p>
+</div>
+
+<script>
+  const roles = {
+    student: { label: 'Student', file: 'student.html', cls: 'rs' },
+    faculty: { label: 'Faculty', file: 'faculty.html', cls: 'rf' },
+    parent:  { label: 'Parent',  file: 'parent.html',  cls: 'rp' },
+    admin:   { label: 'Admin',   file: 'admin.html',   cls: 'ra' },
+  };
+  let active = 'student';
+
+  function selectRole(role) {
+    active = role;
+    document.querySelectorAll('.role-btn').forEach(b =>
+      b.classList.toggle('selected', b.dataset.role === role)
+    );
+    const btn = document.getElementById('loginBtn');
+    btn.className = 'login-btn ' + roles[role].cls;
+    btn.textContent = `Sign in as ${roles[role].label} →`;
+    document.getElementById('errorMsg').classList.remove('show');
+  }
+
+  function doLogin() {
+    const u = document.getElementById('username').value.trim();
+    const p = document.getElementById('password').value.trim();
+    const err = document.getElementById('errorMsg');
+    const btn = document.getElementById('loginBtn');
+
+    if (!u || !p) {
+      err.classList.add('show');
+      setTimeout(() => err.classList.remove('show'), 3000);
+      return;
+    }
+
+    btn.classList.add('loading');
+    btn.textContent = 'Signing in…';
+    setTimeout(() => { window.location.href = roles[active].file; }, 700);
+  }
+</script>
+</body>
+</html>
