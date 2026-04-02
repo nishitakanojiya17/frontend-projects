@@ -3,28 +3,7 @@
 > **Minor Project** | Indore Institute of Science and Technology (IIST), Indore, MP
 > **Team:** VisionX | **Lead Developer:** Nishita
 
----
 
-## 📌 Table of Contents
-
-1. [Project Overview](#project-overview)
-2. [Problem Statement](#problem-statement)
-3. [Objectives](#objectives)
-4. [Tech Stack](#tech-stack)
-5. [Project Structure](#project-structure)
-6. [Pages & Features](#pages--features)
-7. [Dashboards](#dashboards)
-8. [Login Credentials (Demo)](#login-credentials-demo)
-9. [Navigation Flow](#navigation-flow)
-10. [Core Modules](#core-modules)
-11. [User Roles](#user-roles)
-12. [Methodology](#methodology)
-13. [How to Run](#how-to-run)
-14. [Future Scope](#future-scope)
-15. [Team](#team)
-16. [References](#references)
-
----
 
 ## 📖 Project Overview
 
@@ -281,13 +260,13 @@ index.html
 ## 👥 User Roles
 
 ```
-┌─────────────────────────────────────────────────────┐
-│                   CAMPUS MITRA                      │
+┌────────────────────────────────────────────────────┐
+│                   CAMPUS MITRA                     │
 ├──────────┬──────────┬──────────┬───────────────────┤
 │ STUDENT  │ FACULTY  │  PARENT  │      ADMIN        │
 ├──────────┼──────────┼──────────┼───────────────────┤
 │ View     │ Mark     │ Monitor  │ Manage all        │
-│ timetable│ attendance│attendance│ users             │
+│ timetable│ attendance│attendance│ users            │
 │          │          │          │                   │
 │ Download │ Upload   │ View     │ Create            │
 │ notes    │ materials│ results  │ schedules         │
