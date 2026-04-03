@@ -1,11 +1,11 @@
-from pathlib import Path
 import os
+from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-SECRET_KEY = 'django-insecure-campus-mitra-change-this-in-production'
+SECRET_KEY = os.environ.get('SECRET_KEY', 'django-insecure-campus-mitra-change-this-in-production')
 
-DEBUG = True
+DEBUG = os.environ.get('DEBUG', 'True') == 'True'
 
 ALLOWED_HOSTS = ['*']
 
@@ -23,6 +23,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -54,14 +55,12 @@ WSGI_APPLICATION = 'campusmitra.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'campus_mitra_db',
-        'USER': 'root',
-        'PASSWORD': 'root',        # ← set your MySQL root password herehere
-        'HOST': 'localhost',
-        'PORT': '3306',
-        'OPTIONS': {
-            'charset': 'utf8mb4',
-        },
+        'NAME': os.environ.get('MYSQL_DATABASE', 'campus_mitra_db'),
+        'USER': os.environ.get('MYSQL_USER', 'root'),
+        'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'root'),
+        'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
+        'PORT': os.environ.get('MYSQL_PORT', '3306'),
+        'OPTIONS': {'charset': 'utf8mb4'},
     }
 }
 
