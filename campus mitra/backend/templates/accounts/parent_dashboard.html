@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% block title %}Parent Dashboard — Campus Mitra{% endblock %}
+{% block content %}
+<style>
+  body{background:#f4f7ff;}
+  .topbar{background:white;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid #e2e8f0;}
+  .topbar h2{font-size:20px;font-weight:700;}
+  .logout{padding:8px 16px;background:#ef4444;color:white;border:none;border-radius:8px;cursor:pointer;font-size:13px;font-weight:600;text-decoration:none;}
+  .content{padding:32px;}
+  .hero{background:linear-gradient(135deg,#1a0a2e,#2d1060,#7c5cfc);border-radius:20px;padding:28px 32px;color:white;margin-bottom:24px;}
+  .hero h1{font-size:28px;font-weight:800;margin-bottom:6px;}
+  .hero p{opacity:0.7;font-size:14px;}
+  .card{background:white;border-radius:16px;padding:24px;border:1px solid #e2e8f0;max-width:500px;}
+  .card h3{font-size:18px;font-weight:700;margin-bottom:12px;}
+  .row{display:flex;justify-content:space-between;padding:8px 0;border-bottom:1px solid #f1f5ff;font-size:14px;}
+  .row:last-child{border-bottom:none;}
+  .label{color:#64748b;}
+  .val{font-weight:600;}
+</style>
+<div class="topbar">
+  <h2>👨‍👩‍👧 Parent Dashboard</h2>
+  <a href="{% url 'logout' %}" class="logout">⏻ Logout</a>
+</div>
+<div class="content">
+  <div class="hero">
+    <h1>Welcome, {{ request.user.first_name }} Ji 🙏</h1>
+    {% if profile and profile.child %}<p>Monitoring: {{ profile.child.user.get_full_name }} · {{ profile.child.branch }} Sem {{ profile.child.semester }}</p>{% endif %}
+  </div>
+  {% if profile and profile.child %}
+  <div class="card">
+    <h3>Child's Academic Overview</h3>
+    <div class="row"><span class="label">Name</span><span class="val">{{ profile.child.user.get_full_name }}</span></div>
+    <div class="row"><span class="label">Enroll No.</span><span class="val">{{ profile.child.enroll_no }}</span></div>
+    <div class="row"><span class="label">Branch</span><span class="val">{{ profile.child.branch }}</span></div>
+    <div class="row"><span class="label">Semester</span><span class="val">{{ profile.child.semester }}</span></div>
+    <div class="row"><span class="label">CGPA</span><span class="val">{{ profile.child.cgpa }}</span></div>
+  </div>
+  {% endif %}
+</div>
+{% endblock %}

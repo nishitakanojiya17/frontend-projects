@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -148,6 +148,8 @@
   .post-footer { display: flex; gap: 8px; justify-content: flex-end; }
   .post-tag { padding: 7px 14px; border-radius: 8px; border: 1px solid var(--border); font-size: 12px; font-weight: 600; cursor: pointer; font-family: 'DM Sans', sans-serif; background: white; }
   .post-send { padding: 7px 18px; border-radius: 8px; border: none; background: var(--accent); color: white; font-size: 12px; font-weight: 700; cursor: pointer; font-family: 'DM Sans', sans-serif; }
+  .section-page { display: none; }
+  .section-page.active { display: block; }
 </style>
 </head>
 <body>
@@ -164,22 +166,22 @@
   </div>
 
   <div class="nav-section">Teaching</div>
-  <a class="nav-item active" href="#"><span class="nav-icon">🏠</span> Dashboard</a>
-  <a class="nav-item" href="#"><span class="nav-icon">📋</span> Mark Attendance <span class="nav-badge">Today</span></a>
-  <a class="nav-item" href="#"><span class="nav-icon">📚</span> Upload Notes</a>
-  <a class="nav-item" href="#"><span class="nav-icon">📝</span> Assignments</a>
-  <a class="nav-item" href="#"><span class="nav-icon">🗓</span> My Timetable</a>
+  <a class="nav-item active" href="#" data-section="dashboard"><span class="nav-icon">🏠</span> Dashboard</a>
+  <a class="nav-item" href="#" data-section="attendance"><span class="nav-icon">📋</span> Mark Attendance <span class="nav-badge">Today</span></a>
+  <a class="nav-item" href="#" data-section="notes"><span class="nav-icon">📚</span> Upload Notes</a>
+  <a class="nav-item" href="#" data-section="assignments"><span class="nav-icon">📝</span> Assignments</a>
+  <a class="nav-item" href="#" data-section="timetable"><span class="nav-icon">🗓</span> My Timetable</a>
 
   <div class="nav-section">Communication</div>
-  <a class="nav-item" href="#"><span class="nav-icon">📢</span> Announcements <span class="nav-badge">2</span></a>
-  <a class="nav-item" href="#"><span class="nav-icon">👥</span> Student List</a>
-  <a class="nav-item" href="#"><span class="nav-icon">📊</span> Reports</a>
+  <a class="nav-item" href="#" data-section="announcements"><span class="nav-icon">📢</span> Announcements <span class="nav-badge">2</span></a>
+  <a class="nav-item" href="#" data-section="students"><span class="nav-icon">👥</span> Student List</a>
+  <a class="nav-item" href="#" data-section="reports"><span class="nav-icon">📊</span> Reports</a>
 
   <div class="nav-section">Navigation</div>
   <a class="nav-item" href="index.html"><span class="nav-icon">🌐</span> Public Site</a>
 
   <div class="nav-section">Account</div>
-  <a class="nav-item" href="#"><span class="nav-icon">👤</span> My Profile</a>
+  <a class="nav-item" href="#" data-section="profile"><span class="nav-icon">👤</span> My Profile</a>
   <a class="nav-item" href="login.html"><span class="nav-icon">🚪</span> Logout</a>
 
   <div class="sidebar-footer">
@@ -197,8 +199,8 @@
 <main class="main">
   <div class="topbar">
     <div>
-      <div class="page-title">Faculty Dashboard</div>
-      <div class="page-sub">Manage your classes, materials and attendance.</div>
+      <div class="page-title" id="pageTitle">Faculty Dashboard</div>
+      <div class="page-sub" id="pageSub">Manage your classes, materials and attendance.</div>
     </div>
     <div class="topbar-right">
       <a href="login.html" style="font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;transition:all 0.2s;" onmouseover="this.style.background='var(--accent)';this.style.color='white';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='';this.style.color='var(--muted)';this.style.borderColor='var(--border)'">⏻ Logout</a>
@@ -208,6 +210,7 @@
   </div>
 
   <div class="content">
+    <div class="section-page active" id="sec-dashboard">
     <div class="hero-card">
       <div>
         <div class="hero-greeting">Good Morning 🌿</div>
@@ -413,13 +416,191 @@
           </div>
         </div>
       </div>
+    </div> <!-- end grid-2 -->
+    </div> <!-- end sec-dashboard -->
+
+    <!-- ATTENDANCE SECTION -->
+    <div class="section-page" id="sec-attendance">
+      <div class="section-card">
+        <div class="section-header">
+          <div class="section-title">📋 Mark Attendance — Operating Systems (CSE 4B)</div>
+          <a href="#" class="section-link">Save All →</a>
+        </div>
+        <table class="att-table">
+          <thead><tr><th>Student</th><th>Enroll No.</th><th>Status</th><th>Action</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Rahul Sharma</strong></td><td>2022CSE045</td><td><span class="status-pill pill-present">✓ Present</span></td><td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td></tr>
+            <tr><td><strong>Priya Patel</strong></td><td>2022CSE046</td><td><span class="status-pill pill-absent">✗ Absent</span></td><td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td></tr>
+            <tr><td><strong>Aman Gupta</strong></td><td>2022CSE047</td><td><span class="status-pill pill-present">✓ Present</span></td><td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td></tr>
+            <tr><td><strong>Sneha Verma</strong></td><td>2022CSE048</td><td><span class="status-pill pill-late">⏰ Late</span></td><td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td></tr>
+            <tr><td><strong>Karan Singh</strong></td><td>2022CSE049</td><td><span class="status-pill pill-present">✓ Present</span></td><td><button class="mark-btn mark-p">P</button> <button class="mark-btn mark-a">A</button></td></tr>
+          </tbody>
+        </table>
+        <div style="margin-top:14px;display:flex;gap:10px;">
+          <button style="padding:9px 20px;background:var(--accent);color:white;border:none;border-radius:10px;font-size:13px;font-weight:700;cursor:pointer;">💾 Save Attendance</button>
+          <button style="padding:9px 20px;background:var(--bg);border:1px solid var(--border);border-radius:10px;font-size:13px;font-weight:600;cursor:pointer;">Mark All Present</button>
+        </div>
+      </div>
     </div>
+
+    <!-- NOTES SECTION -->
+    <div class="section-page" id="sec-notes">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📚 Upload Study Materials</div></div>
+        <div class="upload-area">
+          <div class="upload-icon">📤</div>
+          <div class="upload-text">Drop files here or click to browse</div>
+          <div class="upload-sub">PDF, PPT, DOCX · Max 20MB</div>
+          <button class="upload-btn">Choose File</button>
+        </div>
+        <div class="upload-list">
+          <div class="upload-item"><span class="upload-item-icon">📄</span><span class="upload-item-name">OS Unit 4 — Virtual Memory.pdf</span><span class="upload-item-meta">Today</span></div>
+          <div class="upload-item"><span class="upload-item-icon">📊</span><span class="upload-item-name">Process Scheduling Slides.pptx</span><span class="upload-item-meta">Yesterday</span></div>
+          <div class="upload-item"><span class="upload-item-icon">📄</span><span class="upload-item-name">OS Lab Manual — Experiment 6.pdf</span><span class="upload-item-meta">3 days ago</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ASSIGNMENTS SECTION -->
+    <div class="section-page" id="sec-assignments">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📝 Assignments</div></div>
+        <div class="class-list">
+          <div class="class-item"><div class="class-time">Due: Friday</div><div class="class-info"><div class="class-name">OS — Assignment 5</div><div class="class-meta">CSE 4B · Process Scheduling</div></div><span class="class-count">48/60 submitted</span></div>
+          <div class="class-item"><div class="class-time">Due: Monday</div><div class="class-info"><div class="class-name">OS Lab — Report 4</div><div class="class-meta">CSE 4A · Memory Management</div></div><span class="class-count">30/30 submitted</span></div>
+          <div class="class-item"><div class="class-time">Closed</div><div class="class-info"><div class="class-name">OS — Assignment 4</div><div class="class-meta">CSE 4B · Deadlock</div></div><span class="class-count">58/60 submitted</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- TIMETABLE SECTION -->
+    <div class="section-page" id="sec-timetable">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">🗓 My Weekly Timetable</div></div>
+        <div class="class-list">
+          <div class="class-item"><div class="class-time">Mon 9–10</div><div class="class-info"><div class="class-name">Operating Systems</div><div class="class-meta">CSE 4B · Room 201</div></div><span class="class-count">58 students</span></div>
+          <div class="class-item"><div class="class-time">Mon 11–12</div><div class="class-info"><div class="class-name">OS Lab</div><div class="class-meta">CSE 4A · Lab 102</div></div><span class="class-count">30 students</span></div>
+          <div class="class-item"><div class="class-time">Tue 2–3</div><div class="class-info"><div class="class-name">Operating Systems</div><div class="class-meta">CSE 4A · Room 302</div></div><span class="class-count">60 students</span></div>
+          <div class="class-item"><div class="class-time">Thu 3–4</div><div class="class-info"><div class="class-name">Research Project Review</div><div class="class-meta">Seminar Hall</div></div><span class="class-count">15 students</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ANNOUNCEMENTS SECTION -->
+    <div class="section-page" id="sec-announcements">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📢 Post Announcement</div></div>
+        <div class="post-area">
+          <select style="padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;width:100%;">
+            <option>📣 All Students (CSE Dept.)</option>
+            <option>👥 CSE 4A only</option>
+            <option>👥 CSE 4B only</option>
+          </select>
+          <textarea class="post-input" rows="4" placeholder="Type your announcement here..."></textarea>
+          <div class="post-footer">
+            <button class="post-tag">📎 Attach</button>
+            <button class="post-tag">🔴 Urgent</button>
+            <button class="post-send">📢 Post Now</button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- STUDENTS SECTION -->
+    <div class="section-page" id="sec-students">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">👥 Student List — CSE 4B</div></div>
+        <table class="att-table">
+          <thead><tr><th>Name</th><th>Enroll No.</th><th>Attendance</th><th>Status</th></tr></thead>
+          <tbody>
+            <tr><td><strong>Rahul Sharma</strong></td><td>2022CSE045</td><td>75%</td><td><span class="status-pill pill-late">⚠ Low</span></td></tr>
+            <tr><td><strong>Priya Patel</strong></td><td>2022CSE046</td><td>88%</td><td><span class="status-pill pill-present">✓ Good</span></td></tr>
+            <tr><td><strong>Aman Gupta</strong></td><td>2022CSE047</td><td>92%</td><td><span class="status-pill pill-present">✓ Good</span></td></tr>
+            <tr><td><strong>Sneha Verma</strong></td><td>2022CSE048</td><td>63%</td><td><span class="status-pill pill-absent">✗ Critical</span></td></tr>
+            <tr><td><strong>Karan Singh</strong></td><td>2022CSE049</td><td>85%</td><td><span class="status-pill pill-present">✓ Good</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- REPORTS SECTION -->
+    <div class="section-page" id="sec-reports">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📊 Attendance Reports</div></div>
+        <div class="class-list">
+          <div class="class-item"><div class="class-time">OS — 4B</div><div class="class-info"><div class="class-name">Average Attendance: 82%</div><div class="class-meta">58 students · 24 classes held</div></div><span class="class-count">Good</span></div>
+          <div class="class-item"><div class="class-time">OS Lab — 4A</div><div class="class-info"><div class="class-name">Average Attendance: 91%</div><div class="class-meta">30 students · 12 labs held</div></div><span class="class-count">Excellent</span></div>
+          <div class="class-item"><div class="class-time">OS — 4A</div><div class="class-info"><div class="class-name">Average Attendance: 78%</div><div class="class-meta">60 students · 24 classes held</div></div><span class="class-count">Average</span></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE SECTION -->
+    <div class="section-page" id="sec-profile">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">👤 My Profile</div></div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;gap:18px;padding:18px;background:var(--bg);border-radius:14px;border:1px solid var(--border);">
+            <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;">MJ</div>
+            <div><div style="font-size:18px;font-weight:700;">Prof. Meena Joshi</div><div style="font-size:13px;color:var(--muted);margin-top:3px;">Department of Computer Science & Engineering</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Faculty ID</div><div style="font-weight:700;margin-top:4px;">FAC-CSE-017</div></div>
+            <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Subjects</div><div style="font-weight:700;margin-top:4px;">Operating Systems</div></div>
+            <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Students</div><div style="font-weight:700;margin-top:4px;">120</div></div>
+            <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Experience</div><div style="font-weight:700;margin-top:4px;">8 Years</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </main>
 
 <script>
   const d = new Date();
   document.getElementById('dateDisplay').textContent = d.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+
+  const sectionMeta = {
+    dashboard:     { title: 'Faculty Dashboard',    sub: 'Manage your classes, materials and attendance.' },
+    attendance:    { title: 'Mark Attendance',      sub: 'Record student attendance for your classes.' },
+    notes:         { title: 'Upload Notes',         sub: 'Share study materials with your students.' },
+    assignments:   { title: 'Assignments',          sub: 'Create and review student assignments.' },
+    timetable:     { title: 'My Timetable',         sub: 'Your weekly class schedule.' },
+    announcements: { title: 'Announcements',        sub: 'Post notices to your students.' },
+    students:      { title: 'Student List',         sub: 'View all students in your classes.' },
+    reports:       { title: 'Reports',              sub: 'Attendance and performance reports.' },
+    profile:       { title: 'My Profile',           sub: 'Your faculty profile details.' },
+  };
+
+  function showSection(name) {
+    document.querySelectorAll('.section-page').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById('sec-' + name);
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.nav-item[data-section]').forEach(el =>
+      el.classList.toggle('active', el.dataset.section === name)
+    );
+    const meta = sectionMeta[name] || { title: name, sub: '' };
+    document.getElementById('pageTitle').textContent = meta.title;
+    document.getElementById('pageSub').textContent = meta.sub;
+  }
+
+  document.querySelectorAll('.nav-item[data-section]').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      showSection(this.dataset.section);
+    });
+  });
 </script>
+
+  <!-- n8n Chat Widget -->
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+  <script type="module">
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+    createChat({
+      webhookUrl: 'https://nishi123.app.n8n.cloud/webhook/cae0e833-2beb-4981-b93b-309f0754cd15/chat'
+    });
+  </script>
 </body>
 </html>
+

@@ -1,0 +1,241 @@
+{% extends 'base.html' %}
+{% block title %}Student Dashboard — Campus Mitra{% endblock %}
+{% block extra_css %}
+<style>
+  *,*::before,*::after{box-sizing:border-box;margin:0;padding:0;}
+  :root{--bg:#f4f7ff;--sidebar:#0a1628;--accent:#4f8ef7;--accent2:#7c5cfc;--green:#22c55e;--red:#ef4444;--orange:#f97316;--card:#fff;--text:#1e293b;--muted:#64748b;--border:#e2e8f0;--sw:240px;}
+  body{font-family:'DM Sans',sans-serif;background:var(--bg);color:var(--text);display:flex;min-height:100vh;}
+  .sidebar{width:var(--sw);background:var(--sidebar);position:fixed;top:0;left:0;height:100vh;display:flex;flex-direction:column;padding:28px 0;z-index:100;box-shadow:4px 0 24px rgba(0,0,0,.15);}
+  .sb-brand{padding:0 24px 28px;border-bottom:1px solid rgba(255,255,255,.08);}
+  .sb-brand-name{font-family:'Playfair Display',serif;font-size:16px;font-weight:800;color:#fff;}
+  .sb-brand-role{font-size:10px;color:rgba(255,255,255,.4);letter-spacing:1.5px;text-transform:uppercase;margin-top:2px;}
+  .nav-sec{padding:20px 16px 8px;font-size:10px;letter-spacing:1.5px;text-transform:uppercase;color:rgba(255,255,255,.3);font-weight:600;}
+  .nav-item{display:flex;align-items:center;gap:12px;padding:11px 24px;cursor:pointer;font-size:14px;font-weight:500;color:rgba(255,255,255,.55);transition:all .2s;text-decoration:none;border-left:3px solid transparent;}
+  .nav-item:hover{color:#fff;background:rgba(255,255,255,.06);}
+  .nav-item.active{color:#fff;background:rgba(79,142,247,.15);border-left-color:var(--accent);}
+  .sb-footer{margin-top:auto;padding:20px 24px 0;border-top:1px solid rgba(255,255,255,.08);}
+  .user-av{width:38px;height:38px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:14px;font-weight:700;color:#fff;}
+  .main{margin-left:var(--sw);flex:1;display:flex;flex-direction:column;}
+  .topbar{background:#fff;padding:16px 32px;display:flex;align-items:center;justify-content:space-between;border-bottom:1px solid var(--border);position:sticky;top:0;z-index:50;}
+  .page-title{font-size:22px;font-weight:700;}
+  .page-sub{font-size:13px;color:var(--muted);}
+  .logout-btn{padding:7px 16px;background:var(--red);color:#fff;border:none;border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;text-decoration:none;}
+  .content{padding:28px 32px;flex:1;}
+  .hero{background:linear-gradient(135deg,#0a1628 0%,#1a3a6e 60%,#4f8ef7 100%);border-radius:20px;padding:28px 32px;display:flex;align-items:center;justify-content:space-between;margin-bottom:24px;overflow:hidden;position:relative;}
+  .hero::before{content:'';position:absolute;width:200px;height:200px;border-radius:50%;background:rgba(255,255,255,.05);right:80px;top:-60px;}
+  .hero-name{font-family:'Playfair Display',serif;font-size:26px;font-weight:800;color:#fff;margin-bottom:6px;}
+  .hero-detail{font-size:13px;color:rgba(255,255,255,.7);}
+  .hero-greeting{font-size:13px;color:rgba(255,255,255,.6);margin-bottom:4px;}
+  .hero-stats{display:flex;gap:16px;position:relative;z-index:1;}
+  .hstat{background:rgba(255,255,255,.1);backdrop-filter:blur(10px);border:1px solid rgba(255,255,255,.15);border-radius:14px;padding:14px 18px;text-align:center;min-width:80px;}
+  .hstat-val{font-size:24px;font-weight:700;color:#fff;}
+  .hstat-label{font-size:10px;color:rgba(255,255,255,.6);margin-top:2px;}
+  .grid2{display:grid;grid-template-columns:2fr 1fr;gap:18px;margin-bottom:24px;}
+  .card{background:var(--card);border-radius:16px;padding:22px;border:1px solid var(--border);}
+  .card-title{font-size:15px;font-weight:700;margin-bottom:16px;}
+  .att-item{margin-bottom:14px;}
+  .att-header{display:flex;justify-content:space-between;margin-bottom:6px;}
+  .att-subject{font-size:13px;font-weight:600;}
+  .att-pct{font-size:13px;font-weight:700;}
+  .att-bar{height:8px;border-radius:20px;background:var(--border);overflow:hidden;}
+  .att-fill{height:100%;border-radius:20px;}
+  .att-good{background:linear-gradient(90deg,var(--green),#16a34a);}
+  .att-warn{background:linear-gradient(90deg,var(--orange),#dc8a0d);}
+  .att-bad{background:linear-gradient(90deg,var(--red),#dc2626);}
+  .att-warning{font-size:11px;font-weight:600;color:var(--red);margin-top:4px;}
+  .notes-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;}
+  .note-card{padding:14px;border-radius:12px;background:var(--bg);border:1px solid var(--border);cursor:pointer;transition:all .2s;}
+  .note-card:hover{border-color:var(--accent);transform:translateY(-2px);}
+  .note-icon{font-size:22px;margin-bottom:8px;}
+  .note-name{font-size:12px;font-weight:700;margin-bottom:3px;}
+  .note-meta{font-size:11px;color:var(--muted);}
+  .empty{text-align:center;padding:32px;color:var(--muted);font-size:13px;}
+  .section-page{display:none;}
+  .section-page.active{display:block;}
+</style>
+{% endblock %}
+
+{% block content %}
+<aside class="sidebar">
+  <div class="sb-brand">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div style="width:36px;height:36px;background:var(--accent);border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:16px;">🏛</div>
+      <div>
+        <div class="sb-brand-name">Campus Mitra</div>
+        <div class="sb-brand-role">Student Portal</div>
+      </div>
+    </div>
+  </div>
+  <div class="nav-sec">Main</div>
+  <a class="nav-item active" href="#" data-section="dashboard">🏠 Dashboard</a>
+  <a class="nav-item" href="#" data-section="attendance">📋 Attendance</a>
+  <a class="nav-item" href="#" data-section="materials">📚 Study Materials</a>
+  <a class="nav-item" href="{% url 'notes_list' %}">📝 Notes</a>
+  <div class="nav-sec">Navigation</div>
+  <a class="nav-item" href="/">🌐 Home</a>
+  <div class="nav-sec">Account</div>
+  <a class="nav-item" href="{% url 'logout' %}">🚪 Logout</a>
+  <div class="sb-footer">
+    <div style="display:flex;align-items:center;gap:10px;">
+      <div class="user-av">{{ request.user.first_name|first }}{{ request.user.last_name|first }}</div>
+      <div>
+        <div style="font-size:13px;font-weight:600;color:#fff;">{{ request.user.get_full_name }}</div>
+        <div style="font-size:11px;color:rgba(255,255,255,.4);">
+          {% if profile %}{{ profile.enroll_no }}{% endif %}
+        </div>
+      </div>
+    </div>
+  </div>
+</aside>
+
+<main class="main">
+  <div class="topbar">
+    <div>
+      <div class="page-title" id="pageTitle">Student Dashboard</div>
+      <div class="page-sub" id="pageSub">Welcome back, {{ request.user.first_name }}!</div>
+    </div>
+    <a href="{% url 'logout' %}" class="logout-btn">⏻ Logout</a>
+  </div>
+
+  <div class="content">
+
+    <!-- DASHBOARD -->
+    <div class="section-page active" id="sec-dashboard">
+      <div class="hero">
+        <div>
+          <div class="hero-greeting">Good Morning ☀️</div>
+          <div class="hero-name">{{ request.user.get_full_name }}</div>
+          <div class="hero-detail">
+            B.Tech {{ profile.branch }} · Semester {{ profile.semester }} · Section {{ profile.section }}
+            &nbsp;|&nbsp; {{ profile.enroll_no }}
+          </div>
+        </div>
+        <div class="hero-stats">
+          <div class="hstat">
+            <div class="hstat-val">{{ profile.semester }}</div>
+            <div class="hstat-label">Semester</div>
+          </div>
+          <div class="hstat">
+            <div class="hstat-val">{{ summaries|length }}</div>
+            <div class="hstat-label">Subjects</div>
+          </div>
+          <div class="hstat">
+            <div class="hstat-val">{{ profile.cgpa }}</div>
+            <div class="hstat-label">CGPA</div>
+          </div>
+        </div>
+      </div>
+
+      <div class="grid2">
+        <div class="card">
+          <div class="card-title">📊 Attendance Overview</div>
+          {% if summaries %}
+            {% for s in summaries %}
+            <div class="att-item">
+              <div class="att-header">
+                <span class="att-subject">{{ s.get_subject_display }}</span>
+                <span class="att-pct" style="color:{% if s.percentage >= 80 %}var(--green){% elif s.percentage >= 75 %}var(--orange){% else %}var(--red){% endif %}">
+                  {{ s.percentage }}%
+                </span>
+              </div>
+              <div class="att-bar">
+                <div class="att-fill {% if s.percentage >= 80 %}att-good{% elif s.percentage >= 75 %}att-warn{% else %}att-bad{% endif %}"
+                     style="width:{{ s.percentage }}%"></div>
+              </div>
+              {% if s.is_shortage %}<div class="att-warning">⚠ Below 75% — shortage risk</div>{% endif %}
+            </div>
+            {% endfor %}
+          {% else %}
+            <div class="empty">No attendance records yet.</div>
+          {% endif %}
+        </div>
+
+        <div class="card">
+          <div class="card-title">📚 Recent Notes</div>
+          {% if recent_notes %}
+          <div class="notes-grid">
+            {% for note in recent_notes %}
+            <a href="{{ note.file.url }}" target="_blank" class="note-card" style="text-decoration:none;color:inherit;">
+              <div class="note-icon">📄</div>
+              <div class="note-name">{{ note.title }}</div>
+              <div class="note-meta">{{ note.get_subject_display }}</div>
+            </a>
+            {% endfor %}
+          </div>
+          {% else %}
+            <div class="empty">No notes uploaded yet.</div>
+          {% endif %}
+        </div>
+      </div>
+    </div>
+
+    <!-- ATTENDANCE -->
+    <div class="section-page" id="sec-attendance">
+      <div class="card">
+        <div class="card-title">📋 Subject-wise Attendance</div>
+        {% if summaries %}
+          {% for s in summaries %}
+          <div class="att-item">
+            <div class="att-header">
+              <span class="att-subject">{{ s.get_subject_display }}</span>
+              <span class="att-pct" style="color:{% if s.percentage >= 80 %}var(--green){% elif s.percentage >= 75 %}var(--orange){% else %}var(--red){% endif %}">
+                {{ s.percentage }}% ({{ s.present_count }}/{{ s.total_classes }})
+              </span>
+            </div>
+            <div class="att-bar">
+              <div class="att-fill {% if s.percentage >= 80 %}att-good{% elif s.percentage >= 75 %}att-warn{% else %}att-bad{% endif %}"
+                   style="width:{{ s.percentage }}%"></div>
+            </div>
+            {% if s.is_shortage %}<div class="att-warning">⚠ Needs more classes to reach 75%</div>{% endif %}
+          </div>
+          {% endfor %}
+        {% else %}
+          <div class="empty">No attendance records yet. Classes haven't started or faculty hasn't marked attendance.</div>
+        {% endif %}
+      </div>
+    </div>
+
+    <!-- MATERIALS -->
+    <div class="section-page" id="sec-materials">
+      <div class="card">
+        <div class="card-title">📚 Study Materials</div>
+        {% if recent_notes %}
+        <div class="notes-grid">
+          {% for note in recent_notes %}
+          <a href="{{ note.file.url }}" target="_blank" class="note-card" style="text-decoration:none;color:inherit;">
+            <div class="note-icon">📄</div>
+            <div class="note-name">{{ note.title }}</div>
+            <div class="note-meta">{{ note.get_subject_display }} · {{ note.uploaded_at|date:"d M Y" }}</div>
+          </a>
+          {% endfor %}
+        </div>
+        {% else %}
+          <div class="empty">No materials uploaded yet.</div>
+        {% endif %}
+      </div>
+    </div>
+
+  </div>
+</main>
+
+<script>
+  const meta = {
+    dashboard:  { title: 'Student Dashboard', sub: 'Welcome back, {{ request.user.first_name }}!' },
+    attendance: { title: 'Attendance',         sub: 'Your subject-wise attendance.' },
+    materials:  { title: 'Study Materials',    sub: 'Notes uploaded by faculty.' },
+  };
+  function showSection(name) {
+    document.querySelectorAll('.section-page').forEach(el => el.classList.remove('active'));
+    const t = document.getElementById('sec-' + name);
+    if (t) t.classList.add('active');
+    document.querySelectorAll('.nav-item[data-section]').forEach(el =>
+      el.classList.toggle('active', el.dataset.section === name)
+    );
+    document.getElementById('pageTitle').textContent = meta[name]?.title || name;
+    document.getElementById('pageSub').textContent   = meta[name]?.sub   || '';
+  }
+  document.querySelectorAll('.nav-item[data-section]').forEach(el => {
+    el.addEventListener('click', e => { e.preventDefault(); showSection(el.dataset.section); });
+  });
+</script>
+{% endblock %}

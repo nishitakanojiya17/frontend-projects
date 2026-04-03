@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 
 <head>
@@ -702,6 +702,9 @@
       font-weight: 600;
       color: var(--text);
     }
+
+    .section-page { display: none; }
+    .section-page.active { display: block; }
   </style>
 </head>
 
@@ -720,22 +723,21 @@
     </div>
 
     <div class="nav-section">Main</div>
-    <a class="nav-item active" href="#"><span class="nav-icon">🏠</span> Dashboard</a>
-    <a class="nav-item" href="#"><span class="nav-icon">📋</span> Attendance <span class="nav-badge">75%</span></a>
-    <a class="nav-item" href="#"><span class="nav-icon">🗓</span> Timetable</a>
-    <a class="nav-item" href="#"><span class="nav-icon">📚</span> Study Materials</a>
-    <a class="nav-item" href="#"><span class="nav-icon">📝</span> Assignments <span class="nav-badge">3</span></a>
+    <a class="nav-item active" href="#" data-section="dashboard"><span class="nav-icon">🏠</span> Dashboard</a>
+    <a class="nav-item" href="#" data-section="attendance"><span class="nav-icon">📋</span> Attendance <span class="nav-badge">75%</span></a>
+    <a class="nav-item" href="#" data-section="timetable"><span class="nav-icon">🗓</span> Timetable</a>
+    <a class="nav-item" href="#" data-section="materials"><span class="nav-icon">📚</span> Study Materials</a>
+    <a class="nav-item" href="#" data-section="assignments"><span class="nav-icon">📝</span> Assignments <span class="nav-badge">3</span></a>
 
     <div class="nav-section">Academic</div>
-    <a class="nav-item" href="#"><span class="nav-icon">📊</span> Results</a>
-    <a class="nav-item" href="#"><span class="nav-icon">🔔</span> Notices <span class="nav-badge">2</span></a>
-    <a class="nav-item" href="#"><span class="nav-icon">💬</span> Chat Support</a>
+    <a class="nav-item" href="#" data-section="results"><span class="nav-icon">📊</span> Results</a>
+    <a class="nav-item" href="#" data-section="notices"><span class="nav-icon">🔔</span> Notices <span class="nav-badge">2</span></a>
+    <a class="nav-item" href="#" data-section="profile"><span class="nav-icon">👤</span> My Profile</a>
 
     <div class="nav-section">Navigation</div>
     <a class="nav-item" href="index.html"><span class="nav-icon">🌐</span> Public Site</a>
 
     <div class="nav-section">Settings</div>
-    <a class="nav-item" href="#"><span class="nav-icon">👤</span> My Profile</a>
     <a class="nav-item" href="login.html"><span class="nav-icon">🚪</span> Logout</a>
 
     <div class="sidebar-footer">
@@ -754,8 +756,8 @@
   <main class="main">
     <div class="topbar">
       <div class="topbar-left">
-        <div class="page-title">Student Dashboard</div>
-        <div class="page-sub">Welcome back, Rahul! Here's your academic overview.</div>
+        <div class="page-title" id="pageTitle">Student Dashboard</div>
+        <div class="page-sub" id="pageSub">Welcome back, Udit! Here's your academic overview.</div>
       </div>
       <div class="topbar-right">
         <a href="login.html"
@@ -770,12 +772,14 @@
     </div>
 
     <div class="content">
+      <!-- DASHBOARD SECTION -->
+      <div class="section-page active" id="sec-dashboard">
       <!-- HERO -->
       <div class="hero-card">
         <div class="hero-left">
           <div class="hero-greeting">Good Morning ☀️</div>
           <div class="hero-name">Udit Rathod</div>
-          <div class="hero-detail">B.Tech CSE · 4th Semester · Section B &nbsp;|&nbsp; Enroll No: 2022CSE045</div>
+          <div class="hero-detail">B.Tech AIML · 6th Semester · Section B &nbsp;|&nbsp; Enroll No: 2022CSE045</div>
         </div>
         <div class="hero-right">
           <div class="hero-stat">
@@ -825,47 +829,55 @@
       <div class="grid-2-1">
         <div class="section-card">
           <div class="section-header">
-            <div class="section-title">📅 Today's Timetable — Monday</div>
+            <div class="section-title">📅 Today's Timetable — AIML 6th Sem</div>
             <a href="#" class="section-link">Full Schedule →</a>
           </div>
           <div class="timetable">
             <div class="tt-item">
-              <div class="tt-time">9:00 – 10:00</div>
+              <div class="tt-time">9:10 – 10:10</div>
               <div>
-                <div class="tt-subject">Data Structures & Algorithms</div>
-                <div class="tt-room">Room 302 · Prof. Rajiv Kumar</div>
+                <div class="tt-subject">Image & Video Processing (IP)</div>
+                <div class="tt-room">Dr. Ratnesh Chaturvedi</div>
               </div>
               <span class="tt-tag tag-now">Now</span>
             </div>
             <div class="tt-item">
-              <div class="tt-time">10:00 – 11:00</div>
+              <div class="tt-time">10:10 – 11:00</div>
               <div>
-                <div class="tt-subject">Operating Systems</div>
-                <div class="tt-room">Room 201 · Prof. Meena Joshi</div>
+                <div class="tt-subject">Cloud Computing (CC)</div>
+                <div class="tt-room">Dr. Nishant Vijayavargiya</div>
               </div>
               <span class="tt-tag tag-theory">Theory</span>
             </div>
             <div class="tt-item">
-              <div class="tt-time">11:15 – 1:15</div>
+              <div class="tt-time">11:00 – 11:50</div>
               <div>
-                <div class="tt-subject">Computer Networks Lab</div>
-                <div class="tt-room">Lab 104 · Prof. Amit Singh</div>
-              </div>
-              <span class="tt-tag tag-lab">Lab</span>
-            </div>
-            <div class="tt-item">
-              <div class="tt-time">2:00 – 3:00</div>
-              <div>
-                <div class="tt-subject">Database Management System</div>
-                <div class="tt-room">Room 402 · Prof. Priya Sharma</div>
+                <div class="tt-subject">PDP</div>
+                <div class="tt-room">Mrs. Jaya Singh</div>
               </div>
               <span class="tt-tag tag-theory">Theory</span>
             </div>
             <div class="tt-item">
-              <div class="tt-time">3:00 – 4:00</div>
+              <div class="tt-time">11:50 – 12:40</div>
               <div>
-                <div class="tt-subject">Software Engineering</div>
-                <div class="tt-room">Room 301 · Prof. Vikram Rao</div>
+                <div class="tt-subject">Computer Networks (CN)</div>
+                <div class="tt-room">Smita Marwadi</div>
+              </div>
+              <span class="tt-tag tag-theory">Theory</span>
+            </div>
+            <div class="tt-item">
+              <div class="tt-time">1:30 – 2:20</div>
+              <div>
+                <div class="tt-subject">Minor Project</div>
+                <div class="tt-room">Sukruti Agarwal</div>
+              </div>
+              <span class="tt-tag tag-lab">Project</span>
+            </div>
+            <div class="tt-item">
+              <div class="tt-time">3:10 – 4:00</div>
+              <div>
+                <div class="tt-subject">Theory of Computation (TOC)</div>
+                <div class="tt-room">Aatish Mishra</div>
               </div>
               <span class="tt-tag tag-theory">Theory</span>
             </div>
@@ -879,35 +891,35 @@
           </div>
           <div class="att-list">
             <div class="att-item">
-              <div class="att-header"><span class="att-subject">Data Structures</span><span class="att-pct"
+              <div class="att-header"><span class="att-subject">Computer Networks (CN)</span><span class="att-pct"
                   style="color:var(--green)">88%</span></div>
               <div class="att-bar">
                 <div class="att-fill att-good" style="width:88%"></div>
               </div>
             </div>
             <div class="att-item">
-              <div class="att-header"><span class="att-subject">Operating Systems</span><span class="att-pct"
+              <div class="att-header"><span class="att-subject">Theory of Computation (TOC)</span><span class="att-pct"
                   style="color:var(--green)">82%</span></div>
               <div class="att-bar">
                 <div class="att-fill att-good" style="width:82%"></div>
               </div>
             </div>
             <div class="att-item">
-              <div class="att-header"><span class="att-subject">DBMS</span><span class="att-pct"
+              <div class="att-header"><span class="att-subject">Cloud Computing (CC)</span><span class="att-pct"
                   style="color:var(--orange)">72%</span></div>
               <div class="att-bar">
                 <div class="att-fill att-warn" style="width:72%"></div>
               </div>
             </div>
             <div class="att-item">
-              <div class="att-header"><span class="att-subject">CN Lab</span><span class="att-pct"
+              <div class="att-header"><span class="att-subject">Image & Video Processing (IP)</span><span class="att-pct"
                   style="color:var(--orange)">70%</span></div>
               <div class="att-bar">
                 <div class="att-fill att-warn" style="width:70%"></div>
               </div>
             </div>
             <div class="att-item">
-              <div class="att-header"><span class="att-subject">Software Engg.</span><span class="att-pct"
+              <div class="att-header"><span class="att-subject">PDP</span><span class="att-pct"
                   style="color:var(--red)">63%</span></div>
               <div class="att-bar">
                 <div class="att-fill att-bad" style="width:63%"></div>
@@ -926,24 +938,24 @@
           </div>
           <div class="notes-grid">
             <div class="note-card">
-              <div class="note-icon">📄</div>
-              <div class="note-name">DSA — Unit 3 Trees</div>
-              <div class="note-meta">Prof. Kumar · 2 days ago</div>
+              <div class="note-icon">🌐</div>
+              <div class="note-name">Computer Networks</div>
+              <div class="note-meta">Notes & Resources</div>
             </div>
             <div class="note-card">
-              <div class="note-icon">📄</div>
-              <div class="note-name">OS — Memory Mgmt.</div>
-              <div class="note-meta">Prof. Joshi · 3 days ago</div>
+              <div class="note-icon">🧠</div>
+              <div class="note-name">Theory of Computation</div>
+              <div class="note-meta">Notes & Resources</div>
             </div>
             <div class="note-card">
-              <div class="note-icon">📊</div>
-              <div class="note-name">DBMS — ER Diagrams</div>
-              <div class="note-meta">Prof. Sharma · 5 days ago</div>
+              <div class="note-icon">☁️</div>
+              <div class="note-name">Cloud Computing</div>
+              <div class="note-meta">Notes & Resources</div>
             </div>
             <div class="note-card">
-              <div class="note-icon">🔬</div>
-              <div class="note-name">CN Lab Manual #4</div>
-              <div class="note-meta">Prof. Singh · 1 week ago</div>
+              <div class="note-icon">🎞️</div>
+              <div class="note-name">Image & Video Processing</div>
+              <div class="note-meta">Notes & Resources</div>
             </div>
           </div>
         </div>
@@ -964,7 +976,7 @@
                 <div class="notice-meta">Academic Office · Yesterday</div>
               </div>
               <div class="notice-item">
-                <div class="notice-title">📋 Assignment 4 — DBMS Due Friday</div>
+                <div class="notice-title">📋 Assignment 4 — Cloud Computing (CC) Due Friday</div>
                 <div class="notice-meta">Prof. Sharma · 2 days ago</div>
               </div>
             </div>
@@ -993,714 +1005,257 @@
           </div>
         </div>
       </div>
-    </div>
+    </div> <!-- end sec-dashboard -->
+
+      <!-- ATTENDANCE SECTION -->
+      <div class="section-page" id="sec-attendance">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">📋 Attendance Overview</div>
+          </div>
+          <div class="att-list">
+            <div class="att-item">
+              <div class="att-header"><span class="att-subject">Computer Networks (CN)</span><span class="att-pct" style="color:var(--green)">88%</span></div>
+              <div class="att-bar"><div class="att-fill att-good" style="width:88%"></div></div>
+            </div>
+            <div class="att-item">
+              <div class="att-header"><span class="att-subject">Theory of Computation (TOC)</span><span class="att-pct" style="color:var(--green)">82%</span></div>
+              <div class="att-bar"><div class="att-fill att-good" style="width:82%"></div></div>
+            </div>
+            <div class="att-item">
+              <div class="att-header"><span class="att-subject">Cloud Computing (CC)</span><span class="att-pct" style="color:var(--orange)">72%</span></div>
+              <div class="att-bar"><div class="att-fill att-warn" style="width:72%"></div></div>
+            </div>
+            <div class="att-item">
+              <div class="att-header"><span class="att-subject">Image & Video Processing (IP)</span><span class="att-pct" style="color:var(--orange)">70%</span></div>
+              <div class="att-bar"><div class="att-fill att-warn" style="width:70%"></div></div>
+            </div>
+            <div class="att-item">
+              <div class="att-header"><span class="att-subject">PDP</span><span class="att-pct" style="color:var(--red)">63%</span></div>
+              <div class="att-bar"><div class="att-fill att-bad" style="width:63%"></div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- TIMETABLE SECTION -->
+      <div class="section-page" id="sec-timetable">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">🗓 6th Sem Timetable — AIML · Jan–Jun 2026 · Room 28</div>
+          </div>
+
+          <!-- MONDAY -->
+          <div style="margin-bottom:18px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Monday</div>
+            <div class="timetable">
+              <div class="tt-item"><div class="tt-time">9:10–10:10</div><div><div class="tt-subject">Image & Video Processing (IP)</div><div class="tt-room">Dr. Ratnesh Chaturvedi</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">10:10–11:00</div><div><div class="tt-subject">Cloud Computing (CC)</div><div class="tt-room">Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">11:00–11:50</div><div><div class="tt-subject">PDP</div><div class="tt-room">Mrs. Jaya Singh</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">11:50–12:40</div><div><div class="tt-subject">Computer Networks (CN)</div><div class="tt-room">Smita Marwadi</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">1:30–2:20</div><div><div class="tt-subject">Minor Project</div><div class="tt-room">Sukruti Agarwal</div></div><span class="tt-tag tag-lab">Project</span></div>
+              <div class="tt-item"><div class="tt-time">3:10–4:00</div><div><div class="tt-subject">Theory of Computation (TOC)</div><div class="tt-room">Aatish Mishra</div></div><span class="tt-tag tag-theory">Theory</span></div>
+            </div>
+          </div>
+
+          <!-- TUESDAY -->
+          <div style="margin-bottom:18px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Tuesday</div>
+            <div class="timetable">
+              <div class="tt-item"><div class="tt-time">9:10–10:10</div><div><div class="tt-subject">Image & Video Processing (IP)</div><div class="tt-room">Dr. Ratnesh Chaturvedi</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">10:10–11:00</div><div><div class="tt-subject">Cloud Computing (CC)</div><div class="tt-room">Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">11:00–11:50</div><div><div class="tt-subject">Theory of Computation (TOC)</div><div class="tt-room">Aatish Mishra</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">11:50–12:40</div><div><div class="tt-subject">PDP</div><div class="tt-room">Mrs. Jaya Singh</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">1:30–2:20</div><div><div class="tt-subject">Computer Networks (CN)</div><div class="tt-room">Smita Marwadi</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">2:20–4:00</div><div><div class="tt-subject">Competitive Programming (SIG-CP)</div><div class="tt-room">Ms. Shivani</div></div><span class="tt-tag tag-lab">Lab</span></div>
+            </div>
+          </div>
+
+          <!-- WEDNESDAY -->
+          <div style="margin-bottom:18px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Wednesday</div>
+            <div class="timetable">
+              <div class="tt-item"><div class="tt-time">9:10–11:00</div><div><div class="tt-subject">Aptitude (APTT)</div><div class="tt-room">Abhishek Bhatnagar</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">11:00–11:50</div><div><div class="tt-subject">Computer Networks (CN)</div><div class="tt-room">Smita Marwadi</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">11:50–12:40</div><div><div class="tt-subject">Theory of Computation (TOC)</div><div class="tt-room">Aatish Mishra</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">1:30–3:10</div><div><div class="tt-subject">IT Lab — CN(B1) / TOC(B2)</div><div class="tt-room">Smita Marwadi / Aatish Mishra</div></div><span class="tt-tag tag-lab">Lab</span></div>
+              <div class="tt-item"><div class="tt-time">3:10–4:00</div><div><div class="tt-subject">Image & Video Processing (IP)</div><div class="tt-room">Dr. Ratnesh Chaturvedi</div></div><span class="tt-tag tag-theory">Theory</span></div>
+            </div>
+          </div>
+
+          <!-- THURSDAY -->
+          <div style="margin-bottom:18px">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Thursday</div>
+            <div class="timetable">
+              <div class="tt-item"><div class="tt-time">9:10–11:00</div><div><div class="tt-subject">IT Lab — IP(B1) / CC(B2)</div><div class="tt-room">Dr. Ratnesh Chaturvedi / Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-lab">Lab</span></div>
+              <div class="tt-item"><div class="tt-time">11:00–12:40</div><div><div class="tt-subject">IT Lab — CN(B2) / TOC(B1)</div><div class="tt-room">Smita Marwadi / Aatish Mishra</div></div><span class="tt-tag tag-lab">Lab</span></div>
+              <div class="tt-item"><div class="tt-time">1:30–2:20</div><div><div class="tt-subject">Cloud Computing (CC)</div><div class="tt-room">Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">2:20–3:10</div><div><div class="tt-subject">PDP</div><div class="tt-room">Mrs. Jaya Singh</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">3:10–4:00</div><div><div class="tt-subject">Theory of Computation (TOC)</div><div class="tt-room">Aatish Mishra</div></div><span class="tt-tag tag-theory">Theory</span></div>
+            </div>
+          </div>
+
+          <!-- FRIDAY -->
+          <div>
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Friday</div>
+            <div class="timetable">
+              <div class="tt-item"><div class="tt-time">9:10–11:00</div><div><div class="tt-subject">IT Lab — IP(B2) / CC(B1)</div><div class="tt-room">Dr. Ratnesh Chaturvedi / Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-lab">Lab</span></div>
+              <div class="tt-item"><div class="tt-time">11:00–11:50</div><div><div class="tt-subject">Computer Networks (CN)</div><div class="tt-room">Smita Marwadi</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">11:50–12:40</div><div><div class="tt-subject">Image & Video Processing (IP)</div><div class="tt-room">Dr. Ratnesh Chaturvedi</div></div><span class="tt-tag tag-theory">Theory</span></div>
+              <div class="tt-item"><div class="tt-time">2:20–4:00</div><div><div class="tt-subject">Competitive Programming (SIG-CP) / CC-IV</div><div class="tt-room">Ms. Shivani / VU</div></div><span class="tt-tag tag-lab">Lab</span></div>
+              <div class="tt-item"><div class="tt-time">3:10–4:00</div><div><div class="tt-subject">Aptitude Test (CC-IV)</div><div class="tt-room">Abhishek Bhatnagar</div></div><span class="tt-tag tag-theory">Theory</span></div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+
+      <!-- STUDY MATERIALS SECTION -->
+      <div class="section-page" id="sec-materials">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">📚 Study Materials & Notes</div>
+          </div>
+          <div class="notes-grid">
+            <div class="note-card"><div class="note-icon">🌐</div><div class="note-name">Computer Networks</div><div class="note-meta">Notes & Resources</div></div>
+            <div class="note-card"><div class="note-icon">🧠</div><div class="note-name">Theory of Computation</div><div class="note-meta">Notes & Resources</div></div>
+            <div class="note-card"><div class="note-icon">☁️</div><div class="note-name">Cloud Computing</div><div class="note-meta">Notes & Resources</div></div>
+            <div class="note-card"><div class="note-icon">🎞️</div><div class="note-name">Image & Video Processing</div><div class="note-meta">Notes & Resources</div></div>
+            <div class="note-card"><div class="note-icon">�</div><div classs="note-name">Practical — Theory of Computation</div><div class="note-meta">Lab Manual</div></div>
+            <div class="note-card"><div class="note-icon">�</div><div class="note-name">Practical — Image & Video Processing</div><div class="note-meta">Lab Manual</div></div>
+            <div class="note-card"><div class="note-icon">🔬</div><div class="note-name">Practical — Computer Networks</div><div class="note-meta">Lab Manual</div></div>
+            <div class="note-card"><div class="note-icon">🗂️</div><div class="note-name">Minor Project</div><div class="note-meta">Project Guidelines</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ASSIGNMENTS SECTION -->
+      <div class="section-page" id="sec-assignments">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">📝 Assignments</div>
+          </div>
+          <div class="timetable">
+            <div class="tt-item"><div class="tt-time">Due: Friday</div><div><div class="tt-subject">Cloud Computing (CC) — Assignment 4</div><div class="tt-room">Prof. Sharma · ER Diagrams & Normalization</div></div><span class="tt-tag tag-lab">Pending</span></div>
+            <div class="tt-item"><div class="tt-time">Due: Monday</div><div><div class="tt-subject">DSA — Assignment 5</div><div class="tt-room">Prof. Kumar · Graph Traversal</div></div><span class="tt-tag tag-lab">Pending</span></div>
+            <div class="tt-item"><div class="tt-time">Submitted</div><div><div class="tt-subject">OS — Assignment 3</div><div class="tt-room">Prof. Joshi · Process Scheduling</div></div><span class="tt-tag tag-now">Done</span></div>
+            <div class="tt-item"><div class="tt-time">Submitted</div><div><div class="tt-subject">SE — Assignment 2</div><div class="tt-room">Prof. Rao · Use Case Diagrams</div></div><span class="tt-tag tag-now">Done</span></div>
+            <div class="tt-item"><div class="tt-time">Submitted</div><div><div class="tt-subject">CN — Lab Report 3</div><div class="tt-room">Prof. Singh · TCP/IP</div></div><span class="tt-tag tag-now">Done</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RESULTS SECTION -->
+      <div class="section-page" id="sec-results">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">📊 Academic Results</div>
+          </div>
+          <div class="att-list">
+            <div class="att-item"><div class="att-header"><span class="att-subject">Computer Networks (CN)</span><span class="att-pct" style="color:var(--green)">91/100</span></div><div class="att-bar"><div class="att-fill att-good" style="width:91%"></div></div></div>
+            <div class="att-item"><div class="att-header"><span class="att-subject">Theory of Computation (TOC)</span><span class="att-pct" style="color:var(--green)">85/100</span></div><div class="att-bar"><div class="att-fill att-good" style="width:85%"></div></div></div>
+            <div class="att-item"><div class="att-header"><span class="att-subject">Cloud Computing (CC)</span><span class="att-pct" style="color:var(--orange)">74/100</span></div><div class="att-bar"><div class="att-fill att-warn" style="width:74%"></div></div></div>
+            <div class="att-item"><div class="att-header"><span class="att-subject">Computer Networks</span><span class="att-pct" style="color:var(--green)">80/100</span></div><div class="att-bar"><div class="att-fill att-good" style="width:80%"></div></div></div>
+            <div class="att-item"><div class="att-header"><span class="att-subject">Minor Project</span><span class="att-pct" style="color:var(--orange)">78/100</span></div><div class="att-bar"><div class="att-fill att-warn" style="width:78%"></div></div></div>
+          </div>
+          <div style="margin-top:18px;padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);text-align:center;">
+            <div style="font-size:28px;font-weight:700;color:var(--accent)">8.4</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px">Current CGPA · ↑ +0.2 this semester</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- NOTICES SECTION -->
+      <div class="section-page" id="sec-notices">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">🔔 Notices & Announcements</div>
+          </div>
+          <div class="notice-list">
+            <div class="notice-item notice-urgent"><div class="notice-title">🚨 Mid-Semester Exam Schedule Released</div><div class="notice-meta">Admin · Today, 9:00 AM</div></div>
+            <div class="notice-item notice-info"><div class="notice-title">⚠️ Attendance Shortage Warning</div><div class="notice-meta">Academic Office · Yesterday</div></div>
+            <div class="notice-item"><div class="notice-title">📋 Assignment 4 — Cloud Computing (CC) Due Friday</div><div class="notice-meta">Prof. Sharma · 2 days ago</div></div>
+            <div class="notice-item"><div class="notice-title">📅 Sports Day — 10th April</div><div class="notice-meta">Admin · 3 days ago</div></div>
+            <div class="notice-item"><div class="notice-title">📢 Guest Lecture on AI — Room 401</div><div class="notice-meta">HOD · 4 days ago</div></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- PROFILE SECTION -->
+      <div class="section-page" id="sec-profile">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">👤 My Profile</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:14px;">
+            <div style="display:flex;align-items:center;gap:18px;padding:18px;background:var(--bg);border-radius:14px;border:1px solid var(--border);">
+              <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;">UR</div>
+              <div><div style="font-size:18px;font-weight:700;">Udit Rathod</div><div style="font-size:13px;color:var(--muted);margin-top:3px;">B.Tech AIML · 6th Semester · Section B</div></div>
+            </div>
+            <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+              <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Enrollment No.</div><div style="font-weight:700;margin-top:4px;">2022CSE045</div></div>
+              <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Branch</div><div style="font-weight:700;margin-top:4px;">Computer Science</div></div>
+              <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">CGPA</div><div style="font-weight:700;margin-top:4px;">8.4</div></div>
+              <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Batch</div><div style="font-weight:700;margin-top:4px;">2022 – 2026</div></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div> <!-- end .content -->
   </main>
 
   <script>
     const d = new Date();
     document.getElementById('dateDisplay').textContent = d.toLocaleDateString('en-IN', { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' });
+
+    // Section switcher
+    const sectionMeta = {
+      dashboard:   { title: 'Student Dashboard',  sub: "Welcome back, Udit! Here's your academic overview." },
+      attendance:  { title: 'Attendance',          sub: 'Track your subject-wise attendance.' },
+      timetable:   { title: 'Timetable',           sub: "Your weekly class schedule." },
+      materials:   { title: 'Study Materials',     sub: 'Notes and resources uploaded by faculty.' },
+      assignments: { title: 'Assignments',         sub: 'Pending and submitted assignments.' },
+      results:     { title: 'Results',             sub: 'Your marks and CGPA.' },
+      notices:     { title: 'Notices',             sub: 'Announcements from admin and faculty.' },
+      profile:     { title: 'My Profile',          sub: 'Your academic profile details.' },
+    };
+
+    function showSection(name) {
+      document.querySelectorAll('.section-page').forEach(el => {
+        el.classList.remove('active');
+      });
+      const target = document.getElementById('sec-' + name);
+      if (target) target.classList.add('active');
+      document.querySelectorAll('.nav-item[data-section]').forEach(el =>
+        el.classList.toggle('active', el.dataset.section === name)
+      );
+      const meta = sectionMeta[name] || { title: name, sub: '' };
+      document.getElementById('pageTitle').textContent = meta.title;
+      document.getElementById('pageSub').textContent = meta.sub;
+    }
+
+    document.querySelectorAll('.nav-item[data-section]').forEach(el => {
+      el.addEventListener('click', function(e) {
+        e.preventDefault();
+        showSection(this.dataset.section);
+      });
+    });
   </script>
 
-  <!-- ═══════════════════════════════════════════════════════════
-         CAMPUS MITRA — n8n RAG Agent Chat Widget
-    ════════════════════════════════════════════════════════════ -->
-  <style>
-    :root {
-      --cm-navy: #0a1628;
-      --cm-blue: #1a3a6e;
-      --cm-accent: #4f8ef7;
-      --cm-gold: #f5c842;
-      --cm-white: #ffffff;
-      --cm-light: #f0f4ff;
-      --cm-muted: #7a8aaa;
-      --cm-border: #e2e8f4;
-      --cm-radius: 18px;
-      --cm-shadow: 0 24px 64px rgba(10, 22, 40, .22), 0 2px 8px rgba(10, 22, 40, .10);
-    }
 
-    #cm-fab {
-      position: fixed;
-      bottom: 28px;
-      right: 28px;
-      z-index: 9999;
-      width: 60px;
-      height: 60px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--cm-accent), var(--cm-blue));
-      border: none;
-      cursor: pointer;
-      box-shadow: 0 8px 24px rgba(79, 142, 247, .45);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: transform .25s, box-shadow .25s;
-      outline: none;
-    }
-
-    #cm-fab:hover {
-      transform: scale(1.08);
-      box-shadow: 0 12px 32px rgba(79, 142, 247, .55);
-    }
-
-    #cm-fab svg {
-      width: 28px;
-      height: 28px;
-      fill: #fff;
-      transition: opacity .2s;
-    }
-
-    #cm-fab::before {
-      content: '';
-      position: absolute;
-      inset: -6px;
-      border-radius: 50%;
-      border: 2px solid rgba(79, 142, 247, .35);
-      animation: cm-pulse 2.4s ease-out infinite;
-    }
-
-    @keyframes cm-pulse {
-      0% {
-        transform: scale(1);
-        opacity: .7;
-      }
-
-      70% {
-        transform: scale(1.4);
-        opacity: 0;
-      }
-
-      100% {
-        transform: scale(1.4);
-        opacity: 0;
-      }
-    }
-
-    #cm-badge {
-      position: absolute;
-      top: -4px;
-      right: -4px;
-      width: 20px;
-      height: 20px;
-      border-radius: 50%;
-      background: var(--cm-gold);
-      color: var(--cm-navy);
-      font-size: 11px;
-      font-weight: 700;
-      display: none;
-      align-items: center;
-      justify-content: center;
-      border: 2px solid #fff;
-    }
-
-    #cm-chat-window {
-      position: fixed;
-      bottom: 100px;
-      right: 28px;
-      z-index: 9998;
-      width: 390px;
-      max-width: calc(100vw - 32px);
-      height: 580px;
-      max-height: calc(100vh - 120px);
-      background: var(--cm-white);
-      border-radius: var(--cm-radius);
-      box-shadow: var(--cm-shadow);
-      display: flex;
-      flex-direction: column;
-      overflow: hidden;
-      transform: scale(.9) translateY(20px);
-      opacity: 0;
-      pointer-events: none;
-      transform-origin: bottom right;
-      transition: transform .28s cubic-bezier(.22, 1, .36, 1), opacity .22s ease;
-      font-family: 'Heebo', 'DM Sans', sans-serif;
-    }
-
-    #cm-chat-window.cm-open {
-      transform: scale(1) translateY(0);
-      opacity: 1;
-      pointer-events: all;
-    }
-
-    #cm-header {
-      background: linear-gradient(135deg, var(--cm-blue) 0%, #0f2347 100%);
-      padding: 16px 18px 14px;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      flex-shrink: 0;
-      position: relative;
-      overflow: hidden;
-    }
-
-    #cm-header::before {
-      content: '';
-      position: absolute;
-      top: -40px;
-      right: -40px;
-      width: 130px;
-      height: 130px;
-      background: radial-gradient(circle, rgba(79, 142, 247, .22) 0%, transparent 70%);
-      border-radius: 50%;
-      pointer-events: none;
-    }
-
-    .cm-avatar {
-      width: 42px;
-      height: 42px;
-      border-radius: 50%;
-      background: linear-gradient(135deg, var(--cm-accent), #3b6fd4);
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 20px;
-      flex-shrink: 0;
-      box-shadow: 0 4px 12px rgba(79, 142, 247, .4);
-    }
-
-    .cm-hinfo {
-      flex: 1;
-      min-width: 0;
-    }
-
-    .cm-hname {
-      font-size: 15px;
-      font-weight: 700;
-      color: #fff;
-      font-family: 'Nunito', serif;
-      margin: 0;
-    }
-
-    .cm-hstatus {
-      font-size: 11px;
-      color: rgba(255, 255, 255, .65);
-      display: flex;
-      align-items: center;
-      gap: 5px;
-      margin-top: 2px;
-    }
-
-    .cm-dot {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: #4ade80;
-      flex-shrink: 0;
-      box-shadow: 0 0 6px rgba(74, 222, 128, .7);
-    }
-
-    #cm-close-btn {
-      background: rgba(255, 255, 255, .12);
-      border: 1px solid rgba(255, 255, 255, .18);
-      border-radius: 8px;
-      width: 32px;
-      height: 32px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      color: rgba(255, 255, 255, .8);
-      font-size: 16px;
-      line-height: 1;
-      transition: background .2s;
-      flex-shrink: 0;
-    }
-
-    #cm-close-btn:hover {
-      background: rgba(255, 255, 255, .22);
-      color: #fff;
-    }
-
-    #cm-chips {
-      background: var(--cm-light);
-      padding: 10px 14px 8px;
-      display: flex;
-      gap: 6px;
-      flex-wrap: wrap;
-      border-bottom: 1px solid var(--cm-border);
-      flex-shrink: 0;
-    }
-
-    .cm-chip {
-      padding: 4px 11px;
-      border-radius: 20px;
-      border: 1.5px solid var(--cm-border);
-      background: #fff;
-      font-size: 11.5px;
-      color: var(--cm-muted);
-      font-weight: 600;
-      cursor: pointer;
-      transition: all .18s;
-      white-space: nowrap;
-    }
-
-    .cm-chip:hover {
-      border-color: var(--cm-accent);
-      color: var(--cm-accent);
-      background: rgba(79, 142, 247, .06);
-    }
-
-    #cm-messages {
-      flex: 1;
-      overflow-y: auto;
-      padding: 16px 14px;
-      display: flex;
-      flex-direction: column;
-      gap: 10px;
-      scroll-behavior: smooth;
-    }
-
-    #cm-messages::-webkit-scrollbar {
-      width: 4px;
-    }
-
-    #cm-messages::-webkit-scrollbar-track {
-      background: transparent;
-    }
-
-    #cm-messages::-webkit-scrollbar-thumb {
-      background: var(--cm-border);
-      border-radius: 4px;
-    }
-
-    .cm-msg {
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
-      animation: cm-msgIn .22s ease forwards;
-    }
-
-    @keyframes cm-msgIn {
-      from {
-        opacity: 0;
-        transform: translateY(8px);
-      }
-
-      to {
-        opacity: 1;
-        transform: translateY(0);
-      }
-    }
-
-    .cm-msg.cm-user {
-      flex-direction: row-reverse;
-    }
-
-    .cm-msg-avatar {
-      width: 28px;
-      height: 28px;
-      border-radius: 50%;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 13px;
-      flex-shrink: 0;
-      margin-bottom: 2px;
-    }
-
-    .cm-bot-av {
-      background: linear-gradient(135deg, var(--cm-accent), #3b6fd4);
-    }
-
-    .cm-user-av {
-      background: linear-gradient(135deg, #1a3a6e, #0a1628);
-    }
-
-    .cm-bubble {
-      max-width: 78%;
-      padding: 10px 14px;
-      border-radius: 16px;
-      font-size: 13.5px;
-      line-height: 1.55;
-      word-break: break-word;
-    }
-
-    .cm-bot .cm-bubble {
-      background: var(--cm-light);
-      color: #1e293b;
-      border-bottom-left-radius: 4px;
-      border: 1px solid var(--cm-border);
-    }
-
-    .cm-user .cm-bubble {
-      background: linear-gradient(135deg, var(--cm-accent), #1a3a6e);
-      color: #fff;
-      border-bottom-right-radius: 4px;
-    }
-
-    .cm-typing-dots {
-      display: flex;
-      gap: 4px;
-      padding: 12px 14px;
-      background: var(--cm-light);
-      border-radius: 16px;
-      border-bottom-left-radius: 4px;
-      border: 1px solid var(--cm-border);
-      width: fit-content;
-    }
-
-    .cm-typing-dots span {
-      width: 7px;
-      height: 7px;
-      border-radius: 50%;
-      background: var(--cm-muted);
-      animation: cm-bounce 1.2s ease infinite;
-    }
-
-    .cm-typing-dots span:nth-child(2) {
-      animation-delay: .18s;
-    }
-
-    .cm-typing-dots span:nth-child(3) {
-      animation-delay: .36s;
-    }
-
-    @keyframes cm-bounce {
-
-      0%,
-      60%,
-      100% {
-        transform: translateY(0);
-        opacity: .5;
-      }
-
-      30% {
-        transform: translateY(-7px);
-        opacity: 1;
-      }
-    }
-
-    .cm-sources {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 5px;
-      margin-top: 7px;
-    }
-
-    .cm-source-tag {
-      font-size: 10.5px;
-      padding: 3px 9px;
-      border-radius: 12px;
-      background: rgba(79, 142, 247, .1);
-      color: var(--cm-accent);
-      border: 1px solid rgba(79, 142, 247, .22);
-      font-weight: 600;
-    }
-
-    #cm-input-row {
-      padding: 12px 14px;
-      border-top: 1px solid var(--cm-border);
-      display: flex;
-      gap: 8px;
-      align-items: flex-end;
-      background: #fff;
-      flex-shrink: 0;
-    }
-
-    #cm-input {
-      flex: 1;
-      border: 1.5px solid var(--cm-border);
-      border-radius: 12px;
-      padding: 10px 14px;
-      font-family: inherit;
-      font-size: 13.5px;
-      color: var(--cm-navy);
-      background: var(--cm-light);
-      outline: none;
-      resize: none;
-      max-height: 100px;
-      min-height: 40px;
-      line-height: 1.5;
-      transition: border-color .2s, box-shadow .2s;
-    }
-
-    #cm-input:focus {
-      border-color: var(--cm-accent);
-      box-shadow: 0 0 0 3px rgba(79, 142, 247, .12);
-      background: #fff;
-    }
-
-    #cm-input::placeholder {
-      color: var(--cm-muted);
-    }
-
-    #cm-send-btn {
-      width: 40px;
-      height: 40px;
-      border-radius: 10px;
-      border: none;
-      background: linear-gradient(135deg, var(--cm-accent), var(--cm-blue));
-      color: #fff;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      flex-shrink: 0;
-      transition: transform .15s, box-shadow .15s;
-      box-shadow: 0 4px 12px rgba(79, 142, 247, .35);
-    }
-
-    #cm-send-btn:hover {
-      transform: scale(1.06);
-      box-shadow: 0 6px 16px rgba(79, 142, 247, .45);
-    }
-
-    #cm-send-btn:disabled {
-      opacity: .45;
-      cursor: not-allowed;
-      transform: none;
-    }
-
-    #cm-send-btn svg {
-      width: 18px;
-      height: 18px;
-      fill: #fff;
-    }
-
-    #cm-footer-bar {
-      padding: 6px 14px 8px;
-      text-align: center;
-      font-size: 10.5px;
-      color: var(--cm-muted);
-      border-top: 1px solid var(--cm-border);
-      background: #fff;
-      flex-shrink: 0;
-      letter-spacing: .3px;
-    }
-
-    #cm-footer-bar span {
-      color: var(--cm-accent);
-      font-weight: 600;
-    }
-
-    @media (max-width: 480px) {
-      #cm-chat-window {
-        right: 0;
-        bottom: 0;
-        width: 100%;
-        height: 100%;
-        max-height: 100%;
-        border-radius: 0;
-      }
-
-      #cm-fab {
-        bottom: 20px;
-        right: 16px;
-      }
-    }
-  </style>
-
-  <!-- Widget HTML -->
-  <div id="cm-chat-root">
-    <button id="cm-fab" aria-label="Open Campus Mitra Assistant">
-      <div id="cm-badge">1</div>
-      <svg id="cm-fab-chat" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path d="M20 2H4C2.9 2 2 2.9 2 4v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm-2 10H6v-2h12v2zm0-3H6V7h12v2z" />
-      </svg>
-      <svg id="cm-fab-close" style="display:none;" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-        <path
-          d="M19 6.41L17.59 5 12 10.59 6.41 5 5 6.41 10.59 12 5 17.59 6.41 19 12 13.41 17.59 19 19 17.59 13.41 12z" />
-      </svg>
-    </button>
-
-    <div id="cm-chat-window" role="dialog" aria-label="Campus Mitra AI Assistant">
-      <div id="cm-header">
-        <div class="cm-avatar">🏛</div>
-        <div class="cm-hinfo">
-          <div class="cm-hname">Campus Mitra AI</div>
-          <div class="cm-hstatus">
-            <div class="cm-dot"></div>
-            Powered by n8n RAG Agent · IIST Indore
-          </div>
-        </div>
-        <div id="cm-close-btn" role="button" aria-label="Close chat" tabindex="0">✕</div>
-      </div>
-
-      <div id="cm-chips">
-        <div class="cm-chip" data-q="What is my attendance status?">📋 Attendance</div>
-        <div class="cm-chip" data-q="Show today's timetable">🗓 Timetable</div>
-        <div class="cm-chip" data-q="What notes are available?">📚 Notes</div>
-        <div class="cm-chip" data-q="Any new announcements?">🔔 Announcements</div>
-        <div class="cm-chip" data-q="How do I contact a faculty member?">📞 Contact</div>
-      </div>
-
-      <div id="cm-messages"></div>
-
-      <div id="cm-input-row">
-        <textarea id="cm-input" placeholder="Ask about attendance, notes, timetable…" rows="1"
-          aria-label="Message input"></textarea>
-        <button id="cm-send-btn" aria-label="Send message">
-          <svg viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg">
-            <path d="M2.01 21L23 12 2.01 3 2 10l15 2-15 2z" />
-          </svg>
-        </button>
-      </div>
-
-      <div id="cm-footer-bar">Responses from <span>Campus Mitra Knowledge Base</span> via n8n</div>
-    </div>
-  </div>
-
-  <script>
-    (function () {
-
-      /* ★ REPLACE THIS with your actual n8n webhook URL */
-      var N8N_WEBHOOK_URL = 'https://your-n8n-instance.com/webhook/campus-mitra-rag';
-
-      var USER_ROLE = window.CM_USER_ROLE || 'Student';
-      var USER_NAME = window.CM_USER_NAME || 'there';
-      var sessionId = 'cm-' + Math.random().toString(36).slice(2, 10);
-      var isOpen = false, isLoading = false, typingEl = null, welcomed = false;
-
-      var fab = document.getElementById('cm-fab');
-      var badge = document.getElementById('cm-badge');
-      var win = document.getElementById('cm-chat-window');
-      var closeBtn = document.getElementById('cm-close-btn');
-      var messages = document.getElementById('cm-messages');
-      var input = document.getElementById('cm-input');
-      var sendBtn = document.getElementById('cm-send-btn');
-      var chatIcon = document.getElementById('cm-fab-chat');
-      var closeIcon = document.getElementById('cm-fab-close');
-      var chips = document.querySelectorAll('.cm-chip');
-
-      function openChat() {
-        isOpen = true;
-        win.classList.add('cm-open');
-        chatIcon.style.display = 'none';
-        closeIcon.style.display = 'block';
-        badge.style.display = 'none';
-        setTimeout(function () { input.focus(); }, 320);
-      }
-      function closeChat() {
-        isOpen = false;
-        win.classList.remove('cm-open');
-        chatIcon.style.display = 'block';
-        closeIcon.style.display = 'none';
-      }
-
-      fab.addEventListener('click', function () {
-        if (isOpen) {
-          closeChat();
-        } else {
-          openChat();
-          if (!welcomed) {
-            welcomed = true;
-            setTimeout(function () {
-              addMessage('bot',
-                '👋 Hi ' + USER_NAME + '! I\'m the **Campus Mitra AI Assistant**.\n\n' +
-                'I can help you with:\n' +
-                '• Attendance records & shortages\n' +
-                '• Today\'s timetable & class info\n' +
-                '• Notes and study material\n' +
-                '• Announcements from faculty\n' +
-                '• General IIST queries\n\n' +
-                'What would you like to know?'
-              );
-            }, 300);
-          }
-        }
-      });
-
-      closeBtn.addEventListener('click', closeChat);
-      closeBtn.addEventListener('keydown', function (e) { if (e.key === 'Enter') closeChat(); });
-
-      function formatText(t) {
-        return t
-          .replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
-          .replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>')
-          .replace(/\*(.*?)\*/g, '<em>$1</em>')
-          .replace(/`(.*?)`/g, '<code style="background:rgba(79,142,247,.1);padding:1px 5px;border-radius:4px;font-size:12px">$1</code>')
-          .replace(/\n/g, '<br>');
-      }
-
-      function addMessage(role, text, sources) {
-        var wrap = document.createElement('div');
-        wrap.className = 'cm-msg ' + (role === 'user' ? 'cm-user' : 'cm-bot');
-        var av = document.createElement('div');
-        av.className = 'cm-msg-avatar ' + (role === 'user' ? 'cm-user-av' : 'cm-bot-av');
-        av.textContent = role === 'user' ? '🎓' : '🏛';
-        var bub = document.createElement('div');
-        bub.className = 'cm-bubble';
-        bub.innerHTML = formatText(text);
-        if (sources && sources.length) {
-          var src = document.createElement('div');
-          src.className = 'cm-sources';
-          sources.forEach(function (s) {
-            var tag = document.createElement('span');
-            tag.className = 'cm-source-tag';
-            tag.textContent = '📄 ' + s;
-            src.appendChild(tag);
-          });
-          bub.appendChild(src);
-        }
-        wrap.appendChild(av);
-        wrap.appendChild(bub);
-        messages.appendChild(wrap);
-        requestAnimationFrame(function () { messages.scrollTop = messages.scrollHeight; });
-        return wrap;
-      }
-
-      function showTyping() {
-        var wrap = document.createElement('div');
-        wrap.className = 'cm-msg cm-bot'; wrap.id = 'cm-typing';
-        var av = document.createElement('div');
-        av.className = 'cm-msg-avatar cm-bot-av'; av.textContent = '🏛';
-        var dots = document.createElement('div');
-        dots.className = 'cm-typing-dots';
-        dots.innerHTML = '<span></span><span></span><span></span>';
-        wrap.appendChild(av); wrap.appendChild(dots);
-        messages.appendChild(wrap); typingEl = wrap;
-        requestAnimationFrame(function () { messages.scrollTop = messages.scrollHeight; });
-      }
-      function hideTyping() { if (typingEl) { typingEl.remove(); typingEl = null; } }
-
-      function sendToAgent(text) {
-        if (isLoading || !text.trim()) return;
-        isLoading = true; sendBtn.disabled = true;
-        addMessage('user', text);
-        input.value = ''; input.style.height = 'auto';
-        showTyping();
-        fetch(N8N_WEBHOOK_URL, {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ message: text, sessionId: sessionId, userRole: USER_ROLE, userName: USER_NAME })
-        })
-          .then(function (res) {
-            if (!res.ok) throw new Error('HTTP ' + res.status);
-            return res.json();
-          })
-          .then(function (data) {
-            var reply = typeof data === 'string' ? data : (data.output || data.response || data.text || JSON.stringify(data));
-            var sources = Array.isArray(data.sources) ? data.sources : [];
-            hideTyping(); addMessage('bot', reply, sources);
-          })
-          .catch(function (err) {
-            hideTyping();
-            addMessage('bot', '⚠️ Could not reach the Campus Mitra knowledge base.\n\nPlease check the n8n webhook URL or try again.\n\n*Error:* `' + err.message + '`');
-          })
-          .finally(function () {
-            isLoading = false; sendBtn.disabled = false; input.focus();
-          });
-      }
-
-      sendBtn.addEventListener('click', function () { sendToAgent(input.value); });
-      input.addEventListener('keydown', function (e) {
-        if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendToAgent(input.value); }
-      });
-      input.addEventListener('input', function () {
-        input.style.height = 'auto';
-        input.style.height = Math.min(input.scrollHeight, 100) + 'px';
-      });
-      chips.forEach(function (chip) {
-        chip.addEventListener('click', function () {
-          if (!isOpen) openChat();
-          setTimeout(function () { sendToAgent(chip.dataset.q); }, 50);
-        });
-      });
-
-      setTimeout(function () { if (!isOpen) badge.style.display = 'flex'; }, 5000);
-
-    })();
+  <!-- n8n Chat Widget -->
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+  <script type="module">
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+    createChat({
+      webhookUrl: 'https://nishi123.app.n8n.cloud/webhook/cae0e833-2beb-4981-b93b-309f0754cd15/chat'
+    });
   </script>
-  <!-- ═══════════════ END CAMPUS MITRA CHAT WIDGET ═══════════════ -->
 
 </body>
 </html>
+
+
+
+

@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -147,6 +147,8 @@
   .teacher-name { font-size: 13px; font-weight: 600; }
   .teacher-subject { font-size: 11px; color: var(--muted); }
   .teacher-contact { margin-left: auto; padding: 5px 12px; background: rgba(124,92,252,0.1); color: var(--accent); border: 1px solid rgba(124,92,252,0.2); border-radius: 8px; font-size: 11px; font-weight: 700; cursor: pointer; }
+  .section-page { display: none; }
+  .section-page.active { display: block; }
 </style>
 </head>
 <body>
@@ -163,21 +165,21 @@
   </div>
 
   <div class="nav-section">Monitor</div>
-  <a class="nav-item active" href="#"><span class="nav-icon">🏠</span> Dashboard</a>
-  <a class="nav-item" href="#"><span class="nav-icon">📋</span> Attendance Report</a>
-  <a class="nav-item" href="#"><span class="nav-icon">🏆</span> Academic Results</a>
-  <a class="nav-item" href="#"><span class="nav-icon">🗓</span> Timetable</a>
+  <a class="nav-item active" href="#" data-section="dashboard"><span class="nav-icon">🏠</span> Dashboard</a>
+  <a class="nav-item" href="#" data-section="attendance"><span class="nav-icon">📋</span> Attendance Report</a>
+  <a class="nav-item" href="#" data-section="results"><span class="nav-icon">🏆</span> Academic Results</a>
+  <a class="nav-item" href="#" data-section="timetable"><span class="nav-icon">🗓</span> Timetable</a>
 
   <div class="nav-section">Communication</div>
-  <a class="nav-item" href="#"><span class="nav-icon">🔔</span> Notices <span class="nav-badge">3</span></a>
-  <a class="nav-item" href="#"><span class="nav-icon">👩‍🏫</span> Contact Faculty</a>
-  <a class="nav-item" href="#"><span class="nav-icon">📊</span> Progress Report</a>
+  <a class="nav-item" href="#" data-section="notices"><span class="nav-icon">🔔</span> Notices <span class="nav-badge">3</span></a>
+  <a class="nav-item" href="#" data-section="contact"><span class="nav-icon">👩‍🏫</span> Contact Faculty</a>
+  <a class="nav-item" href="#" data-section="progress"><span class="nav-icon">📊</span> Progress Report</a>
 
   <div class="nav-section">Navigation</div>
   <a class="nav-item" href="index.html"><span class="nav-icon">🌐</span> Public Site</a>
 
   <div class="nav-section">Account</div>
-  <a class="nav-item" href="#"><span class="nav-icon">👤</span> My Profile</a>
+  <a class="nav-item" href="#" data-section="profile"><span class="nav-icon">👤</span> My Profile</a>
   <a class="nav-item" href="login.html"><span class="nav-icon">🚪</span> Logout</a>
 
   <div class="sidebar-footer">
@@ -195,8 +197,8 @@
 <main class="main">
   <div class="topbar">
     <div>
-      <div class="page-title">Parent Dashboard</div>
-      <div class="page-sub">Monitor your child's academic progress at IIST.</div>
+      <div class="page-title" id="pageTitle">Parent Dashboard</div>
+      <div class="page-sub" id="pageSub">Monitor your child's academic progress at IIST.</div>
     </div>
     <div class="topbar-right">
       <a href="login.html" style="font-size:12px;color:var(--muted);text-decoration:none;display:flex;align-items:center;gap:5px;padding:6px 12px;border:1px solid var(--border);border-radius:8px;transition:all 0.2s;" onmouseover="this.style.background='var(--accent)';this.style.color='white';this.style.borderColor='var(--accent)'" onmouseout="this.style.background='';this.style.color='var(--muted)';this.style.borderColor='var(--border)'">⏻ Logout</a>
@@ -206,6 +208,7 @@
   </div>
 
   <div class="content">
+    <div class="section-page active" id="sec-dashboard">
     <div class="hero-card">
       <div>
         <div class="hero-greeting">Welcome, Sunita Ji 🙏</div>
@@ -260,7 +263,7 @@
         <div>
           <div class="stat-val" style="color:var(--red)">2</div>
           <div class="stat-name">Shortage Alerts</div>
-          <div class="stat-trend trend-down">SE & DBMS critical</div>
+          <div class="stat-trend trend-down">PDP & IP critical</div>
         </div>
       </div>
     </div>
@@ -274,25 +277,25 @@
         </div>
         <div class="att-list">
           <div class="att-item">
-            <div class="att-header"><span class="att-subject">Data Structures & Algorithms</span><span class="att-pct" style="color:var(--green)">88%</span></div>
+            <div class="att-header"><span class="att-subject">Computer Networks (CN)</span><span class="att-pct" style="color:var(--green)">88%</span></div>
             <div class="att-bar"><div class="att-fill att-good" style="width:88%"></div></div>
           </div>
           <div class="att-item">
-            <div class="att-header"><span class="att-subject">Operating Systems</span><span class="att-pct" style="color:var(--green)">82%</span></div>
+            <div class="att-header"><span class="att-subject">Theory of Computation (TOC)</span><span class="att-pct" style="color:var(--green)">82%</span></div>
             <div class="att-bar"><div class="att-fill att-good" style="width:82%"></div></div>
           </div>
           <div class="att-item">
-            <div class="att-header"><span class="att-subject">Database Management System</span><span class="att-pct" style="color:var(--orange)">72%</span></div>
+            <div class="att-header"><span class="att-subject">Practical — Image & Video Processing</span><span class="att-pct" style="color:var(--orange)">72%</span></div>
             <div class="att-bar"><div class="att-fill att-warn" style="width:72%"></div></div>
             <div class="att-warning">⚠ Needs 8 more classes to reach 75%</div>
           </div>
           <div class="att-item">
-            <div class="att-header"><span class="att-subject">Computer Networks Lab</span><span class="att-pct" style="color:var(--orange)">70%</span></div>
+            <div class="att-header"><span class="att-subject">Practical — Computer Networks</span><span class="att-pct" style="color:var(--orange)">70%</span></div>
             <div class="att-bar"><div class="att-fill att-warn" style="width:70%"></div></div>
             <div class="att-warning">⚠ Risk of detention in lab</div>
           </div>
           <div class="att-item">
-            <div class="att-header"><span class="att-subject">Software Engineering</span><span class="att-pct" style="color:var(--red)">63%</span></div>
+            <div class="att-header"><span class="att-subject">Minor Project</span><span class="att-pct" style="color:var(--red)">63%</span></div>
             <div class="att-bar"><div class="att-fill att-bad" style="width:63%"></div></div>
             <div class="att-warning">🚨 Critical! Detention risk in exams</div>
           </div>
@@ -329,17 +332,17 @@
           <div class="teacher-list">
             <div class="teacher-item">
               <div class="teacher-avatar">MJ</div>
-              <div><div class="teacher-name">Prof. Meena Joshi</div><div class="teacher-subject">Operating Systems</div></div>
+              <div><div class="teacher-name">Prof. Meena Joshi</div><div class="teacher-subject">Theory of Computation (TOC)</div></div>
               <button class="teacher-contact">📩 Message</button>
             </div>
             <div class="teacher-item">
               <div class="teacher-avatar">PS</div>
-              <div><div class="teacher-name">Prof. Priya Sharma</div><div class="teacher-subject">DBMS</div></div>
+              <div><div class="teacher-name">Prof. Priya Sharma</div><div class="teacher-subject">Cloud Computing (CC)</div></div>
               <button class="teacher-contact">📩 Message</button>
             </div>
             <div class="teacher-item">
               <div class="teacher-avatar">VR</div>
-              <div><div class="teacher-name">Prof. Vikram Rao</div><div class="teacher-subject">Software Engg.</div></div>
+              <div><div class="teacher-name">Prof. Vikram Rao</div><div class="teacher-subject">PDP</div></div>
               <button class="teacher-contact">📩 Message</button>
             </div>
           </div>
@@ -364,7 +367,7 @@
           </tr>
         </thead>
         <tbody>
-          <tr><td>Data Structures</td><td>27</td><td>62</td><td>89</td><td><span class="grade-badge grade-a">A+</span></td></tr>
+          <tr><td>Computer Networks (CN)</td><td>27</td><td>62</td><td>89</td><td><span class="grade-badge grade-a">A+</span></td></tr>
           <tr><td>Computer Organization</td><td>24</td><td>58</td><td>82</td><td><span class="grade-badge grade-a">A</span></td></tr>
           <tr><td>Discrete Mathematics</td><td>22</td><td>55</td><td>77</td><td><span class="grade-badge grade-b">B+</span></td></tr>
           <tr><td>Theory of Computation</td><td>20</td><td>50</td><td>70</td><td><span class="grade-badge grade-b">B</span></td></tr>
@@ -372,12 +375,156 @@
         </tbody>
       </table>
     </div>
+    </div> <!-- end sec-dashboard -->
+
+    <!-- ATTENDANCE SECTION -->
+    <div class="section-page" id="sec-attendance">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📊 Subject-wise Attendance</div></div>
+        <div class="att-list">
+          <div class="att-item"><div class="att-header"><span class="att-subject">Computer Networks (CN)</span><span class="att-pct" style="color:var(--green)">88%</span></div><div class="att-bar"><div class="att-fill att-good" style="width:88%"></div></div></div>
+          <div class="att-item"><div class="att-header"><span class="att-subject">Theory of Computation (TOC)</span><span class="att-pct" style="color:var(--green)">82%</span></div><div class="att-bar"><div class="att-fill att-good" style="width:82%"></div></div></div>
+          <div class="att-item"><div class="att-header"><span class="att-subject">Practical — Image & Video Processing</span><span class="att-pct" style="color:var(--orange)">72%</span></div><div class="att-bar"><div class="att-fill att-warn" style="width:72%"></div></div><div class="att-warning">⚠ Needs 8 more classes to reach 75%</div></div>
+          <div class="att-item"><div class="att-header"><span class="att-subject">Practical — Computer Networks</span><span class="att-pct" style="color:var(--orange)">70%</span></div><div class="att-bar"><div class="att-fill att-warn" style="width:70%"></div></div><div class="att-warning">⚠ Risk of detention in lab</div></div>
+          <div class="att-item"><div class="att-header"><span class="att-subject">Minor Project</span><span class="att-pct" style="color:var(--red)">63%</span></div><div class="att-bar"><div class="att-fill att-bad" style="width:63%"></div></div><div class="att-warning">🚨 Critical! Detention risk in exams</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- RESULTS SECTION -->
+    <div class="section-page" id="sec-results">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">🏆 Semester Results — Sem 3</div><a href="#" class="section-link">Download Report Card →</a></div>
+        <table class="result-table">
+          <thead><tr><th>Subject</th><th>Internal (30)</th><th>External (70)</th><th>Total (100)</th><th>Grade</th></tr></thead>
+          <tbody>
+            <tr><td>Computer Networks (CN)</td><td>27</td><td>62</td><td>89</td><td><span class="grade-badge grade-a">A+</span></td></tr>
+            <tr><td>Computer Organization</td><td>24</td><td>58</td><td>82</td><td><span class="grade-badge grade-a">A</span></td></tr>
+            <tr><td>Discrete Mathematics</td><td>22</td><td>55</td><td>77</td><td><span class="grade-badge grade-b">B+</span></td></tr>
+            <tr><td>Theory of Computation</td><td>20</td><td>50</td><td>70</td><td><span class="grade-badge grade-b">B</span></td></tr>
+            <tr><td>Python Programming Lab</td><td>28</td><td>60</td><td>88</td><td><span class="grade-badge grade-a">A+</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+    <!-- TIMETABLE SECTION -->
+    <div class="section-page" id="sec-timetable">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">🗓 Child's Weekly Timetable</div></div>
+        <div class="teacher-list">
+          <div class="teacher-item"><div style="min-width:90px;font-size:12px;font-weight:700;color:var(--accent)">Mon 9:10–10:10</div><div><div class="teacher-name">Image & Video Processing (IP)</div><div class="teacher-subject">Dr. Ratnesh Chaturvedi</div></div></div>
+          <div class="teacher-item"><div style="min-width:90px;font-size:12px;font-weight:700;color:var(--accent)">Mon 10:10–11:00</div><div><div class="teacher-name">Cloud Computing (CC)</div><div class="teacher-subject">Dr. Nishant Vijayavargiya</div></div></div>
+          <div class="teacher-item"><div style="min-width:90px;font-size:12px;font-weight:700;color:var(--accent)">Mon 11:00–11:50</div><div><div class="teacher-name">PDP</div><div class="teacher-subject">Mrs. Jaya Singh</div></div></div>
+          <div class="teacher-item"><div style="min-width:90px;font-size:12px;font-weight:700;color:var(--accent)">Mon 11:50–12:40</div><div><div class="teacher-name">Computer Networks (CN)</div><div class="teacher-subject">Smita Marwadi</div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- NOTICES SECTION -->
+    <div class="section-page" id="sec-notices">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📢 School Notices</div></div>
+        <div class="notice-list">
+          <div class="notice-item urgent"><div class="notice-title">🚨 Mid-Semester Exam — Nov 15–22</div><div class="notice-meta">Academic Office · Today</div></div>
+          <div class="notice-item warn"><div class="notice-title">⚠️ Attendance Shortage — Rahul Sharma</div><div class="notice-meta">Dept. CSE · Yesterday</div></div>
+          <div class="notice-item"><div class="notice-title">📋 Parent-Teacher Meeting — Nov 20</div><div class="notice-meta">Principal Office · 2 days ago</div></div>
+          <div class="notice-item"><div class="notice-title">📅 Sports Day — November 28</div><div class="notice-meta">Admin · 3 days ago</div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- CONTACT FACULTY SECTION -->
+    <div class="section-page" id="sec-contact">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">👩‍🏫 Contact Teachers</div></div>
+        <div class="teacher-list">
+          <div class="teacher-item"><div class="teacher-avatar">RC</div><div><div class="teacher-name">Dr. Ratnesh Chaturvedi</div><div class="teacher-subject">Image & Video Processing</div></div><button class="teacher-contact">📩 Message</button></div>
+          <div class="teacher-item"><div class="teacher-avatar">NV</div><div><div class="teacher-name">Dr. Nishant Vijayavargiya</div><div class="teacher-subject">Cloud Computing</div></div><button class="teacher-contact">📩 Message</button></div>
+          <div class="teacher-item"><div class="teacher-avatar">SM</div><div><div class="teacher-name">Smita Marwadi</div><div class="teacher-subject">Computer Networks</div></div><button class="teacher-contact">📩 Message</button></div>
+          <div class="teacher-item"><div class="teacher-avatar">AM</div><div><div class="teacher-name">Aatish Mishra</div><div class="teacher-subject">Theory of Computation</div></div><button class="teacher-contact">📩 Message</button></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROGRESS SECTION -->
+    <div class="section-page" id="sec-progress">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">📊 Overall Progress Report</div></div>
+        <div class="att-list">
+          <div class="att-item"><div class="att-header"><span class="att-subject">Overall Attendance</span><span class="att-pct" style="color:var(--orange)">75%</span></div><div class="att-bar"><div class="att-fill att-warn" style="width:75%"></div></div></div>
+          <div class="att-item"><div class="att-header"><span class="att-subject">CGPA Progress</span><span class="att-pct" style="color:var(--green)">8.4 / 10</span></div><div class="att-bar"><div class="att-fill att-good" style="width:84%"></div></div></div>
+          <div class="att-item"><div class="att-header"><span class="att-subject">Assignments Completed</span><span class="att-pct" style="color:var(--green)">3/5</span></div><div class="att-bar"><div class="att-fill att-good" style="width:60%"></div></div></div>
+        </div>
+      </div>
+    </div>
+
+    <!-- PROFILE SECTION -->
+    <div class="section-page" id="sec-profile">
+      <div class="section-card">
+        <div class="section-header"><div class="section-title">👤 My Profile</div></div>
+        <div style="display:flex;flex-direction:column;gap:14px;">
+          <div style="display:flex;align-items:center;gap:18px;padding:18px;background:var(--bg);border-radius:14px;border:1px solid var(--border);">
+            <div style="width:64px;height:64px;border-radius:50%;background:linear-gradient(135deg,var(--accent),var(--accent2));display:flex;align-items:center;justify-content:center;font-size:24px;font-weight:700;color:white;">SV</div>
+            <div><div style="font-size:18px;font-weight:700;">Sunita Verma</div><div style="font-size:13px;color:var(--muted);margin-top:3px;">Parent · Guardian of Rahul Sharma</div></div>
+          </div>
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;">
+            <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Parent ID</div><div style="font-weight:700;margin-top:4px;">PAR-2022045</div></div>
+            <div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);"><div style="font-size:11px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;">Child</div><div style="font-weight:700;margin-top:4px;">Rahul Sharma</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
   </div>
 </main>
 
 <script>
   const d = new Date();
   document.getElementById('dateDisplay').textContent = d.toLocaleDateString('en-IN', {weekday:'long', day:'numeric', month:'long', year:'numeric'});
+
+  const sectionMeta = {
+    dashboard:  { title: 'Parent Dashboard',      sub: "Monitor your child's academic progress at IIST." },
+    attendance: { title: 'Attendance Report',      sub: "Subject-wise attendance details." },
+    results:    { title: 'Academic Results',       sub: "Semester results and grades." },
+    timetable:  { title: 'Timetable',             sub: "Your child's weekly class schedule." },
+    notices:    { title: 'Notices',               sub: "School announcements and alerts." },
+    contact:    { title: 'Contact Faculty',        sub: "Reach out to teachers directly." },
+    progress:   { title: 'Progress Report',        sub: "Overall academic progress overview." },
+    profile:    { title: 'My Profile',             sub: "Your parent account details." },
+  };
+
+  function showSection(name) {
+    document.querySelectorAll('.section-page').forEach(el => el.classList.remove('active'));
+    const target = document.getElementById('sec-' + name);
+    if (target) target.classList.add('active');
+    document.querySelectorAll('.nav-item[data-section]').forEach(el =>
+      el.classList.toggle('active', el.dataset.section === name)
+    );
+    const meta = sectionMeta[name] || { title: name, sub: '' };
+    document.getElementById('pageTitle').textContent = meta.title;
+    document.getElementById('pageSub').textContent = meta.sub;
+  }
+
+  document.querySelectorAll('.nav-item[data-section]').forEach(el => {
+    el.addEventListener('click', function(e) {
+      e.preventDefault();
+      showSection(this.dataset.section);
+    });
+  });
 </script>
+
+  <!-- n8n Chat Widget -->
+  <link href="https://cdn.jsdelivr.net/npm/@n8n/chat/dist/style.css" rel="stylesheet" />
+  <script type="module">
+    import { createChat } from 'https://cdn.jsdelivr.net/npm/@n8n/chat/dist/chat.bundle.es.js';
+    createChat({
+      webhookUrl: 'https://nishi123.app.n8n.cloud/webhook/cae0e833-2beb-4981-b93b-309f0754cd15/chat'
+    });
+  </script>
 </body>
 </html>
+
+
+
+
