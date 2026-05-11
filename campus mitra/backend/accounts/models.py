@@ -19,7 +19,7 @@ class User(AbstractUser):
 class StudentProfile(models.Model):
     user = models.OneToOneField(User, on_delete=models.CASCADE, related_name='student_profile')
     enroll_no = models.CharField(max_length=20, unique=True)
-    branch = models.CharField(max_length=50, default='AIML')
+    branch = models.CharField(max_length=50, default='AIML')  # AIML, ME, CS, etc.
     semester = models.PositiveSmallIntegerField(default=6)
     section = models.CharField(max_length=5, default='B')
     cgpa = models.DecimalField(max_digits=4, decimal_places=2, default=0.0)

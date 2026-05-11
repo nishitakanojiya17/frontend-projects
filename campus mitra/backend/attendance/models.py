@@ -18,8 +18,9 @@ STATUS_CHOICES = [
     ('late',    'Late'),
 ]
 
-# All subjects from the AIML 6th sem timetable
+# All subjects across all branches
 SUBJECT_CHOICES = [
+    # AIML 6th sem
     ('IP',      'Image & Video Processing'),
     ('CC',      'Cloud Computing'),
     ('PDP',     'PDP'),
@@ -32,7 +33,52 @@ SUBJECT_CHOICES = [
     ('TOC_LAB', 'Practical — Theory of Computation'),
     ('APT',     'Aptitude'),
     ('CP',      'Competitive Programming'),
+    # CS 6th sem
+    ('ML',      'Machine Learning'),
+    ('CN_CS',   'Computer Networks (CS)'),
+    ('CD',      'Compiler Design'),
+    ('PM',      'Project Management'),
+    ('DAL',     'DAL'),
+    ('SDL',     'SDL'),
+    ('CS_MP',   'Minor Project (CS)'),
+    ('SIG_CP',  'Competitive Programming (CS)'),
+    ('APTT',    'Aptitude (CS)'),
+    ('DAL_LAB', 'Practical — DAL'),
+    ('SDL_LAB', 'Practical — SDL'),
+    ('ML_LAB',  'Practical — ML'),
+    ('CN_CS_LAB','Practical — CN (CS)'),
+    # ME 6th sem
+    ('MCD',       'Machine Component Design'),
+    ('TE',        'Thermal Engineering'),
+    ('RET',       'Renewable Energy Technology'),
+    ('RDBMS',     'RDBMS'),
+    ('APT_ME',    'Aptitude (ME)'),
+    ('MCD_LAB',   'Practical — Machine Component Design'),
+    ('CAD_LAB',   'Practical — CAD'),
+    ('RDBMS_LAB', 'Practical — RDBMS'),
+    # IT 6th sem
+    ('CGMM',     'Computer Graphics & Multimedia'),
+    ('WMC',      'Wireless & Mobile Computing'),
+    ('CD_IT',    'Compiler Design (IT)'),
+    ('SE_IT',    'Software Engineering (IT)'),
+    ('PP',       'PP'),
+    ('AD',       'Android Development'),
+    ('IT_MP',    'Minor Project (IT)'),
+    ('CP_IT',    'Competitive Programming (IT)'),
+    ('APTT_IT',  'Aptitude (IT)'),
+    ('PDP_IT',   'PDP (IT)'),
+    ('AND_LAB',  'Practical — Android/Python'),
+    ('CGMM_LAB', 'Practical — CGMM'),
+    ('WMC_LAB',  'Practical — WMC'),
 ]
+
+BRANCH_CHOICES = [
+    ('AIML', 'AI & Machine Learning'),
+    ('CS',   'Computer Science'),
+    ('IT',   'Information Technology'),
+    ('ME',   'Mechanical Engineering'),
+]
+
 
 BATCH_CHOICES = [
     ('ALL', 'All Students'),
@@ -46,14 +92,15 @@ class TimetableSlot(models.Model):
     day         = models.CharField(max_length=3, choices=DAY_CHOICES)
     start_time  = models.TimeField()
     end_time    = models.TimeField()
-    subject     = models.CharField(max_length=10, choices=SUBJECT_CHOICES)
+    subject     = models.CharField(max_length=15, choices=SUBJECT_CHOICES)
     type        = models.CharField(max_length=10, choices=TYPE_CHOICES, default='theory')
     batch       = models.CharField(max_length=3, choices=BATCH_CHOICES, default='ALL')
+    branch      = models.CharField(max_length=10, choices=BRANCH_CHOICES, default='AIML')
     faculty     = models.ForeignKey(
         User, on_delete=models.SET_NULL, null=True,
         limit_choices_to={'role': 'faculty'}
     )
-    room        = models.CharField(max_length=20, default='Room 28')
+    room        = models.CharField(max_length=20, default='Room 27')
 
     class Meta:
         ordering = ['day', 'start_time']

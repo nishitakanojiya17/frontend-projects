@@ -7,15 +7,31 @@ from .forms import NoteUploadForm
 
 @login_required
 def notes_list(request):
-    """Students see all active notes, optionally filtered by subject."""
+    """Students see notes for their branch + ALL-branch notes."""
     subject = request.GET.get('subject', '')
+    branch  = request.GET.get('branch', '')
+
     notes = Note.objects.filter(is_active=True)
+
+    # Auto-filter by student's branch
+    if request.user.role == 'student':
+        profile = getattr(request.user, 'student_profile', None)
+        if profile:
+            notes = notes.filter(branch__in=[profile.branch, 'ALL'])
+
+    # Manual branch filter (for faculty/admin)
+    if branch and request.user.role != 'student':
+        notes = notes.filter(branch=branch)
+
     if subject:
         notes = notes.filter(subject=subject)
+
     return render(request, 'notes/notes_list.html', {
         'notes': notes,
         'subject_filter': subject,
+        'branch_filter': branch,
         'subjects': Note.subject.field.choices,
+        'branches': Note.branch.field.choices,
     })
 
 

@@ -28,5 +28,18 @@
   {% block content %}{% endblock %}
 
   {% block extra_js %}{% endblock %}
+<script>
+  (function() {
+    var h = new Date().getHours();
+    var msg, emoji;
+    if (h >= 5 && h < 12)       { msg = 'Good Morning';   emoji = '☀️'; }
+    else if (h >= 12 && h < 17) { msg = 'Good Afternoon'; emoji = '🌤️'; }
+    else if (h >= 17 && h < 21) { msg = 'Good Evening';   emoji = '🌆'; }
+    else                         { msg = 'Good Night';     emoji = '🌙'; }
+    document.querySelectorAll('.hero-greeting').forEach(function(el) {
+      el.textContent = msg + ' ' + emoji;
+    });
+  })();
+</script>
 </body>
 </html>

@@ -103,7 +103,7 @@
     <div class="section-page active" id="sec-dashboard">
       <div class="hero">
         <div>
-          <div style="font-size:13px;color:rgba(255,255,255,.55);margin-bottom:4px;">Good Morning 🌿</div>
+          <div class="hero-greeting" style="font-size:13px;color:rgba(255,255,255,.55);margin-bottom:4px;">Good Morning 🌿</div>
           <div class="hero-name">{{ request.user.get_full_name }}</div>
           <div class="hero-detail">
             {% if profile %}{{ profile.department }} · {{ profile.subjects }}{% endif %}
@@ -131,21 +131,32 @@
           </div>
           {% endfor %}
         {% else %}
-          <div class="empty">No theory classes scheduled for today.</div>
+          <div class="empty">No classes scheduled for today.</div>
         {% endif %}
       </div>
 
       <div class="card">
-        <div class="card-title">📊 All My Theory Slots</div>
-        {% if theory_slots %}
+        <div class="card-title">📊 All My Slots</div>
+        {% if theory_slots or practical_slots %}
         <table>
-          <thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Batch</th><th>Room</th></tr></thead>
+          <thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Type</th><th>Batch</th><th>Room</th></tr></thead>
           <tbody>
             {% for slot in theory_slots %}
             <tr>
               <td>{{ slot.get_day_display }}</td>
               <td>{{ slot.start_time|time:"H:i" }} – {{ slot.end_time|time:"H:i" }}</td>
               <td>{{ slot.get_subject_display }}</td>
+              <td><span style="color:var(--accent);font-weight:600;">Theory</span></td>
+              <td>{{ slot.batch }}</td>
+              <td>{{ slot.room }}</td>
+            </tr>
+            {% endfor %}
+            {% for slot in practical_slots %}
+            <tr>
+              <td>{{ slot.get_day_display }}</td>
+              <td>{{ slot.start_time|time:"H:i" }} – {{ slot.end_time|time:"H:i" }}</td>
+              <td>{{ slot.get_subject_display }}</td>
+              <td><span style="color:#4f8ef7;font-weight:600;">{{ slot.get_type_display }}</span></td>
               <td>{{ slot.batch }}</td>
               <td>{{ slot.room }}</td>
             </tr>
@@ -211,7 +222,7 @@
                 <tr><th>#</th><th>Student</th><th>Enroll No.</th><th>Status</th></tr>
               </thead>
               <tbody>
-                {% for student in students %}
+                {% for student in item.slot_students %}
                 <tr>
                   <td>{{ forloop.counter }}</td>
                   <td><strong>{{ student.user.get_full_name }}</strong></td>
@@ -247,7 +258,7 @@
           <table>
             <thead><tr><th>#</th><th>Student</th><th>Enroll No.</th><th>Status</th></tr></thead>
             <tbody>
-              {% for student in students %}
+              {% for student in item.slot_students %}
               <tr>
                 <td>{{ forloop.counter }}</td>
                 <td>{{ student.user.get_full_name }}</td>
@@ -269,7 +280,7 @@
         {% endfor %}
 
         {% else %}
-          <div class="empty">No theory classes scheduled for today. Come back on a class day.</div>
+          <div class="empty">No classes scheduled for today. Come back on a class day.</div>
         {% endif %}
       </div>
     </div>
@@ -278,7 +289,7 @@
     <div class="section-page" id="sec-timetable">
       <div class="card">
         <div class="card-title">🗓 My Weekly Timetable</div>
-        {% if theory_slots %}
+        {% if theory_slots or practical_slots %}
         <table>
           <thead><tr><th>Day</th><th>Time</th><th>Subject</th><th>Type</th><th>Batch</th><th>Room</th></tr></thead>
           <tbody>
@@ -287,7 +298,17 @@
               <td>{{ slot.get_day_display }}</td>
               <td>{{ slot.start_time|time:"H:i" }} – {{ slot.end_time|time:"H:i" }}</td>
               <td><strong>{{ slot.get_subject_display }}</strong></td>
-              <td>{{ slot.get_type_display }}</td>
+              <td><span style="color:var(--accent);font-weight:600;">Theory</span></td>
+              <td>{{ slot.batch }}</td>
+              <td>{{ slot.room }}</td>
+            </tr>
+            {% endfor %}
+            {% for slot in practical_slots %}
+            <tr>
+              <td>{{ slot.get_day_display }}</td>
+              <td>{{ slot.start_time|time:"H:i" }} – {{ slot.end_time|time:"H:i" }}</td>
+              <td><strong>{{ slot.get_subject_display }}</strong></td>
+              <td><span style="color:#4f8ef7;font-weight:600;">{{ slot.get_type_display }}</span></td>
               <td>{{ slot.batch }}</td>
               <td>{{ slot.room }}</td>
             </tr>

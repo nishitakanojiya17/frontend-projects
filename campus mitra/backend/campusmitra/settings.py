@@ -55,12 +55,12 @@ WSGI_APPLICATION = 'campusmitra.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql',
-        'NAME': os.environ.get('MYSQL_DATABASE', 'campus_mitra_db'),
-        'USER': os.environ.get('MYSQL_USER', 'root'),
+        'NAME':     os.environ.get('MYSQL_DATABASE', 'campus_mitra_db'),
+        'USER':     os.environ.get('MYSQL_USER',     'root'),
         'PASSWORD': os.environ.get('MYSQL_PASSWORD', 'root'),
-        'HOST': os.environ.get('MYSQL_HOST', 'localhost'),
-        'PORT': os.environ.get('MYSQL_PORT', '3306'),
-        'OPTIONS': {'charset': 'utf8mb4'},
+        'HOST':     os.environ.get('MYSQL_HOST',     'localhost'),
+        'PORT':     os.environ.get('MYSQL_PORT',     '3306'),
+        'OPTIONS':  {'charset': 'utf8mb4'},
     }
 }
 

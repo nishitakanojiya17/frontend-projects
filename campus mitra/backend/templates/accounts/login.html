@@ -141,5 +141,9 @@
     btn.className = 'login-btn ' + roles[role].cls;
     btn.textContent = `Sign in as ${roles[role].label} →`;
   }
+
+  // Pre-select role from query param (e.g. ?role=faculty)
+  const urlRole = new URLSearchParams(window.location.search).get('role');
+  if (urlRole && roles[urlRole]) selectRole(urlRole);
 </script>
 {% endblock %}

@@ -184,6 +184,7 @@
 </style>
 </head>
 <body>
+<script src="js/config.js"></script>
 
 <div class="bg-orbs">
   <div class="orb orb-1"></div>
@@ -253,11 +254,15 @@
 </div>
 
 <script>
+  // Set this to your deployed backend URL in production
+  // e.g. 'https://campus-mitra-backend.up.railway.app'
+  const BACKEND_URL = window.BACKEND_URL || '';
+
   const roles = {
-    student: { label: 'Student', file: 'student.html', cls: 'rs' },
-    faculty: { label: 'Faculty', file: 'faculty.html', cls: 'rf' },
-    parent:  { label: 'Parent',  file: 'parent.html',  cls: 'rp' },
-    admin:   { label: 'Admin',   file: 'admin.html',   cls: 'ra' },
+    student: { label: 'Student', cls: 'rs' },
+    faculty: { label: 'Faculty', cls: 'rf' },
+    parent:  { label: 'Parent',  cls: 'rp' },
+    admin:   { label: 'Admin',   cls: 'ra' },
   };
   let active = 'student';
 
@@ -279,6 +284,7 @@
     const btn = document.getElementById('loginBtn');
 
     if (!u || !p) {
+      err.textContent = '⚠️ Please enter your email/ID and password to continue.';
       err.classList.add('show');
       setTimeout(() => err.classList.remove('show'), 3000);
       return;
@@ -286,7 +292,40 @@
 
     btn.classList.add('loading');
     btn.textContent = 'Signing in…';
-    setTimeout(() => { window.location.href = roles[active].file; }, 700);
+
+    // Submit via a hidden form so Django CSRF is handled server-side
+    const form = document.createElement('form');
+    form.method = 'POST';
+    form.action = BACKEND_URL + '/login/';
+    [['username', u], ['password', p], ['role', active]].forEach(([name, val]) => {
+      const input = document.createElement('input');
+      input.type = 'hidden';
+      input.name = name;
+      input.value = val;
+      form.appendChild(input);
+    });
+    // Django requires CSRF — fetch the token from the backend first
+    fetch(BACKEND_URL + '/login/', { credentials: 'include' })
+      .then(r => r.text())
+      .then(html => {
+        const match = html.match(/name="csrfmiddlewaretoken" value="([^"]+)"/);
+        if (match) {
+          const csrf = document.createElement('input');
+          csrf.type = 'hidden';
+          csrf.name = 'csrfmiddlewaretoken';
+          csrf.value = match[1];
+          form.appendChild(csrf);
+        }
+        document.body.appendChild(form);
+        form.submit();
+      })
+      .catch(() => {
+        err.textContent = '⚠️ Cannot reach the server. Make sure the backend is running on port 8000.';
+        err.classList.add('show');
+        setTimeout(() => err.classList.remove('show'), 5000);
+        btn.classList.remove('loading');
+        btn.textContent = `Sign in as ${roles[active].label} →`;
+      });
   }
 </script>
 </body>
