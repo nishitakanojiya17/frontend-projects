@@ -3,17 +3,8 @@
 import os
 import sys
 
-# Patch PyMySQL to act as mysqlclient before Django loads
-try:
-    import pymysql
-    pymysql.version_info = (2, 2, 1, 'final', 0)
-    pymysql.install_as_MySQLdb()
-except ImportError:
-    pass
-
 
 def main():
-    """Run administrative tasks."""
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'campusmitra.settings')
     try:
         from django.core.management import execute_from_command_line

@@ -247,16 +247,15 @@
       Sign in as Student →
     </button>
 
-    <p class="demo-hint">Demo mode — enter any credentials to explore the dashboards</p>
+    <p class="demo-hint">Try: <strong>student@iist.ac.in</strong> / <strong>student123</strong></p>
   </div>
 
   <p class="login-footer">© 2025 Campus Mitra · All rights reserved</p>
 </div>
 
 <script>
-  // Set this to your deployed backend URL in production
-  // e.g. 'https://campus-mitra-backend.up.railway.app'
-  const BACKEND_URL = window.BACKEND_URL || '';
+  // Backend URL — update this if you deploy the Django backend elsewhere
+  const BACKEND_URL = (window.BACKEND_URL || 'http://127.0.0.1:8000').replace(/\/$/, '');
 
   const roles = {
     student: { label: 'Student', cls: 'rs' },
@@ -264,6 +263,15 @@
     parent:  { label: 'Parent',  cls: 'rp' },
     admin:   { label: 'Admin',   cls: 'ra' },
   };
+
+  // Role → dashboard page mapping
+  const dashboards = {
+    student: 'student.html',
+    faculty: 'faculty.html',
+    parent:  'parent.html',
+    admin:   'admin.html',
+  };
+
   let active = 'student';
 
   function selectRole(role) {
@@ -277,55 +285,73 @@
     document.getElementById('errorMsg').classList.remove('show');
   }
 
-  function doLogin() {
-    const u = document.getElementById('username').value.trim();
-    const p = document.getElementById('password').value.trim();
+  async function doLogin() {
+    const email = document.getElementById('username').value.trim().toLowerCase();
+    const password = document.getElementById('password').value.trim();
     const err = document.getElementById('errorMsg');
     const btn = document.getElementById('loginBtn');
 
-    if (!u || !p) {
-      err.textContent = '⚠️ Please enter your email/ID and password to continue.';
-      err.classList.add('show');
-      setTimeout(() => err.classList.remove('show'), 3000);
+    if (!email || !password) {
+      showError('⚠️ Please enter your email/ID and password to continue.');
       return;
     }
 
     btn.classList.add('loading');
     btn.textContent = 'Signing in…';
 
-    // Submit via a hidden form so Django CSRF is handled server-side
-    const form = document.createElement('form');
-    form.method = 'POST';
-    form.action = BACKEND_URL + '/login/';
-    [['username', u], ['password', p], ['role', active]].forEach(([name, val]) => {
-      const input = document.createElement('input');
-      input.type = 'hidden';
-      input.name = name;
-      input.value = val;
-      form.appendChild(input);
-    });
-    // Django requires CSRF — fetch the token from the backend first
-    fetch(BACKEND_URL + '/login/', { credentials: 'include' })
-      .then(r => r.text())
-      .then(html => {
-        const match = html.match(/name="csrfmiddlewaretoken" value="([^"]+)"/);
-        if (match) {
-          const csrf = document.createElement('input');
-          csrf.type = 'hidden';
-          csrf.name = 'csrfmiddlewaretoken';
-          csrf.value = match[1];
-          form.appendChild(csrf);
-        }
-        document.body.appendChild(form);
-        form.submit();
-      })
-      .catch(() => {
-        err.textContent = '⚠️ Cannot reach the server. Make sure the backend is running on port 8000.';
-        err.classList.add('show');
-        setTimeout(() => err.classList.remove('show'), 5000);
-        btn.classList.remove('loading');
-        btn.textContent = `Sign in as ${roles[active].label} →`;
+    try {
+      const res = await fetch(`${BACKEND_URL}/api/auth/login/`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email, password }),
       });
+
+      const data = await res.json();
+
+      if (!res.ok) {
+        showError('⚠️ ' + (data.error || 'Invalid credentials. Please try again.'));
+        resetBtn();
+        return;
+      }
+
+      // Verify the returned role matches the selected role tab
+      if (data.role !== active) {
+        showError(`⚠️ This account is registered as "${data.role}", not "${active}". Please select the correct role.`);
+        resetBtn();
+        return;
+      }
+
+      // Store auth data
+      localStorage.setItem('access_token', data.access);
+      localStorage.setItem('refresh_token', data.refresh);
+      localStorage.setItem('role', data.role);
+      localStorage.setItem('name', data.name);
+      localStorage.setItem('email', data.email);
+      if (data.department)    localStorage.setItem('department', data.department);
+      if (data.branch_code)   localStorage.setItem('branch_code', data.branch_code);
+      if (data.enrollment_no) localStorage.setItem('enrollment_no', data.enrollment_no);
+      if (data.faculty_id)    localStorage.setItem('faculty_id', data.faculty_id);
+
+      // Redirect to the correct dashboard
+      window.location.href = dashboards[data.role] || 'index.html';
+
+    } catch (e) {
+      showError('⚠️ Cannot reach the server. Make sure the backend is running on port 8000.');
+      resetBtn();
+    }
+  }
+
+  function showError(msg) {
+    const err = document.getElementById('errorMsg');
+    err.textContent = msg;
+    err.classList.add('show');
+    setTimeout(() => err.classList.remove('show'), 5000);
+  }
+
+  function resetBtn() {
+    const btn = document.getElementById('loginBtn');
+    btn.classList.remove('loading');
+    btn.textContent = `Sign in as ${roles[active].label} →`;
   }
 </script>
 </body>

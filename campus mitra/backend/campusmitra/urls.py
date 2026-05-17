@@ -2,12 +2,8 @@ from django.contrib import admin
 from django.urls import path, include
 from django.conf import settings
 from django.conf.urls.static import static
-from django.shortcuts import redirect
 
 urlpatterns = [
-    path('',        lambda r: redirect('login'), name='home'),
-    path('admin/',  admin.site.urls),
-    path('',        include('accounts.urls')),
-    path('',        include('notes.urls')),
-    path('',        include('attendance.urls')),
+    path('admin/', admin.site.urls),
+    path('api/', include('core.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
