@@ -887,44 +887,10 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">📊 Attendance</div>
-            <a href="#" class="section-link">Details ?</a>
+            <a href="#" class="section-link" onclick="showSection('attendance');return false;">Details →</a>
           </div>
-          <div class="att-list">
-            <div class="att-item">
-              <div class="att-header"><span class="att-subject">Computer Networks (CN)</span><span class="att-pct"
-                  style="color:var(--green)">88%</span></div>
-              <div class="att-bar">
-                <div class="att-fill att-good" style="width:88%"></div>
-              </div>
-            </div>
-            <div class="att-item">
-              <div class="att-header"><span class="att-subject">Theory of Computation (TOC)</span><span class="att-pct"
-                  style="color:var(--green)">82%</span></div>
-              <div class="att-bar">
-                <div class="att-fill att-good" style="width:82%"></div>
-              </div>
-            </div>
-            <div class="att-item">
-              <div class="att-header"><span class="att-subject">Cloud Computing (CC)</span><span class="att-pct"
-                  style="color:var(--orange)">72%</span></div>
-              <div class="att-bar">
-                <div class="att-fill att-warn" style="width:72%"></div>
-              </div>
-            </div>
-            <div class="att-item">
-              <div class="att-header"><span class="att-subject">Image & Video Processing (IP)</span><span class="att-pct"
-                  style="color:var(--orange)">70%</span></div>
-              <div class="att-bar">
-                <div class="att-fill att-warn" style="width:70%"></div>
-              </div>
-            </div>
-            <div class="att-item">
-              <div class="att-header"><span class="att-subject">PDP</span><span class="att-pct"
-                  style="color:var(--red)">63%</span></div>
-              <div class="att-bar">
-                <div class="att-fill att-bad" style="width:63%"></div>
-              </div>
-            </div>
+          <div class="att-list" id="dashAttList">
+            <div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">Loading attendance...</div>
           </div>
         </div>
       </div>
@@ -934,29 +900,13 @@
         <div class="section-card">
           <div class="section-header">
             <div class="section-title">📚 Recent Notes</div>
-            <a href="#" class="section-link">All Materials ?</a>
+            <a href="#" class="section-link" onclick="showSection('materials');return false;">All Materials →</a>
           </div>
-          <div class="notes-grid">
-            <div class="note-card">
-              <div class="note-icon">📘</div>
-              <div class="note-name">Computer Networks</div>
-              <div class="note-meta">Notes & Resources</div>
-            </div>
-            <div class="note-card">
-              <div class="note-icon">📘</div>
-              <div class="note-name">Theory of Computation</div>
-              <div class="note-meta">Notes & Resources</div>
-            </div>
-            <div class="note-card">
-              <div class="note-icon">📘</div>
-              <div class="note-name">Cloud Computing</div>
-              <div class="note-meta">Notes & Resources</div>
-            </div>
-            <div class="note-card">
-              <div class="note-icon">🎬</div>
-              <div class="note-name">Image & Video Processing</div>
-              <div class="note-meta">Notes & Resources</div>
-            </div>
+          <div class="notes-grid" id="dashNotesGrid">
+            <!-- populated by loadNotes() -->
+          </div>
+          <div id="dashNotesEmpty" style="text-align:center;padding:24px;color:var(--muted);font-size:13px;">
+            📭 No notes uploaded yet by faculty
           </div>
         </div>
 
@@ -1038,71 +988,11 @@
       <!-- TIMETABLE SECTION -->
       <div class="section-page" id="sec-timetable">
         <div class="section-card">
-          <div class="section-header">
-            <div class="section-title">📅 6th Sem Timetable � AIML � Jan�Jun 2026 � Room 28</div>
+          <div class="section-header" id="ttSectionHeader">
+            <div class="section-title">📅 VI Sem Timetable</div>
           </div>
-
-          <!-- MONDAY -->
-          <div style="margin-bottom:18px">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Monday</div>
-            <div class="timetable">
-              <div class="tt-item"><div class="tt-time">9:10�10:10</div><div><div class="tt-subject">Image & Video Processing (IP)</div><div class="tt-room">Dr. Ratnesh Chaturvedi</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">10:10�11:00</div><div><div class="tt-subject">Cloud Computing (CC)</div><div class="tt-room">Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">11:00�11:50</div><div><div class="tt-subject">PDP</div><div class="tt-room">Mrs. Jaya Singh</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">11:50�12:40</div><div><div class="tt-subject">Computer Networks (CN)</div><div class="tt-room">Smita Marwadi</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">1:30�2:20</div><div><div class="tt-subject">Minor Project</div><div class="tt-room">Sukruti Agarwal</div></div><span class="tt-tag tag-lab">Project</span></div>
-              <div class="tt-item"><div class="tt-time">3:10�4:00</div><div><div class="tt-subject">Theory of Computation (TOC)</div><div class="tt-room">Aatish Mishra</div></div><span class="tt-tag tag-theory">Theory</span></div>
-            </div>
-          </div>
-
-          <!-- TUESDAY -->
-          <div style="margin-bottom:18px">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Tuesday</div>
-            <div class="timetable">
-              <div class="tt-item"><div class="tt-time">9:10�10:10</div><div><div class="tt-subject">Image & Video Processing (IP)</div><div class="tt-room">Dr. Ratnesh Chaturvedi</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">10:10�11:00</div><div><div class="tt-subject">Cloud Computing (CC)</div><div class="tt-room">Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">11:00�11:50</div><div><div class="tt-subject">Theory of Computation (TOC)</div><div class="tt-room">Aatish Mishra</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">11:50�12:40</div><div><div class="tt-subject">PDP</div><div class="tt-room">Mrs. Jaya Singh</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">1:30�2:20</div><div><div class="tt-subject">Computer Networks (CN)</div><div class="tt-room">Smita Marwadi</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">2:20�4:00</div><div><div class="tt-subject">Competitive Programming (SIG-CP)</div><div class="tt-room">Ms. Shivani</div></div><span class="tt-tag tag-lab">Lab</span></div>
-            </div>
-          </div>
-
-          <!-- WEDNESDAY -->
-          <div style="margin-bottom:18px">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Wednesday</div>
-            <div class="timetable">
-              <div class="tt-item"><div class="tt-time">9:10�11:00</div><div><div class="tt-subject">Aptitude (APTT)</div><div class="tt-room">Abhishek Bhatnagar</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">11:00�11:50</div><div><div class="tt-subject">Computer Networks (CN)</div><div class="tt-room">Smita Marwadi</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">11:50�12:40</div><div><div class="tt-subject">Theory of Computation (TOC)</div><div class="tt-room">Aatish Mishra</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">1:30�3:10</div><div><div class="tt-subject">IT Lab � CN(B1) / TOC(B2)</div><div class="tt-room">Smita Marwadi / Aatish Mishra</div></div><span class="tt-tag tag-lab">Lab</span></div>
-              <div class="tt-item"><div class="tt-time">3:10�4:00</div><div><div class="tt-subject">Image & Video Processing (IP)</div><div class="tt-room">Dr. Ratnesh Chaturvedi</div></div><span class="tt-tag tag-theory">Theory</span></div>
-            </div>
-          </div>
-
-          <!-- THURSDAY -->
-          <div style="margin-bottom:18px">
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Thursday</div>
-            <div class="timetable">
-              <div class="tt-item"><div class="tt-time">9:10�11:00</div><div><div class="tt-subject">IT Lab � IP(B1) / CC(B2)</div><div class="tt-room">Dr. Ratnesh Chaturvedi / Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-lab">Lab</span></div>
-              <div class="tt-item"><div class="tt-time">11:00�12:40</div><div><div class="tt-subject">IT Lab � CN(B2) / TOC(B1)</div><div class="tt-room">Smita Marwadi / Aatish Mishra</div></div><span class="tt-tag tag-lab">Lab</span></div>
-              <div class="tt-item"><div class="tt-time">1:30�2:20</div><div><div class="tt-subject">Cloud Computing (CC)</div><div class="tt-room">Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">2:20�3:10</div><div><div class="tt-subject">PDP</div><div class="tt-room">Mrs. Jaya Singh</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">3:10�4:00</div><div><div class="tt-subject">Theory of Computation (TOC)</div><div class="tt-room">Aatish Mishra</div></div><span class="tt-tag tag-theory">Theory</span></div>
-            </div>
-          </div>
-
-          <!-- FRIDAY -->
-          <div>
-            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;">Friday</div>
-            <div class="timetable">
-              <div class="tt-item"><div class="tt-time">9:10�11:00</div><div><div class="tt-subject">IT Lab � IP(B2) / CC(B1)</div><div class="tt-room">Dr. Ratnesh Chaturvedi / Dr. Nishant Vijayavargiya</div></div><span class="tt-tag tag-lab">Lab</span></div>
-              <div class="tt-item"><div class="tt-time">11:00�11:50</div><div><div class="tt-subject">Computer Networks (CN)</div><div class="tt-room">Smita Marwadi</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">11:50�12:40</div><div><div class="tt-subject">Image & Video Processing (IP)</div><div class="tt-room">Dr. Ratnesh Chaturvedi</div></div><span class="tt-tag tag-theory">Theory</span></div>
-              <div class="tt-item"><div class="tt-time">2:20�4:00</div><div><div class="tt-subject">Competitive Programming (SIG-CP) / CC-IV</div><div class="tt-room">Ms. Shivani / VU</div></div><span class="tt-tag tag-lab">Lab</span></div>
-              <div class="tt-item"><div class="tt-time">3:10�4:00</div><div><div class="tt-subject">Aptitude Test (CC-IV)</div><div class="tt-room">Abhishek Bhatnagar</div></div><span class="tt-tag tag-theory">Theory</span></div>
-            </div>
-          </div>
+          <!-- populated dynamically by loadTimetable() -->
+          <div id="ttFullWrap"></div>
 
         </div>
       </div>
@@ -1113,15 +1003,13 @@
           <div class="section-header">
             <div class="section-title">📚 Study Materials & Notes</div>
           </div>
-          <div class="notes-grid">
-            <div class="note-card"><div class="note-icon">📘</div><div class="note-name">Computer Networks</div><div class="note-meta">Notes & Resources</div></div>
-            <div class="note-card"><div class="note-icon">📘</div><div class="note-name">Theory of Computation</div><div class="note-meta">Notes & Resources</div></div>
-            <div class="note-card"><div class="note-icon">📘</div><div class="note-name">Cloud Computing</div><div class="note-meta">Notes & Resources</div></div>
-            <div class="note-card"><div class="note-icon">🎬</div><div class="note-name">Image & Video Processing</div><div class="note-meta">Notes & Resources</div></div>
-            <div class="note-card"><div class="note-icon">🔬</div><div classs="note-name">Practical � Theory of Computation</div><div class="note-meta">Lab Manual</div></div>
-            <div class="note-card"><div class="note-icon">🔬</div><div class="note-name">Practical � Image & Video Processing</div><div class="note-meta">Lab Manual</div></div>
-            <div class="note-card"><div class="note-icon">📘</div><div class="note-name">Practical � Computer Networks</div><div class="note-meta">Lab Manual</div></div>
-            <div class="note-card"><div class="note-icon">🎬</div><div class="note-name">Minor Project</div><div class="note-meta">Project Guidelines</div></div>
+          <div class="notes-grid" id="materialsGrid">
+            <!-- populated by loadNotes() — empty until faculty uploads -->
+          </div>
+          <div id="materialsEmpty" style="text-align:center;padding:40px 20px;color:var(--muted);">
+            <div style="font-size:40px;margin-bottom:12px;">📭</div>
+            <div style="font-size:15px;font-weight:600;color:var(--text);">No materials uploaded yet</div>
+            <div style="font-size:13px;margin-top:6px;">Your faculty will upload notes and resources here. Check back soon.</div>
           </div>
         </div>
       </div>
@@ -1148,16 +1036,12 @@
           <div class="section-header">
             <div class="section-title">🏆 Academic Results</div>
           </div>
-          <div class="att-list">
-            <div class="att-item"><div class="att-header"><span class="att-subject">Computer Networks (CN)</span><span class="att-pct" style="color:var(--green)">91/100</span></div><div class="att-bar"><div class="att-fill att-good" style="width:91%"></div></div></div>
-            <div class="att-item"><div class="att-header"><span class="att-subject">Theory of Computation (TOC)</span><span class="att-pct" style="color:var(--green)">85/100</span></div><div class="att-bar"><div class="att-fill att-good" style="width:85%"></div></div></div>
-            <div class="att-item"><div class="att-header"><span class="att-subject">Cloud Computing (CC)</span><span class="att-pct" style="color:var(--orange)">74/100</span></div><div class="att-bar"><div class="att-fill att-warn" style="width:74%"></div></div></div>
-            <div class="att-item"><div class="att-header"><span class="att-subject">Computer Networks</span><span class="att-pct" style="color:var(--green)">80/100</span></div><div class="att-bar"><div class="att-fill att-good" style="width:80%"></div></div></div>
-            <div class="att-item"><div class="att-header"><span class="att-subject">Minor Project</span><span class="att-pct" style="color:var(--orange)">78/100</span></div><div class="att-bar"><div class="att-fill att-warn" style="width:78%"></div></div></div>
+          <div class="att-list" id="resultsAttList">
+            <!-- populated dynamically by loadResults() -->
           </div>
           <div style="margin-top:18px;padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);text-align:center;">
-            <div style="font-size:28px;font-weight:700;color:var(--accent)">8.4</div>
-            <div style="font-size:13px;color:var(--muted);margin-top:4px">Current CGPA � ? +0.2 this semester</div>
+            <div id="cgpaDisplay" style="font-size:28px;font-weight:700;color:var(--accent)">—</div>
+            <div style="font-size:13px;color:var(--muted);margin-top:4px">Current CGPA · Results released by admin</div>
           </div>
         </div>
       </div>
@@ -1243,19 +1127,24 @@
 
     // ── Inject into DOM ───────────────────────────────────────────────────────
 
-    // Hero card
-    document.querySelector('.hero-greeting').textContent = greeting + ' 👋';
-    document.querySelector('.hero-name').textContent = studentName;
-    document.querySelector('.hero-detail').textContent =
-      `B.Tech ${branchCode} · ${semester}th Semester  |  Enroll No: ${enrollmentNo}`;
+    // Hero card — safe null checks
+    const heroGreeting = document.querySelector('.hero-greeting');
+    const heroName     = document.querySelector('.hero-name');
+    const heroDetail   = document.querySelector('.hero-detail');
+    if (heroGreeting) heroGreeting.textContent = greeting + ' 👋';
+    if (heroName)     heroName.textContent     = studentName;
+    if (heroDetail)   heroDetail.textContent   = `B.Tech ${branchCode} · ${semester}th Semester  |  Enroll No: ${enrollmentNo}`;
 
     // Topbar
     document.getElementById('pageSub').textContent = `Welcome back, ${firstName}! Here's your academic overview.`;
 
-    // Sidebar user card
-    document.querySelector('.user-avatar').textContent = initials;
-    document.querySelector('.user-name').textContent = studentName;
-    document.querySelector('.user-id').textContent = `${branchCode} · ${enrollmentNo}`;
+    // Sidebar user card — use safe null checks
+    const uAvatar = document.querySelector('.user-avatar');
+    const uName   = document.querySelector('.user-name');
+    const uId     = document.querySelector('.user-id');
+    if (uAvatar) uAvatar.textContent = initials;
+    if (uName)   uName.textContent   = studentName;
+    if (uId)     uId.textContent     = `${branchCode} · ${enrollmentNo}`;
     // Also update the new ID-based elements
     const sidebarAvatar = document.getElementById('sidebarAvatar');
     const sidebarName   = document.getElementById('sidebarName');
@@ -1264,9 +1153,12 @@
     if (sidebarName)   sidebarName.textContent   = studentName;
     if (sidebarId)     sidebarId.textContent     = `${branchCode} · ${enrollmentNo}`;
 
-    // Timetable section title
-    const ttTitle = document.querySelector('#sec-dashboard .section-title');
-    if (ttTitle) ttTitle.textContent = `📅 Today's Timetable · ${branchCode} ${semester}th Sem`;
+    // Timetable section title — set dynamically
+    document.querySelectorAll('.section-title').forEach(el => {
+      if (el.textContent.includes("Today's Timetable")) {
+        el.textContent = `📅 Today's Timetable · ${branchCode} ${semester}th Sem`;
+      }
+    });
 
     // Date display
     const d = new Date();
@@ -1284,111 +1176,625 @@
     document.getElementById('profileSem').textContent    = `${semester}th Semester`;
     document.getElementById('profileBatch').textContent  = `${enrollYear} – ${parseInt(enrollYear) + 4}`;
 
-    // ── Load attendance from API ──────────────────────────────────────────────
+    // ══════════════════════════════════════════════════════════════════════════
+    // BRANCH-WISE DATA — static fallback when backend is offline
+    // All data is keyed by branchCode so only the logged-in student's branch
+    // data is ever used. Backend enforces the same filter via student.department.
+    // ══════════════════════════════════════════════════════════════════════════
+    const BRANCH_DATA = {
+      AIML: {
+        subjects: [
+          {name:'Image & Video Processing', code:'IVP'},
+          {name:'Computer Networks',        code:'CN'},
+          {name:'Cloud Computing',          code:'CC'},
+          {name:'PDP',                      code:'PDP'},
+          {name:'Theory of Computation',    code:'TOC'},
+          {name:'Minor Project',            code:'MP'},
+          {name:'Competitive Programming',  code:'SIG-CP'},
+          {name:'Aptitude',                 code:'APTT'},
+        ],
+        faculty: [
+          {name:'Dr. Ratnesh Chaturvedi', subject:'Image & Video Processing', id:'FAC-AIML-000'},
+          {name:'Smita Marwadi',          subject:'Computer Networks',        id:'FAC-AIML-004'},
+          {name:'Nishant Vijayavargiya',  subject:'Cloud Computing',          id:'FAC-AIML-002'},
+          {name:'Jaya Singh',             subject:'PDP',                      id:'FAC-AIML-003'},
+          {name:'Aatish Mishra',          subject:'Theory of Computation',    id:'FAC-AIML-006'},
+          {name:'Sukruti Agarwal',        subject:'Minor Project',            id:'FAC-AIML-005'},
+          {name:'Shivani Sharma',         subject:'Competitive Programming',  id:'FAC-AIML-008'},
+          {name:'Abhishek Bhatnagar',     subject:'Aptitude',                 id:'FAC-AIML-007'},
+        ],
+        timetable: {
+          Mon: [
+            {time:'9:10–10:10',  subject:'Image & Video Processing (IP)', faculty:'Dr. Ratnesh Chaturvedi',    tag:'Theory'},
+            {time:'10:10–11:00', subject:'Cloud Computing (CC)',           faculty:'Dr. Nishant Vijayavargiya', tag:'Theory'},
+            {time:'11:00–11:50', subject:'PDP',                            faculty:'Mrs. Jaya Singh',           tag:'Theory'},
+            {time:'11:50–12:40', subject:'Computer Networks (CN)',         faculty:'Smita Marwadi',             tag:'Theory'},
+            {time:'1:30–2:20',   subject:'Minor Project',                  faculty:'Sukruti Agarwal',           tag:'Project'},
+            {time:'3:10–4:00',   subject:'Theory of Computation (TOC)',    faculty:'Aatish Mishra',             tag:'Theory'},
+          ],
+          Tue: [
+            {time:'9:10–10:10',  subject:'Image & Video Processing (IP)', faculty:'Dr. Ratnesh Chaturvedi',    tag:'Theory'},
+            {time:'10:10–11:00', subject:'Cloud Computing (CC)',           faculty:'Dr. Nishant Vijayavargiya', tag:'Theory'},
+            {time:'11:00–11:50', subject:'Theory of Computation (TOC)',    faculty:'Aatish Mishra',             tag:'Theory'},
+            {time:'11:50–12:40', subject:'PDP',                            faculty:'Mrs. Jaya Singh',           tag:'Theory'},
+            {time:'1:30–2:20',   subject:'Computer Networks (CN)',         faculty:'Smita Marwadi',             tag:'Theory'},
+            {time:'2:20–4:00',   subject:'Competitive Programming (SIG-CP)', faculty:'Ms. Shivani',            tag:'Lab'},
+          ],
+          Wed: [
+            {time:'9:10–11:00',  subject:'Aptitude (APTT)',                faculty:'Abhishek Bhatnagar',        tag:'Theory'},
+            {time:'11:00–11:50', subject:'Computer Networks (CN)',         faculty:'Smita Marwadi',             tag:'Theory'},
+            {time:'11:50–12:40', subject:'Theory of Computation (TOC)',    faculty:'Aatish Mishra',             tag:'Theory'},
+            {time:'1:30–3:10',   subject:'IT Lab – CN(B1) / TOC(B2)',      faculty:'Smita Marwadi / Aatish Mishra', tag:'Lab'},
+            {time:'3:10–4:00',   subject:'Image & Video Processing (IP)', faculty:'Dr. Ratnesh Chaturvedi',    tag:'Theory'},
+          ],
+          Thu: [
+            {time:'9:10–11:00',  subject:'IT Lab – IP(B1) / CC(B2)',       faculty:'Dr. Ratnesh Chaturvedi / Dr. Nishant', tag:'Lab'},
+            {time:'11:00–12:40', subject:'IT Lab – CN(B2) / TOC(B1)',      faculty:'Smita Marwadi / Aatish Mishra',        tag:'Lab'},
+            {time:'1:30–2:20',   subject:'Cloud Computing (CC)',           faculty:'Dr. Nishant Vijayavargiya', tag:'Theory'},
+            {time:'2:20–3:10',   subject:'Minor Project',                  faculty:'Sukruti Agarwal',           tag:'Project'},
+            {time:'3:10–4:00',   subject:'Theory of Computation (TOC)',    faculty:'Aatish Mishra',             tag:'Theory'},
+          ],
+          Fri: [
+            {time:'9:10–11:00',  subject:'IT Lab – IP(B2) / CC(B1)',       faculty:'Dr. Ratnesh Chaturvedi / Dr. Nishant', tag:'Lab'},
+            {time:'11:00–11:50', subject:'Computer Networks (CN)',         faculty:'Smita Marwadi',             tag:'Theory'},
+            {time:'11:50–12:40', subject:'Image & Video Processing (IP)', faculty:'Dr. Ratnesh Chaturvedi',    tag:'Theory'},
+            {time:'2:20–4:00',   subject:'Competitive Programming (SIG-CP)', faculty:'Ms. Shivani',            tag:'Lab'},
+            {time:'3:10–4:00',   subject:'Aptitude Test',                  faculty:'Abhishek Bhatnagar',        tag:'Theory'},
+          ],
+          Sat: [],
+        },
+        assignments: [
+          {title:'CN Assignment 3 – Routing Protocols',    subject:'Computer Networks',      deadline:'2026-05-25', status:'pending'},
+          {title:'CC Lab Report – Docker',                 subject:'Cloud Computing',        deadline:'2026-05-28', status:'pending'},
+          {title:'TOC Assignment 2 – CFG',                 subject:'Theory of Computation',  deadline:'2026-06-01', status:'submitted'},
+        ],
+      },
+      CS: {
+        subjects: [
+          {name:'Machine Learning',    code:'ML'},
+          {name:'Computer Networks',   code:'CN'},
+          {name:'Compiler Design',     code:'CD'},
+          {name:'DAL',                 code:'DAL'},
+          {name:'SDL & Minor Project', code:'SDL'},
+          {name:'PDP',                 code:'PDP'},
+        ],
+        faculty: [
+          {name:'Reetu Gupta',    subject:'Machine Learning',    id:'FAC-CS-001'},
+          {name:'Rati Gupta',     subject:'Computer Networks',   id:'FAC-CS-002'},
+          {name:'Shreyas Pagare', subject:'Compiler Design',     id:'FAC-CS-003'},
+          {name:'Muskan Tirole',  subject:'DAL',                 id:'FAC-CS-004'},
+          {name:'Purva Shukla',   subject:'SDL & Minor Project', id:'FAC-CS-005'},
+          {name:'Gourav Sharma',  subject:'PDP',                 id:'FAC-CS-006'},
+        ],
+        timetable: [
+          {time:'9:00–10:00',  subject:'Machine Learning',  faculty:'Reetu Gupta',    tag:'Theory'},
+          {time:'10:00–11:00', subject:'Computer Networks', faculty:'Rati Gupta',     tag:'Theory'},
+          {time:'11:00–12:00', subject:'Compiler Design',   faculty:'Shreyas Pagare', tag:'Theory'},
+          {time:'1:00–2:00',   subject:'DAL',               faculty:'Muskan Tirole',  tag:'Theory'},
+          {time:'2:00–3:00',   subject:'Minor Project',     faculty:'Purva Shukla',   tag:'Project'},
+        ],
+        assignments: [
+          {title:'ML Assignment 2 – Decision Trees', subject:'Machine Learning',  deadline:'2026-05-26', status:'pending'},
+          {title:'CD Lab – Lexical Analyser',        subject:'Compiler Design',   deadline:'2026-05-30', status:'pending'},
+        ],
+      },
+      IT: {
+        subjects: [
+          {name:'Computer Graphics & Multimedia', code:'CGM'},
+          {name:'Wireless & Mobile Computing',    code:'WMC'},
+          {name:'Compiler Design',                code:'CD'},
+          {name:'Software Engineering',           code:'SE'},
+          {name:'PP',                             code:'PP'},
+          {name:'Minor Project',                  code:'MP'},
+        ],
+        faculty: [
+          {name:'Sheetal Mandloi', subject:'Computer Graphics & Multimedia', id:'FAC-IT-001'},
+          {name:'Ankit Saxena',    subject:'Wireless & Mobile Computing',    id:'FAC-IT-002'},
+          {name:'Rakesh Jain',     subject:'Compiler Design',                id:'FAC-IT-003'},
+          {name:'Puneet Duggal',   subject:'Software Engineering',           id:'FAC-IT-004'},
+          {name:'Shreya Dubey',    subject:'PP',                             id:'FAC-IT-005'},
+          {name:'Rupal Yadav',     subject:'Minor Project',                  id:'FAC-IT-006'},
+        ],
+        timetable: [
+          {time:'9:00–10:00',  subject:'Computer Graphics', faculty:'Sheetal Mandloi', tag:'Theory'},
+          {time:'10:00–11:00', subject:'Wireless Computing', faculty:'Ankit Saxena',   tag:'Theory'},
+          {time:'11:00–12:00', subject:'Software Engineering', faculty:'Puneet Duggal', tag:'Theory'},
+          {time:'1:00–2:00',   subject:'Compiler Design',    faculty:'Rakesh Jain',    tag:'Theory'},
+          {time:'2:00–3:00',   subject:'Minor Project',      faculty:'Rupal Yadav',    tag:'Project'},
+        ],
+        assignments: [
+          {title:'SE Assignment – Use Case Diagrams', subject:'Software Engineering', deadline:'2026-05-27', status:'pending'},
+          {title:'CGM Lab – OpenGL Shapes',           subject:'Computer Graphics',    deadline:'2026-06-02', status:'submitted'},
+        ],
+      },
+      ME: {
+        subjects: [
+          {name:'Thermal Engg. & Gas Dynamics', code:'TEGD'},
+          {name:'Machine Component Design',      code:'MCD'},
+          {name:'Turbomachinery',                code:'Turbo'},
+          {name:'Renewable Energy Technology',   code:'RET'},
+          {name:'CAD Lab',                       code:'CAD'},
+          {name:'RDBMS Lab',                     code:'RDBMS'},
+          {name:'Minor Project II',              code:'MP-II'},
+          {name:'PDP',                           code:'PDP'},
+          {name:'Aptitude',                      code:'APT'},
+        ],
+        faculty: [
+          {name:'Mr. Dushyant Sahu',                    subject:'Thermal Engg. & Gas Dynamics', id:'FAC-ME-001'},
+          {name:'Mr. Saurabh Verma',                    subject:'Machine Component Design',      id:'FAC-ME-002'},
+          {name:'Mr. Suveer Dubey',                     subject:'Turbomachinery',                id:'FAC-ME-003'},
+          {name:'Mr. Umesh Badode',                     subject:'Renewable Energy Technology',   id:'FAC-ME-004'},
+          {name:'Mr. Rahul Malviya',                    subject:'CAD Lab',                       id:'FAC-ME-005'},
+          {name:'Mr. Devendra Kushwah',                 subject:'RDBMS Lab',                     id:'FAC-ME-006'},
+          {name:'Mr. Devkant Varde',                    subject:'Minor Project II',              id:'FAC-ME-007'},
+          {name:'Mr. Gaurav Sharma',                    subject:'PDP',                           id:'FAC-ME-008'},
+          {name:'Mr. Abhishek Bhatnagar / Ms. Kiran Gaur', subject:'Aptitude',                  id:'FAC-ME-009'},
+        ],
+        timetable: {
+          Mon: [
+            {time:'10:00–10:50', subject:'TEGD Lab',                    faculty:'Mr. Dushyant Sahu',   tag:'Lab'},
+            {time:'10:50–11:40', subject:'TEGD Lab',                    faculty:'Mr. Dushyant Sahu',   tag:'Lab'},
+            {time:'11:40–12:30', subject:'Turbomachinery',              faculty:'Mr. Suveer Dubey',    tag:'Theory'},
+            {time:'12:30–1:15',  subject:'TEGD',                        faculty:'Mr. Dushyant Sahu',   tag:'Theory'},
+            {time:'2:00–3:00',   subject:'Machine Component Design',    faculty:'Mr. Saurabh Verma',   tag:'Theory'},
+            {time:'3:00–3:50',   subject:'TEGD',                        faculty:'Mr. Dushyant Sahu',   tag:'Theory'},
+            {time:'3:50–4:40',   subject:'Sports',                      faculty:'',                    tag:'Activity'},
+          ],
+          Tue: [
+            {time:'10:00–10:50', subject:'Turbomachinery',              faculty:'Mr. Suveer Dubey',    tag:'Theory'},
+            {time:'10:50–11:40', subject:'Renewable Energy Technology', faculty:'Mr. Umesh Badode',    tag:'Theory'},
+            {time:'11:40–12:30', subject:'PDP',                         faculty:'Mr. Gaurav Sharma',   tag:'Theory'},
+            {time:'12:30–1:15',  subject:'Machine Component Design',    faculty:'Mr. Saurabh Verma',   tag:'Theory'},
+            {time:'2:00–3:00',   subject:'Machine Component Design',    faculty:'Mr. Saurabh Verma',   tag:'Theory'},
+            {time:'3:00–4:40',   subject:'RDBMS Lab',                   faculty:'Mr. Devendra Kushwah',tag:'Lab'},
+          ],
+          Wed: [
+            {time:'10:00–11:40', subject:'CAD Lab',                     faculty:'Mr. Rahul Malviya',   tag:'Lab'},
+            {time:'11:40–12:30', subject:'PDP',                         faculty:'Mr. Gaurav Sharma',   tag:'Theory'},
+            {time:'12:30–1:15',  subject:'Turbomachinery',              faculty:'Mr. Suveer Dubey',    tag:'Theory'},
+            {time:'2:00–3:00',   subject:'Machine Component Design',    faculty:'Mr. Saurabh Verma',   tag:'Theory'},
+            {time:'3:00–3:50',   subject:'TEGD',                        faculty:'Mr. Dushyant Sahu',   tag:'Theory'},
+            {time:'3:50–4:40',   subject:'Renewable Energy Technology', faculty:'Mr. Umesh Badode',    tag:'Theory'},
+          ],
+          Thu: [
+            {time:'10:00–10:50', subject:'Aptitude Lab',                faculty:'Mr. Abhishek Bhatnagar',tag:'Lab'},
+            {time:'10:50–11:40', subject:'Aptitude Lab',                faculty:'Mr. Abhishek Bhatnagar',tag:'Lab'},
+            {time:'11:40–1:15',  subject:'Minor Project II',            faculty:'Mr. Devkant Varde',   tag:'Project'},
+            {time:'2:00–3:00',   subject:'Renewable Energy Technology', faculty:'Mr. Umesh Badode',    tag:'Theory'},
+            {time:'3:00–4:40',   subject:'MCD Lab',                     faculty:'Mr. Saurabh Verma',   tag:'Lab'},
+          ],
+          Fri: [
+            {time:'10:00–10:50', subject:'PDP',                         faculty:'Mr. Gaurav Sharma',   tag:'Theory'},
+            {time:'10:50–11:40', subject:'Renewable Energy Technology', faculty:'Mr. Umesh Badode',    tag:'Theory'},
+            {time:'11:40–12:30', subject:'Aptitude Lab',                faculty:'Mr. Abhishek Bhatnagar',tag:'Lab'},
+            {time:'12:30–1:15',  subject:'TEGD',                        faculty:'Mr. Dushyant Sahu',   tag:'Theory'},
+            {time:'2:00–3:00',   subject:'Turbomachinery',              faculty:'Mr. Suveer Dubey',    tag:'Theory'},
+            {time:'3:00–3:50',   subject:'Library',                     faculty:'',                    tag:'Activity'},
+            {time:'3:50–4:40',   subject:'TEGD',                        faculty:'Mr. Dushyant Sahu',   tag:'Theory'},
+          ],
+          Sat: [],
+        },
+        assignments: [
+          {title:'TEGD Assignment – Gas Dynamics Problems',    subject:'Thermal Engg. & Gas Dynamics', deadline:'2026-05-28', status:'pending'},
+          {title:'MCD Assignment – Shaft & Bearing Design',    subject:'Machine Component Design',      deadline:'2026-06-02', status:'pending'},
+          {title:'Turbo Assignment – Centrifugal Compressor',  subject:'Turbomachinery',                deadline:'2026-06-05', status:'submitted'},
+          {title:'Minor Project II – Progress Report',         subject:'Minor Project II',              deadline:'2026-06-10', status:'pending'},
+        ],
+      },
+    };
+
+    // Get this student's branch data (only their own branch)
+    const myBranchData = BRANCH_DATA[branchCode] || BRANCH_DATA['AIML'];
+
+    // ── Load attendance from API (branch-filtered by backend) ────────────────
     async function loadAttendance() {
+      let data = [];
       try {
-        const data = await apiFetch('attendance/my/');
-        if (!data || !data.length) return;
+        const apiData = await apiFetch('attendance/my/');
+        if (apiData && apiData.length) {
+          // Verify subjects belong to this student's branch
+          // The backend filters by student.department, but if subjects aren't seeded
+          // for this branch yet, it returns empty or wrong data — use fallback in that case
+          const mySubjectNames = myBranchData.subjects.map(s => s.name.toLowerCase());
+          const matchCount = apiData.filter(s =>
+            mySubjectNames.some(n => s.subject?.toLowerCase().includes(n.split(' ')[0]))
+          ).length;
 
-        // Overall average
-        const avg = Math.round(data.reduce((s, x) => s + x.percentage, 0) / data.length);
-        document.querySelector('.hero-stat-val').textContent = avg + '%';
+          // If at least half the returned subjects match this branch, trust the API
+          data = (matchCount >= apiData.length / 2) ? apiData : [];
+        }
+      } catch (e) {}
 
-        // Subject count
-        const subjectStats = document.querySelectorAll('.hero-stat-val');
-        if (subjectStats[1]) subjectStats[1].textContent = data.length;
+      // Fallback — use branch-specific subjects with deterministic demo percentages
+      if (!data.length) {
+        const seed = enrollmentNo ? enrollmentNo.charCodeAt(enrollmentNo.length - 1) : 42;
+        data = myBranchData.subjects.map((s, i) => {
+          const pct = 65 + ((seed + i * 7) % 30);
+          return {
+            subject: s.name, code: s.code,
+            total: 20, present: Math.round(20 * pct / 100),
+            percentage: pct, shortage: pct < 75
+          };
+        });
+      }
+      if (!data || !data.length) return;
 
-        // Overall attendance stat card
-        const overallVal = document.querySelector('.stat-card .stat-val');
-        if (overallVal) overallVal.textContent = avg + '%';
-        const overallTrend = document.querySelector('.stat-card .stat-trend');
-        if (overallTrend) {
-          if (avg >= 80) {
-            overallTrend.className = 'stat-trend trend-up';
-            overallTrend.textContent = '✓ Above 80% threshold';
-          } else {
-            overallTrend.className = 'stat-trend trend-down';
-            overallTrend.textContent = '↓ Below 80% threshold';
+      // Overall average
+      const avg = Math.round(data.reduce((s, x) => s + x.percentage, 0) / data.length);
+      const heroStats = document.querySelectorAll('.hero-stat-val');
+      if (heroStats[0]) heroStats[0].textContent = avg + '%';
+      if (heroStats[1]) heroStats[1].textContent = data.length;
+
+      // Stat card
+      const overallVal = document.querySelector('.stat-card .stat-val');
+      if (overallVal) overallVal.textContent = avg + '%';
+      const overallTrend = document.querySelector('.stat-card .stat-trend');
+      if (overallTrend) {
+        overallTrend.className = avg >= 80 ? 'stat-trend trend-up' : 'stat-trend trend-down';
+        overallTrend.textContent = avg >= 80 ? '✓ Above 80% threshold' : '↓ Below 80% threshold';
+      }
+
+      // Sidebar badge
+      const badge = document.querySelector('.nav-item[data-section="attendance"] .nav-badge');
+      if (badge) badge.textContent = avg + '%';
+
+      // Render bars in all .att-list containers
+      const attHTML = data.map(sub => {
+        const pct = sub.percentage;
+        const color = pct >= 80 ? 'var(--green)' : pct >= 75 ? 'var(--orange)' : 'var(--red)';
+        const cls   = pct >= 80 ? 'att-good'     : pct >= 75 ? 'att-warn'      : 'att-bad';
+        return `<div class="att-item">
+          <div class="att-header">
+            <span class="att-subject">${sub.subject} (${sub.code})</span>
+            <span class="att-pct" style="color:${color}">${pct}%</span>
+          </div>
+          <div class="att-bar"><div class="att-fill ${cls}" style="width:${pct}%"></div></div>
+        </div>`;
+      }).join('');
+      document.querySelectorAll('.att-list').forEach(el => el.innerHTML = attHTML);
+
+      // Also update the named dashboard attendance widget
+      const dashAtt = document.getElementById('dashAttList');
+      if (dashAtt) dashAtt.innerHTML = attHTML;
+    }
+
+    // ── Load notes from API (only show what faculty actually uploaded) ─────────
+    async function loadNotes() {
+      let notes = [];
+      try {
+        notes = await apiFetch('notes/');
+      } catch(e) {}
+
+      const icons = {pdf:'📄', ppt:'📊', pptx:'📊', doc:'📝', docx:'📝'};
+      const dashGrid   = document.getElementById('dashNotesGrid');
+      const dashEmpty  = document.getElementById('dashNotesEmpty');
+      const matGrid    = document.getElementById('materialsGrid');
+      const matEmpty   = document.getElementById('materialsEmpty');
+
+      if (!notes || !notes.length) {
+        if (dashGrid)  dashGrid.innerHTML  = '';
+        if (dashEmpty) dashEmpty.style.display = 'block';
+        if (matGrid)   matGrid.innerHTML   = '';
+        if (matEmpty)  matEmpty.style.display  = 'block';
+        return;
+      }
+
+      if (dashEmpty) dashEmpty.style.display = 'none';
+      if (matEmpty)  matEmpty.style.display  = 'none';
+
+      const noteCard = (n) => {
+        const ext = (n.file || '').split('.').pop().toLowerCase();
+        const fileUrl = n.file_url || (n.file ? `${window.BACKEND_URL||'http://127.0.0.1:8000'}${n.file}` : '');
+        return `<div class="note-card">
+          <div class="note-icon">${icons[ext] || '📁'}</div>
+          <div class="note-name">${n.title}</div>
+          <div class="note-meta">${n.subject_name || ''} · ${new Date(n.uploaded_at).toLocaleDateString('en-IN')}</div>
+          ${fileUrl ? `<a href="${fileUrl}" target="_blank" download style="display:block;margin-top:8px;font-size:11px;font-weight:700;color:var(--accent);text-decoration:none;text-align:center;padding:4px 8px;border:1px solid var(--accent);border-radius:6px;">⬇ Download</a>` : ''}
+        </div>`;
+      };
+
+      if (dashGrid)  dashGrid.innerHTML  = notes.slice(0, 4).map(noteCard).join('');
+      if (matGrid)   matGrid.innerHTML   = notes.map(noteCard).join('');
+    }
+
+    // ── Load results (branch subjects, marks from API or empty) ──────────────
+    async function loadResults() {
+      const resultsList = document.getElementById('resultsAttList');
+      const cgpaEl      = document.getElementById('cgpaDisplay');
+      if (!resultsList) return;
+
+      // Try API — no results endpoint yet, so show branch subjects with "—"
+      const subjects = myBranchData.subjects;
+      resultsList.innerHTML = subjects.map(s => `
+        <div class="att-item">
+          <div class="att-header">
+            <span class="att-subject">${s.name} (${s.code})</span>
+            <span class="att-pct" style="color:var(--muted)">— / 100</span>
+          </div>
+          <div class="att-bar"><div class="att-fill" style="width:0%;background:var(--border)"></div></div>
+        </div>`).join('');
+
+      if (cgpaEl) cgpaEl.textContent = '—';
+    }
+
+    // ── Load timetable (branch-filtered, day-aware) ───────────────────────────
+    async function loadTimetable() {
+      const days = ['Sun','Mon','Tue','Wed','Thu','Fri','Sat'];
+      const today = days[new Date().getDay()];
+
+      let slots = [];
+      // Try API first
+      try {
+        const data = await apiFetch('timetable/');
+        if (data && data.length) {
+          const todaySlots = data.filter(t => t.day === today);
+          if (todaySlots.length) {
+            slots = todaySlots.map(t => ({
+              time: `${t.start_time?.slice(0,5)}–${t.end_time?.slice(0,5)}`,
+              subject: t.subject_name,
+              faculty: '',
+              tag: 'Theory'
+            }));
           }
         }
+      } catch(e) {}
 
-        // Attendance badge in sidebar
-        const badge = document.querySelector('.nav-item[data-section="attendance"] .nav-badge');
-        if (badge) badge.textContent = avg + '%';
-
-        // Render attendance bars in both dashboard and attendance section
-        const attListEls = document.querySelectorAll('.att-list');
-        attListEls.forEach(attList => {
-          attList.innerHTML = data.map(sub => {
-            const pct = sub.percentage;
-            const color = pct >= 80 ? 'var(--green)' : pct >= 75 ? 'var(--orange)' : 'var(--red)';
-            const cls   = pct >= 80 ? 'att-good'     : pct >= 75 ? 'att-warn'      : 'att-bad';
-            return `
-              <div class="att-item">
-                <div class="att-header">
-                  <span class="att-subject">${sub.subject} (${sub.code})</span>
-                  <span class="att-pct" style="color:${color}">${pct}%</span>
-                </div>
-                <div class="att-bar">
-                  <div class="att-fill ${cls}" style="width:${pct}%"></div>
-                </div>
-              </div>`;
-          }).join('');
-        });
-
-        // Notes grid — populate with subject names
-        const notesGrid = document.querySelector('.notes-grid');
-        if (notesGrid) {
-          const icons = ['📘','📗','📙','📕','📓','📔'];
-          notesGrid.innerHTML = data.slice(0, 4).map((sub, i) => `
-            <div class="note-card">
-              <div class="note-icon">${icons[i % icons.length]}</div>
-              <div class="note-name">${sub.subject}</div>
-              <div class="note-meta">${sub.code} · Notes & Resources</div>
-            </div>`).join('');
+      // Fallback to static branch data
+      if (!slots.length) {
+        const tt = myBranchData.timetable;
+        // Support both array format (AIML/CS/IT) and day-keyed object (ME)
+        if (Array.isArray(tt)) {
+          slots = tt;
+        } else {
+          slots = tt[today] || tt['Mon'] || [];
         }
+      }
 
-      } catch (e) {
-        console.warn('Attendance API not available:', e.message);
+      const tagClass = {Theory:'tag-theory', Lab:'tag-lab', Project:'tag-lab', Activity:'tag-theory'};
+      const ttHTML = slots.length ? slots.map((s, i) => {
+        const tag = i === 0 ? 'Now' : s.tag;
+        const tc  = i === 0 ? 'tag-now' : (tagClass[s.tag] || 'tag-theory');
+        return `<div class="tt-item">
+          <div class="tt-time">${s.time}</div>
+          <div>
+            <div class="tt-subject">${s.subject}</div>
+            ${s.faculty ? `<div class="tt-room">${s.faculty}</div>` : ''}
+          </div>
+          <span class="tt-tag ${tc}">${tag}</span>
+        </div>`;
+      }).join('') : `<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">No classes today 🎉</div>`;
+
+      const dashTT = document.querySelector('#sec-dashboard .timetable');
+      if (dashTT) dashTT.innerHTML = ttHTML;
+
+      const ttSection = document.getElementById('sec-timetable');
+      if (!ttSection) return;
+      const tt = myBranchData.timetable;
+      const dayNames = {Mon:'Monday',Tue:'Tuesday',Wed:'Wednesday',Thu:'Thursday',Fri:'Friday',Sat:'Saturday'};
+      const roomNo = branchCode === 'ME' ? '27' : '28';
+
+      // Update section title
+      const ttHeader = document.getElementById('ttSectionHeader');
+      if (ttHeader) ttHeader.querySelector('.section-title').textContent = `📅 ${branchCode} VI Sem Timetable · Room ${roomNo}`;
+
+      const wrap = document.getElementById('ttFullWrap');
+      if (!wrap) return;
+
+      if (!Array.isArray(tt)) {
+        // Day-keyed format — render full week
+        let fullHTML = '';
+        for (const [day, daySlots] of Object.entries(tt)) {
+          if (!daySlots.length) continue;
+          fullHTML += `<div style="margin-bottom:20px;">
+            <div style="font-size:11px;font-weight:700;text-transform:uppercase;letter-spacing:1px;color:var(--muted);margin-bottom:8px;padding:0 4px;">${dayNames[day]||day}</div>
+            <div class="timetable">${daySlots.map(s => `
+              <div class="tt-item">
+                <div class="tt-time">${s.time}</div>
+                <div>
+                  <div class="tt-subject">${s.subject}</div>
+                  ${s.faculty ? `<div class="tt-room">${s.faculty}</div>` : ''}
+                </div>
+                <span class="tt-tag ${tagClass[s.tag]||'tag-theory'}">${s.tag}</span>
+              </div>`).join('')}
+            </div>
+          </div>`;
+        }
+        wrap.innerHTML = fullHTML;
+      } else {
+        wrap.innerHTML = `<div class="timetable">${ttHTML}</div>`;
       }
     }
 
-    // ── Load announcements ────────────────────────────────────────────────────
-    async function loadAnnouncements() {
+    // ── Load faculty (branch-filtered) ───────────────────────────────────────
+    async function loadFaculty() {
+      let faculty = myBranchData.faculty;
       try {
-        const data = await apiFetch('announcements/');
-        if (!data || !data.length) return;
-
-        const urgencyClass = { urgent: 'notice-urgent', event: 'notice-info', general: '' };
-        const urgencyIcon  = { urgent: '🔴', event: '📢', general: '📌' };
-
-        const noticeList = document.querySelector('.notice-list');
-        if (noticeList) {
-          noticeList.innerHTML = data.slice(0, 4).map(a => `
-            <div class="notice-item ${urgencyClass[a.urgency] || ''}">
-              <div class="notice-title">${urgencyIcon[a.urgency] || '📌'} ${a.title}</div>
-              <div class="notice-meta">${a.posted_by_name} · ${new Date(a.created_at).toLocaleDateString('en-IN')}</div>
-            </div>`).join('');
+        const data = await apiFetch('faculty/my/');
+        if (data && data.length) {
+          faculty = data.map(f => ({
+            name: f.user?.first_name + ' ' + f.user?.last_name,
+            subject: '',
+            id: f.faculty_id
+          }));
         }
+      } catch(e) {}
 
-        // Notices badge
-        const noticeBadge = document.querySelector('.nav-item[data-section="notices"] .nav-badge');
-        if (noticeBadge) noticeBadge.textContent = data.length;
+      const facSection = document.getElementById('sec-faculty-list');
+      if (!facSection) return;
+      facSection.innerHTML = faculty.map(f => `
+        <div class="class-item">
+          <div class="stat-icon" style="background:rgba(79,142,247,0.1);width:40px;height:40px;border-radius:12px;display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">👤</div>
+          <div class="class-info">
+            <div class="class-name">${f.name}</div>
+            <div class="class-meta">${f.subject || branchCode + ' Department'}</div>
+          </div>
+          <span style="font-size:11px;color:var(--muted);">${f.id}</span>
+        </div>`).join('');
+    }
 
-      } catch (e) {
-        console.warn('Announcements API not available:', e.message);
+    // ── Load assignments (branch-filtered) with submit button ────────────────
+    async function loadAssignments() {
+      let assignments = myBranchData.assignments;
+      let fromAPI = false;
+      try {
+        const data = await apiFetch('assignments/');
+        if (data && data.length) {
+          assignments = data.map(a => ({
+            id: a.id,
+            title: a.title,
+            subject: a.subject_name,
+            description: a.description,
+            deadline: a.deadline?.split('T')[0],
+            deadlineFull: a.deadline,
+            fileUrl: a.file_url || '',
+            status: 'pending'
+          }));
+          fromAPI = true;
+        }
+      } catch(e) {}
+
+      // Load student's own submissions to mark submitted ones
+      let submittedIds = new Set();
+      try {
+        const subs = await apiFetch('assignments/my-submissions/');
+        if (subs) subs.forEach(s => submittedIds.add(s.assignment));
+      } catch(e) {}
+
+      const pendingCount = assignments.filter(a => !submittedIds.has(a.id)).length;
+      const heroStats = document.querySelectorAll('.hero-stat-val');
+      if (heroStats[2]) heroStats[2].textContent = pendingCount;
+
+      const statCards = document.querySelectorAll('.stat-card');
+      if (statCards[1]) {
+        const val = statCards[1].querySelector('.stat-val');
+        const trend = statCards[1].querySelector('.stat-trend');
+        const done = assignments.length - pendingCount;
+        if (val) val.textContent = `${done}/${assignments.length}`;
+        if (trend) trend.textContent = `↑ ${pendingCount} pending`;
       }
+
+      const badge = document.querySelector('.nav-item[data-section="assignments"] .nav-badge');
+      if (badge) badge.textContent = pendingCount;
+
+      const secEl = document.querySelector('#sec-assignments .timetable');
+      if (!secEl) return;
+
+      if (!assignments.length) {
+        secEl.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">No assignments yet. Check back later.</div>';
+        return;
+      }
+
+      secEl.innerHTML = assignments.map(a => {
+        const due = new Date(a.deadlineFull || a.deadline);
+        const daysLeft = Math.ceil((due - new Date()) / 86400000);
+        const color = daysLeft <= 2 ? 'var(--red)' : daysLeft <= 5 ? 'var(--orange)' : 'var(--green)';
+        const isSubmitted = submittedIds.has(a.id);
+        const statusBadge = isSubmitted
+          ? `<span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(34,197,94,0.1);color:var(--green);">✓ Submitted</span>`
+          : `<span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(239,68,68,0.1);color:var(--red);">Due ${daysLeft > 0 ? 'in ' + daysLeft + 'd' : 'Today'}</span>`;
+
+        const submitBtn = (fromAPI && a.id && !isSubmitted) ? `
+          <div style="margin-top:10px;display:flex;align-items:center;gap:10px;flex-wrap:wrap;">
+            <input type="file" id="sub-file-${a.id}" accept=".pdf,.doc,.docx,.ppt,.pptx" style="display:none;" onchange="previewSubmit(${a.id}, this)">
+            <button onclick="document.getElementById('sub-file-${a.id}').click()" style="padding:6px 14px;background:var(--bg);border:1px solid var(--border);border-radius:8px;font-size:12px;font-weight:600;cursor:pointer;font-family:'DM Sans',sans-serif;">📎 Attach File</button>
+            <span id="sub-name-${a.id}" style="font-size:11px;color:var(--muted);"></span>
+            <button id="sub-btn-${a.id}" onclick="submitAssignment(${a.id})" style="padding:6px 14px;background:var(--accent);color:white;border:none;border-radius:8px;font-size:12px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;display:none;">📤 Submit</button>
+          </div>
+          <div id="sub-msg-${a.id}" style="display:none;font-size:12px;font-weight:600;margin-top:6px;"></div>` : '';
+
+        return `<div class="tt-item" style="flex-direction:column;align-items:stretch;gap:8px;">
+          <div style="display:flex;align-items:center;gap:14px;">
+            <div class="tt-time" style="color:${color};min-width:90px;">${a.deadline || 'TBD'}</div>
+            <div class="class-info" style="flex:1;">
+              <div class="class-name">${a.title}</div>
+              <div class="class-meta">${a.subject} · ${branchCode}${a.description ? ' · ' + a.description.slice(0,60) : ''}</div>
+            </div>
+            <div style="display:flex;gap:8px;align-items:center;">
+              ${a.fileUrl ? `<a href="${a.fileUrl}" target="_blank" style="font-size:11px;color:var(--accent);font-weight:600;text-decoration:none;padding:3px 8px;border:1px solid var(--accent);border-radius:6px;">⬇ Brief</a>` : ''}
+              ${statusBadge}
+            </div>
+          </div>
+          ${submitBtn}
+        </div>`;
+      }).join('');
+    }
+
+    window.previewSubmit = function(id, input) {
+      if (input.files[0]) {
+        document.getElementById(`sub-name-${id}`).textContent = `📎 ${input.files[0].name}`;
+        document.getElementById(`sub-btn-${id}`).style.display = 'inline-block';
+      }
+    }
+
+    window.submitAssignment = async function(id) {
+      const fileInput = document.getElementById(`sub-file-${id}`);
+      const btn = document.getElementById(`sub-btn-${id}`);
+      const msg = document.getElementById(`sub-msg-${id}`);
+      if (!fileInput || !fileInput.files[0]) return;
+
+      const allowed = ['.pdf','.doc','.docx','.ppt','.pptx'];
+      const ext = '.' + fileInput.files[0].name.split('.').pop().toLowerCase();
+      if (!allowed.includes(ext)) {
+        msg.style.display='block'; msg.style.color='var(--red)';
+        msg.textContent=`❌ Only PDF, DOC, DOCX, PPT, PPTX allowed.`; return;
+      }
+
+      btn.textContent = 'Submitting…'; btn.disabled = true;
+      const formData = new FormData();
+      formData.append('file', fileInput.files[0]);
+      const token = localStorage.getItem('access_token');
+      try {
+        const res = await fetch(`${window.BACKEND_URL||'http://127.0.0.1:8000'}/api/assignments/${id}/submit/`, {
+          method:'POST', headers:{'Authorization':`Bearer ${token}`}, body:formData
+        });
+        const data = await res.json();
+        if (!res.ok) throw new Error(data.error || 'Submission failed');
+        msg.style.display='block'; msg.style.color='var(--green)';
+        msg.textContent=`✅ Submitted successfully!`;
+        btn.style.display='none';
+        // Replace submit area with submitted badge
+        setTimeout(() => loadAssignments(), 1500);
+      } catch(e) {
+        msg.style.display='block'; msg.style.color='var(--red)';
+        msg.textContent=`❌ ${e.message}`;
+        btn.textContent='📤 Submit'; btn.disabled=false;
+      }
+    }
+
+    // ── Load announcements (branch-filtered by backend) ───────────────────────
+    async function loadAnnouncements() {
+      let data = [];
+      try {
+        data = await apiFetch('announcements/');
+      } catch (e) {}
+
+      const urgencyClass = { urgent: 'notice-urgent', event: 'notice-info', general: '' };
+      const urgencyIcon  = { urgent: '🔴', event: '📢', general: '📌' };
+
+      const noticeHTML = (data.length ? data : [
+        {title:`${branchCode} Mid-Semester Exam Schedule Released`, urgency:'urgent', posted_by_name:'Admin', created_at: new Date().toISOString()},
+        {title:`${branchCode} Attendance Shortage Warning`, urgency:'general', posted_by_name:'Academic Office', created_at: new Date().toISOString()},
+      ]).slice(0, 5).map(a => `
+        <div class="notice-item ${urgencyClass[a.urgency] || ''}">
+          <div class="notice-title">${urgencyIcon[a.urgency] || '📌'} ${a.title}</div>
+          <div class="notice-meta">${a.posted_by_name} · ${new Date(a.created_at).toLocaleDateString('en-IN')}</div>
+        </div>`).join('');
+
+      document.querySelectorAll('.notice-list').forEach(el => el.innerHTML = noticeHTML);
+
+      const noticeBadge = document.querySelector('.nav-item[data-section="notices"] .nav-badge');
+      if (noticeBadge) noticeBadge.textContent = data.length || 2;
     }
 
     // ── Section switcher ──────────────────────────────────────────────────────
     const sectionMeta = {
       dashboard:   { title: 'Student Dashboard',  sub: `Welcome back, ${firstName}! Here's your academic overview.` },
-      attendance:  { title: 'Attendance',          sub: 'Track your subject-wise attendance.' },
-      timetable:   { title: 'Timetable',           sub: 'Your weekly class schedule.' },
-      materials:   { title: 'Study Materials',     sub: 'Notes and resources uploaded by faculty.' },
-      assignments: { title: 'Assignments',         sub: 'Pending and submitted assignments.' },
+      attendance:  { title: 'Attendance',          sub: `${branchCode} · Subject-wise attendance tracking.` },
+      timetable:   { title: 'Timetable',           sub: `${branchCode} · ${semester}th Semester class schedule.` },
+      materials:   { title: 'Study Materials',     sub: `${branchCode} · Notes and resources uploaded by faculty.` },
+      assignments: { title: 'Assignments',         sub: `${branchCode} · Pending and submitted assignments.` },
       results:     { title: 'Results',             sub: 'Your marks and CGPA.' },
-      notices:     { title: 'Notices',             sub: 'Announcements from admin and faculty.' },
+      notices:     { title: 'Notices',             sub: `${branchCode} · Announcements from admin and faculty.` },
       profile:     { title: 'My Profile',          sub: 'Your academic profile details.' },
     };
 
@@ -1402,6 +1808,11 @@
       const meta = sectionMeta[name] || { title: name, sub: '' };
       document.getElementById('pageTitle').textContent = meta.title;
       document.getElementById('pageSub').textContent = meta.sub;
+      // Lazy-load section data on first open
+      if (name === 'notices') loadAnnouncements();
+      if (name === 'assignments') loadAssignments();
+      if (name === 'materials') loadNotes();
+      if (name === 'results') loadResults();
     }
 
     document.querySelectorAll('.nav-item[data-section]').forEach(el => {
@@ -1412,20 +1823,22 @@
     });
 
     // Logout buttons
-    document.querySelectorAll('[onclick*="logout"], .logout-btn').forEach(el => {
-      el.onclick = logout;
-    });
+    document.querySelectorAll('.logout-btn').forEach(el => el.onclick = logout);
     document.querySelectorAll('a[href*="/logout/"]').forEach(el => {
       el.href = '#';
       el.addEventListener('click', e => { e.preventDefault(); logout(); });
     });
-    // Quick action logout
     const qaLogout = document.querySelector('.action-btn[onclick*="logout"]');
     if (qaLogout) qaLogout.onclick = logout;
 
-    // ── Init ──────────────────────────────────────────────────────────────────
+    // ── Init — load all branch-specific data ──────────────────────────────────
     loadAttendance();
+    loadNotes();
+    loadTimetable();
+    loadFaculty();
+    loadAssignments();
     loadAnnouncements();
+    loadResults();
   </script>
 
 

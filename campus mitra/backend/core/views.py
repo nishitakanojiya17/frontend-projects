@@ -1,47 +1,37 @@
 from rest_framework import generics, permissions, status
 from rest_framework.response import Response
 from rest_framework.views import APIView
+from rest_framework.parsers import MultiPartParser, FormParser, JSONParser
 from rest_framework_simplejwt.tokens import RefreshToken
 from django.contrib.auth import authenticate
 from django.db.models import Q
 
 from .models import (User, Student, Faculty, Parent, Department,
-                     Subject, Timetable, Attendance, Note, Announcement, Assignment)
+                     Subject, Timetable, Attendance, Note, Announcement,
+                     Assignment, AssignmentSubmission)
 from .serializers import (UserSerializer, StudentSerializer, FacultySerializer,
                           SubjectSerializer, TimetableSerializer, AttendanceSerializer,
-                          NoteSerializer, AnnouncementSerializer, DepartmentSerializer, AssignmentSerializer)
+                          NoteSerializer, AnnouncementSerializer, DepartmentSerializer,
+                          AssignmentSerializer, AssignmentSubmissionSerializer)
 from .permissions import IsFaculty, IsStudent, IsParent, IsAdminUser, IsFacultyOrAdmin
 
 
 # ── Auth ──────────────────────────────────────────────────────────────────────
 
 class LoginView(APIView):
-    """
-    POST /api/auth/login/
-    Body: { "email": "...", "password": "..." }
-    Returns: { access, refresh, role, name, department, branch_code }
-    """
     permission_classes = [permissions.AllowAny]
 
     def post(self, request):
         email = request.data.get('email', '').strip().lower()
         password = request.data.get('password', '').strip()
-
         if not email or not password:
             return Response({'error': 'Email and password are required.'}, status=400)
-
-        # Django's authenticate uses username field; our users have email == username
         user = authenticate(request, username=email, password=password)
-
         if not user:
             return Response({'error': 'Invalid credentials. Please check your email and password.'}, status=400)
-
         if not user.is_active:
             return Response({'error': 'Your account has been deactivated. Contact admin.'}, status=403)
-
         refresh = RefreshToken.for_user(user)
-
-        # Build role-specific extra info
         extra = {}
         if hasattr(user, 'student'):
             s = user.student
@@ -64,7 +54,6 @@ class LoginView(APIView):
                 {'name': c.user.get_full_name(), 'enrollment_no': c.enrollment_no}
                 for c in children
             ]
-
         return Response({
             'access': str(refresh.access_token),
             'refresh': str(refresh),
@@ -76,8 +65,6 @@ class LoginView(APIView):
 
 
 class MeView(APIView):
-    """GET /api/auth/me/ — returns current user profile"""
-
     def get(self, request):
         user = request.user
         data = UserSerializer(user).data
@@ -91,22 +78,18 @@ class MeView(APIView):
 # ── Attendance ────────────────────────────────────────────────────────────────
 
 class MarkAttendanceView(APIView):
-    """
-    POST /api/attendance/mark/
-    Faculty marks attendance for a class.
-    Body: { "records": [{ "student": id, "subject": id, "date": "YYYY-MM-DD", "status": "P/A/L" }] }
-    """
+    """POST /api/attendance/mark/ — faculty marks attendance"""
     permission_classes = [IsFaculty]
 
     def post(self, request):
         records = request.data.get('records', [])
         if not records:
             return Response({'error': 'No records provided.'}, status=400)
-
         count = 0
         errors = []
         for r in records:
             try:
+                # student_id is the DB Student.id (integer)
                 Attendance.objects.update_or_create(
                     student_id=r['student'],
                     subject_id=r['subject'],
@@ -119,12 +102,11 @@ class MarkAttendanceView(APIView):
                 count += 1
             except Exception as e:
                 errors.append(str(e))
-
         return Response({'marked': count, 'errors': errors})
 
 
 class StudentAttendanceView(APIView):
-    """GET /api/attendance/my/ — student views their subject-wise attendance"""
+    """GET /api/attendance/my/ — student views subject-wise attendance"""
     permission_classes = [IsStudent]
 
     def get(self, request):
@@ -150,10 +132,7 @@ class StudentAttendanceView(APIView):
 
 
 class AttendanceBySubjectView(APIView):
-    """
-    GET /api/attendance/subject/<subject_id>/
-    Faculty views attendance for a specific subject.
-    """
+    """GET /api/attendance/subject/<id>/ — faculty views attendance for a subject"""
     permission_classes = [IsFaculty]
 
     def get(self, request, subject_id):
@@ -161,20 +140,23 @@ class AttendanceBySubjectView(APIView):
             subject = Subject.objects.get(pk=subject_id)
         except Subject.DoesNotExist:
             return Response({'error': 'Subject not found.'}, status=404)
-
         records = Attendance.objects.filter(subject=subject).select_related('student__user')
-        return Response(AttendanceSerializer(records, many=True).data)
+        return Response(AttendanceSerializer(records, many=True, context={'request': request}).data)
 
 
 # ── Notes ─────────────────────────────────────────────────────────────────────
 
 class NoteUploadView(generics.CreateAPIView):
-    """POST /api/notes/upload/ — faculty uploads a note"""
+    """POST /api/notes/upload/ — faculty uploads a note (multipart)"""
     serializer_class = NoteSerializer
     permission_classes = [IsFaculty]
+    parser_classes = [MultiPartParser, FormParser]
 
     def perform_create(self, serializer):
         serializer.save(uploaded_by=self.request.user.faculty)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 class NoteListView(generics.ListAPIView):
@@ -188,6 +170,23 @@ class NoteListView(generics.ListAPIView):
             subject__department=student.department,
             subject__semester=student.semester
         ).order_by('-uploaded_at')
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+
+class FacultyNoteListView(generics.ListAPIView):
+    """GET /api/notes/my/ — faculty lists their own uploaded notes"""
+    serializer_class = NoteSerializer
+    permission_classes = [IsFaculty]
+
+    def get_queryset(self):
+        return Note.objects.filter(
+            uploaded_by=self.request.user.faculty
+        ).order_by('-uploaded_at')
+
+    def get_serializer_context(self):
+        return {'request': self.request}
 
 
 # ── Assignments ───────────────────────────────────────────────────────────────
@@ -204,52 +203,137 @@ class AssignmentListView(generics.ListAPIView):
             subject__semester=student.semester
         ).order_by('deadline')
 
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+
+class AssignmentCreateView(generics.CreateAPIView):
+    """POST /api/assignments/create/ — faculty creates an assignment"""
+    serializer_class = AssignmentSerializer
+    permission_classes = [IsFaculty]
+    parser_classes = [MultiPartParser, FormParser, JSONParser]
+
+    def perform_create(self, serializer):
+        serializer.save(uploaded_by=self.request.user.faculty)
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+
+class FacultyAssignmentListView(generics.ListAPIView):
+    """GET /api/assignments/my/ — faculty lists their own assignments"""
+    serializer_class = AssignmentSerializer
+    permission_classes = [IsFaculty]
+
+    def get_queryset(self):
+        return Assignment.objects.filter(
+            uploaded_by=self.request.user.faculty
+        ).order_by('-created_at')
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+
+class AssignmentSubmitView(APIView):
+    """POST /api/assignments/<id>/submit/ — student submits an assignment"""
+    permission_classes = [IsStudent]
+    parser_classes = [MultiPartParser, FormParser]
+
+    def post(self, request, assignment_id):
+        try:
+            assignment = Assignment.objects.get(pk=assignment_id)
+        except Assignment.DoesNotExist:
+            return Response({'error': 'Assignment not found.'}, status=404)
+
+        student = request.user.student
+        file = request.FILES.get('file')
+        if not file:
+            return Response({'error': 'No file provided.'}, status=400)
+
+        # Validate file type
+        allowed = ['.pdf', '.doc', '.docx', '.ppt', '.pptx']
+        import os
+        ext = os.path.splitext(file.name)[1].lower()
+        if ext not in allowed:
+            return Response({'error': f'File type {ext} not allowed. Use PDF, DOC, DOCX, PPT, or PPTX.'}, status=400)
+
+        submission, created = AssignmentSubmission.objects.update_or_create(
+            assignment=assignment,
+            student=student,
+            defaults={'file': file, 'remarks': request.data.get('remarks', '')}
+        )
+        action = 'submitted' if created else 'resubmitted'
+        return Response({
+            'status': action,
+            'assignment': assignment.title,
+            'submitted_at': submission.submitted_at.isoformat(),
+        })
+
+
+class AssignmentSubmissionsView(generics.ListAPIView):
+    """GET /api/assignments/<id>/submissions/ — faculty views all submissions"""
+    serializer_class = AssignmentSubmissionSerializer
+    permission_classes = [IsFaculty]
+
+    def get_queryset(self):
+        return AssignmentSubmission.objects.filter(
+            assignment_id=self.kwargs['assignment_id']
+        ).select_related('student__user')
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
+
+class StudentSubmissionsView(generics.ListAPIView):
+    """GET /api/assignments/my-submissions/ — student views their own submissions"""
+    serializer_class = AssignmentSubmissionSerializer
+    permission_classes = [IsStudent]
+
+    def get_queryset(self):
+        return AssignmentSubmission.objects.filter(
+            student=self.request.user.student
+        ).select_related('assignment')
+
+    def get_serializer_context(self):
+        return {'request': self.request}
+
 
 # ── Announcements ─────────────────────────────────────────────────────────────
 
 class AnnouncementListView(generics.ListAPIView):
-    """GET /api/announcements/ — role-filtered announcements"""
     serializer_class = AnnouncementSerializer
 
     def get_queryset(self):
         role = self.request.user.role
-        # 'all' audience is visible to everyone; role-specific ones filter by role
         audience_map = {
-            'student': 'students',
-            'faculty': 'faculty',
-            'parent': 'parents',
-            'admin': 'all',
+            'student': 'students', 'faculty': 'faculty',
+            'parent': 'parents', 'admin': 'all',
         }
         target = audience_map.get(role, 'all')
-        
-        qs = Announcement.objects.filter(
-            Q(audience='all') | Q(audience=target)
-        )
-        
+        qs = Announcement.objects.filter(Q(audience='all') | Q(audience=target))
         if hasattr(self.request.user, 'student'):
             dept = self.request.user.student.department
             qs = qs.filter(Q(department__isnull=True) | Q(department=dept))
         elif hasattr(self.request.user, 'faculty'):
             dept = self.request.user.faculty.department
             qs = qs.filter(Q(department__isnull=True) | Q(department=dept))
-
         return qs.order_by('-created_at')
 
 
 class AnnouncementCreateView(generics.CreateAPIView):
-    """POST /api/announcements/new/ — faculty or admin posts announcement"""
     serializer_class = AnnouncementSerializer
     permission_classes = [IsFacultyOrAdmin]
 
     def perform_create(self, serializer):
-        serializer.save(posted_by=self.request.user)
+        dept = None
+        if hasattr(self.request.user, 'faculty'):
+            dept = self.request.user.faculty.department
+        serializer.save(posted_by=self.request.user, department=dept)
 
 
 # ── Timetable ─────────────────────────────────────────────────────────────────
 
 class TimetableView(APIView):
-    """GET /api/timetable/ — student or faculty views their timetable"""
-
     def get(self, request):
         user = request.user
         if hasattr(user, 'student'):
@@ -269,23 +353,27 @@ class TimetableView(APIView):
 # ── Subjects ──────────────────────────────────────────────────────────────────
 
 class SubjectListView(generics.ListAPIView):
-    """GET /api/subjects/ — list subjects (filtered by dept/semester for students)"""
     serializer_class = SubjectSerializer
 
     def get_queryset(self):
         user = self.request.user
+        dept = self.request.query_params.get('dept')
         if hasattr(user, 'student'):
             s = user.student
             return Subject.objects.filter(department=s.department, semester=s.semester)
         elif hasattr(user, 'faculty'):
-            return Subject.objects.filter(faculty=user.faculty)
+            qs = Subject.objects.filter(department=user.faculty.department)
+            if dept:
+                qs = qs.filter(department__code=dept)
+            return qs
+        if dept:
+            return Subject.objects.filter(department__code=dept)
         return Subject.objects.all()
 
 
 # ── Faculty ───────────────────────────────────────────────────────────────────
 
 class StudentFacultyListView(generics.ListAPIView):
-    """GET /api/faculty/my/ — student lists faculty for their dept"""
     serializer_class = FacultySerializer
     permission_classes = [IsStudent]
 
@@ -294,10 +382,28 @@ class StudentFacultyListView(generics.ListAPIView):
         return Faculty.objects.filter(department=student.department)
 
 
+# ── Students (for faculty attendance) ────────────────────────────────────────
+
+class FacultyStudentListView(generics.ListAPIView):
+    """GET /api/students/by-dept/?dept=AIML — faculty gets student list for attendance"""
+    serializer_class = StudentSerializer
+    permission_classes = [IsFaculty]
+
+    def get_queryset(self):
+        dept = self.request.query_params.get('dept', '')
+        if dept:
+            return Student.objects.filter(
+                department__code=dept
+            ).select_related('user', 'department').order_by('enrollment_no')
+        # Default: faculty's own department
+        return Student.objects.filter(
+            department=self.request.user.faculty.department
+        ).select_related('user', 'department').order_by('enrollment_no')
+
+
 # ── Parent ────────────────────────────────────────────────────────────────────
 
 class ParentChildView(APIView):
-    """GET /api/parent/children/ — parent views their child's profile"""
     permission_classes = [IsParent]
 
     def get(self, request):
@@ -308,7 +414,6 @@ class ParentChildView(APIView):
 # ── Departments ───────────────────────────────────────────────────────────────
 
 class DepartmentListView(generics.ListAPIView):
-    """GET /api/departments/ — list all departments"""
     serializer_class = DepartmentSerializer
     permission_classes = [permissions.AllowAny]
     queryset = Department.objects.all()
@@ -317,14 +422,12 @@ class DepartmentListView(generics.ListAPIView):
 # ── Admin ─────────────────────────────────────────────────────────────────────
 
 class UserListView(generics.ListCreateAPIView):
-    """GET/POST /api/admin/users/ — admin manages users"""
     serializer_class = UserSerializer
     permission_classes = [IsAdminUser]
     queryset = User.objects.all()
 
 
 class AttendanceAlertView(APIView):
-    """GET /api/admin/alerts/ — students below 75% attendance"""
     permission_classes = [IsAdminUser]
 
     def get(self, request):
@@ -345,7 +448,6 @@ class AttendanceAlertView(APIView):
 
 
 class AdminStudentListView(generics.ListAPIView):
-    """GET /api/admin/students/?dept=AIML — admin lists students by dept"""
     serializer_class = StudentSerializer
     permission_classes = [IsAdminUser]
 
@@ -358,7 +460,6 @@ class AdminStudentListView(generics.ListAPIView):
 
 
 class AdminFacultyListView(generics.ListAPIView):
-    """GET /api/admin/faculty/?dept=AIML — admin lists faculty by dept"""
     serializer_class = FacultySerializer
     permission_classes = [IsAdminUser]
 

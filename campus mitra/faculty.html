@@ -380,12 +380,55 @@
 
     <!-- ASSIGNMENTS SECTION -->
     <div class="section-page" id="sec-assignments">
-      <div class="section-card">
-        <div class="section-header"><div class="section-title">📋 Assignments</div></div>
-        <div class="class-list">
-          <div class="class-item"><div class="class-time">Due: Friday</div><div class="class-info"><div class="class-name">OS � Assignment 5</div><div class="class-meta">CSE 4B � Process Scheduling</div></div><span class="class-count">48/60 submitted</span></div>
-          <div class="class-item"><div class="class-time">Due: Monday</div><div class="class-info"><div class="class-name">OS Lab � Report 4</div><div class="class-meta">CSE 4A � Memory Management</div></div><span class="class-count">30/30 submitted</span></div>
-          <div class="class-item"><div class="class-time">Closed</div><div class="class-info"><div class="class-name">OS � Assignment 4</div><div class="class-meta">CSE 4B � Deadlock</div></div><span class="class-count">58/60 submitted</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+
+        <!-- Create Assignment -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">📝 Create Assignment</div>
+          </div>
+          <div style="display:flex;flex-direction:column;gap:12px;">
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Title</label>
+              <input type="text" id="asgTitle" placeholder="e.g. Unit 3 – Assignment on Routing Protocols" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Subject</label>
+              <select id="asgSubject" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;background:white;">
+                <option value="">— Select Subject —</option>
+              </select>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Description / Instructions</label>
+              <textarea id="asgDesc" rows="3" placeholder="Describe the assignment requirements..." style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;resize:vertical;"></textarea>
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Due Date & Time</label>
+              <input type="datetime-local" id="asgDeadline" style="width:100%;padding:10px 12px;border:1.5px solid var(--border);border-radius:10px;font-family:'DM Sans',sans-serif;font-size:13px;outline:none;">
+            </div>
+            <div>
+              <label style="font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:1px;display:block;margin-bottom:6px;">Attach File (optional)</label>
+              <div onclick="document.getElementById('asgFileInput').click()" style="border:2px dashed var(--border);border-radius:12px;padding:16px;text-align:center;cursor:pointer;background:var(--bg);">
+                <div style="font-size:20px;">📎</div>
+                <div style="font-size:12px;color:var(--muted);margin-top:4px;">Click to attach PDF/PPT/DOCX</div>
+                <div id="asgFileName" style="font-size:12px;font-weight:700;color:var(--accent);margin-top:6px;display:none;"></div>
+              </div>
+              <input type="file" id="asgFileInput" accept=".pdf,.ppt,.pptx,.doc,.docx" style="display:none;" onchange="asgFileSelected(this)">
+            </div>
+            <div id="asgMsg" style="display:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;"></div>
+            <button onclick="createAssignment()" style="padding:11px;background:var(--accent);color:white;border:none;border-radius:10px;font-size:14px;font-weight:700;cursor:pointer;font-family:'DM Sans',sans-serif;">📝 Post Assignment</button>
+          </div>
+        </div>
+
+        <!-- My Assignments -->
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">📋 My Assignments</div>
+            <a href="#" class="section-link" onclick="loadMyAssignments();return false;">Refresh ↻</a>
+          </div>
+          <div id="myAssignmentsList" style="display:flex;flex-direction:column;gap:10px;">
+            <div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">Loading...</div>
+          </div>
         </div>
       </div>
     </div>
@@ -563,36 +606,53 @@
   document.getElementById('profileBranch').textContent  = branchCode;
   document.getElementById('profileDeptFull').textContent = department;
 
-  // ── Subject & Student data ──────────────────────────────────────────────────
-  const SUBJECTS = {
-    AIML:[{id:'aiml-ivp',name:'Image & Video Processing'},{id:'aiml-cn',name:'Computer Networks'},{id:'aiml-cc',name:'Cloud Computing'},{id:'aiml-pdp',name:'PDP'},{id:'aiml-toc',name:'Theory of Computation'},{id:'aiml-mp',name:'Minor Project'}],
-    CS:  [{id:'cs-ml',name:'Machine Learning'},{id:'cs-cn',name:'Computer Networks'},{id:'cs-cd',name:'Compiler Design'},{id:'cs-dal',name:'DAL'},{id:'cs-sdl',name:'SDL & Minor Project'},{id:'cs-pdp',name:'PDP'}],
-    IT:  [{id:'it-cgm',name:'Computer Graphics & Multimedia'},{id:'it-wmc',name:'Wireless & Mobile Computing'},{id:'it-cd',name:'Compiler Design'},{id:'it-se',name:'Software Engineering'},{id:'it-pp',name:'PP'},{id:'it-mp',name:'Minor Project'}],
-    ME:  [{id:'me-mcd',name:'Machine Component Design'},{id:'me-cad',name:'CAD Lab'},{id:'me-ret',name:'Renewable Energy Technology'},{id:'me-rdb',name:'RDBMS Lab'},{id:'me-te',name:'Thermal Engineering'}],
-  };
-  const STUDENTS = {
+  // ── Subject & Student data (real DB IDs loaded from API) ──────────────────
+  const STATIC_STUDENTS = {
     AIML:[{id:1,name:'Nishita Kanojiya',enroll:'2022AIML001'},{id:2,name:'Chanchal Rathore',enroll:'2022AIML002'},{id:3,name:'Anshika Punase',enroll:'2022AIML003'},{id:4,name:'Udit Rathore',enroll:'2022AIML004'},{id:5,name:'Keshav Chikhalikar',enroll:'2022AIML005'},{id:6,name:'Hitanshi Upadhya',enroll:'2022AIML006'},{id:7,name:'Shyam Jain',enroll:'2022AIML007'},{id:8,name:'Sneha Malviya',enroll:'2022AIML008'},{id:9,name:'Nayan Adlak',enroll:'2022AIML009'},{id:10,name:'Yash Joshi',enroll:'2022AIML010'},{id:11,name:'Adeesh Jain',enroll:'2022AIML011'},{id:12,name:'Sumit Singh',enroll:'2022AIML012'},{id:13,name:'Shivam Mahajan',enroll:'2022AIML013'},{id:14,name:'Bhavesh Prajapat',enroll:'2022AIML014'},{id:15,name:'Aaradhya Rassay',enroll:'2022AIML015'},{id:16,name:'Bhumika Malakar',enroll:'2022AIML016'},{id:17,name:'Samradhi Pawar',enroll:'2022AIML017'},{id:18,name:'Anuj Pawar',enroll:'2022AIML018'},{id:19,name:'Rishi Singh',enroll:'2022AIML019'},{id:20,name:'Nandini Singh',enroll:'2022AIML020'}],
     CS:  [{id:21,name:'Riya Sharma',enroll:'2022CS001'},{id:22,name:'Rohan Gupta',enroll:'2022CS002'},{id:23,name:'Saakshi Pardeshi',enroll:'2022CS003'},{id:24,name:'Sachin Tiwari',enroll:'2022CS004'},{id:25,name:'Sagar Patel',enroll:'2022CS005'},{id:26,name:'Sahil Khan',enroll:'2022CS006'},{id:27,name:'Sahvendra Singh',enroll:'2022CS007'},{id:28,name:'Samyak Jain',enroll:'2022CS008'},{id:29,name:'Sanidhya Verma',enroll:'2022CS009'},{id:30,name:'Sanjeet Yadav',enroll:'2022CS010'}],
     IT:  [{id:31,name:'Yash Tolani',enroll:'2022IT001'},{id:32,name:'Shivanand Choure',enroll:'2022IT002'},{id:33,name:'Amish Paliwal',enroll:'2022IT003'},{id:34,name:'Prince Chohan',enroll:'2022IT004'},{id:35,name:'Mayank Malawanta',enroll:'2022IT005'},{id:36,name:'Aditya Thatte',enroll:'2022IT006'},{id:37,name:'Sheetal Khedia',enroll:'2022IT007'},{id:38,name:'Palak Shukla',enroll:'2022IT008'},{id:39,name:'Shreya Tiwari',enroll:'2022IT009'},{id:40,name:'Khushboo Walwani',enroll:'2022IT010'}],
     ME:  [{id:41,name:'Arpit Jaiswal',enroll:'2022ME001'},{id:42,name:'Shivam Chouhan',enroll:'2022ME002'},{id:43,name:'Sujal Prajapati',enroll:'2022ME003'},{id:44,name:'Ujjwal Verma',enroll:'2022ME004'},{id:45,name:'Ujjwal Tiwari',enroll:'2022ME005'},{id:46,name:'Suryansh Verma',enroll:'2022ME006'},{id:47,name:'Yash Yadav',enroll:'2022ME007'},{id:48,name:'Dheeraj Pal',enroll:'2022ME008'},{id:49,name:'Vishal Rathore',enroll:'2022ME009'},{id:50,name:'Dhirendra Sisodiya',enroll:'2022ME010'},{id:51,name:'Nakshatra Prajapat',enroll:'2022ME011'}],
   };
+  let dbSubjects = {};
+  let dbStudents = {};
 
-  // ── Attendance ──────────────────────────────────────────────────────────────
-  window.loadSubjectsForBranch = function() {
-    const branch = document.getElementById('attBranch').value;
-    const sel = document.getElementById('attSubject');
-    sel.innerHTML = '<option value="">— Select Subject —</option>';
-    (SUBJECTS[branch]||[]).forEach(s => sel.innerHTML += `<option value="${s.id}">${s.name}</option>`);
-    document.getElementById('attStudentCard').style.display = 'none';
+  async function loadDbSubjects(branch) {
+    if (dbSubjects[branch]) return dbSubjects[branch];
+    try {
+      const data = await apiFetch(`subjects/?dept=${branch}`);
+      if (data && data.length) { dbSubjects[branch] = data.map(s=>({id:s.id,name:s.name,code:s.code})); return dbSubjects[branch]; }
+    } catch(e) {}
+    return [];
   }
 
-  window.loadStudentsForAttendance = function() {
+  async function loadDbStudents(branch) {
+    if (dbStudents[branch]) return dbStudents[branch];
+    try {
+      const data = await apiFetch(`students/by-dept/?dept=${branch}`);
+      if (data && data.length) { dbStudents[branch] = data.map(s=>({id:s.id,name:(s.user?.first_name+' '+s.user?.last_name).trim(),enroll:s.enrollment_no})); return dbStudents[branch]; }
+    } catch(e) {}
+    return STATIC_STUDENTS[branch] || [];
+  }
+
+  // ── Attendance ──────────────────────────────────────────────────────────────
+  window.loadSubjectsForBranch = async function() {
     const branch = document.getElementById('attBranch').value;
-    const subjEl = document.getElementById('attSubject');
+    const sel = document.getElementById('attSubject');
+    sel.innerHTML = '<option value="">Loading...</option>';
+    document.getElementById('attStudentCard').style.display = 'none';
+    const subjects = await loadDbSubjects(branch);
+    sel.innerHTML = '<option value="">— Select Subject —</option>';
+    subjects.forEach(s => sel.innerHTML += `<option value="${s.id}">${s.name}</option>`);
+    if (!subjects.length) sel.innerHTML = '<option value="">No subjects — run seed_subjects first</option>';
+  }
+
+  window.loadStudentsForAttendance = async function() {
+    const branch  = document.getElementById('attBranch').value;
+    const subjEl  = document.getElementById('attSubject');
     const subjName = subjEl.options[subjEl.selectedIndex]?.text || '';
-    const date = document.getElementById('attDate').value;
+    const date    = document.getElementById('attDate').value;
     if (!branch || !subjEl.value || !date) { alert('Please select Branch, Subject and Date.'); return; }
-    const students = STUDENTS[branch] || [];
+    const students = await loadDbStudents(branch);
     document.getElementById('attStudentCard').style.display = 'block';
     document.getElementById('attTableTitle').textContent = `📋 ${subjName} — ${branch} (${students.length} students)`;
     document.getElementById('attTableBody').innerHTML = students.map((s,i) => `
@@ -616,66 +676,71 @@
 
   window.markAll = function(status) {
     const branch = document.getElementById('attBranch').value;
-    (STUDENTS[branch]||[]).forEach(s => {
+    const students = dbStudents[branch] || STATIC_STUDENTS[branch] || [];
+    students.forEach(s => {
       const r = document.getElementById(`${status.toLowerCase()}-${s.id}`);
       if (r) { r.checked = true; updatePill(s.id, status); }
     });
   }
 
   window.saveAttendance = async function() {
-    const branch = document.getElementById('attBranch').value;
-    const subjEl = document.getElementById('attSubject');
-    const date   = document.getElementById('attDate').value;
-    const btn    = document.getElementById('saveAttBtn');
-    const msg    = document.getElementById('attMsg');
-    const records = (STUDENTS[branch]||[]).map(s => {
+    const branch  = document.getElementById('attBranch').value;
+    const subjEl  = document.getElementById('attSubject');
+    const date    = document.getElementById('attDate').value;
+    const btn     = document.getElementById('saveAttBtn');
+    if (!subjEl.value) { showAttMsg('⚠️ Please select a subject first.', 'error'); return; }
+    const students = dbStudents[branch] || STATIC_STUDENTS[branch] || [];
+    const records = students.map(s => {
       const checked = document.querySelector(`input[name="att-${s.id}"]:checked`);
-      return {student:s.id, subject:subjEl.value, date, status: checked?checked.value:'A'};
+      return {student: s.id, subject: parseInt(subjEl.value), date, status: checked ? checked.value : 'A'};
     });
     btn.textContent = 'Saving…'; btn.disabled = true;
     try {
       const res = await apiFetch('attendance/mark/', {method:'POST', body:JSON.stringify({records})});
-      showAttMsg(`✅ Attendance saved for ${res.marked} students!`, 'success');
+      showAttMsg(`✅ Attendance saved for ${res.marked} students! Students can now see it on their dashboard.`, 'success');
     } catch(e) {
-      showAttMsg(`✅ Attendance recorded for ${records.length} students (demo mode)`, 'success');
+      showAttMsg(`❌ Failed: ${e.message}`, 'error');
     }
     btn.textContent = '✅ Save Attendance'; btn.disabled = false;
   }
 
   function showAttMsg(text, type) {
     const msg = document.getElementById('attMsg');
-    msg.style.display = 'block';
-    msg.style.background = type==='success'?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.1)';
-    msg.style.color = type==='success'?'var(--accent)':'var(--red)';
-    msg.textContent = text;
-    setTimeout(()=>msg.style.display='none', 4000);
+    msg.style.display='block'; msg.style.background=type==='success'?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.1)';
+    msg.style.color=type==='success'?'var(--accent)':'var(--red)'; msg.textContent=text;
+    setTimeout(()=>msg.style.display='none', 5000);
   }
 
   // ── Notes ───────────────────────────────────────────────────────────────────
-  window.loadSubjectsForNotes = function() {
+  window.loadSubjectsForNotes = async function() {
     const branch = document.getElementById('noteBranch').value;
     const sel = document.getElementById('noteSubject');
+    sel.innerHTML = '<option value="">Loading...</option>';
+    const subjects = await loadDbSubjects(branch);
     sel.innerHTML = '<option value="">— Select Subject —</option>';
-    (SUBJECTS[branch]||[]).forEach(s => sel.innerHTML += `<option value="${s.id}">${s.name}</option>`);
-    renderNotesList(branch);
+    subjects.forEach(s => sel.innerHTML += `<option value="${s.id}">${s.name}</option>`);
+    loadMyNotes();
   }
 
-  function getNotes() { try { return JSON.parse(sessionStorage.getItem('cm_notes')||'[]'); } catch { return []; } }
-  function saveNotes(n) { sessionStorage.setItem('cm_notes', JSON.stringify(n)); }
-
-  function renderNotesList(branch) {
-    const notes = getNotes().filter(n => !branch || n.branch===branch);
+  async function loadMyNotes() {
     const el = document.getElementById('notesList');
-    if (!notes.length) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">No materials uploaded yet</div>'; return; }
-    const icons = {pdf:'📄',ppt:'📊',pptx:'📊',doc:'📝',docx:'📝'};
-    el.innerHTML = notes.slice().reverse().map(n => {
-      const ext = n.name.split('.').pop().toLowerCase();
-      return `<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">
-        <span style="font-size:20px;">${icons[ext]||'📁'}</span>
-        <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.title}</div>
-        <div style="font-size:11px;color:var(--muted);">${n.subject} · ${n.branch} · ${n.name}</div></div>
-        <span style="font-size:11px;color:var(--muted);white-space:nowrap;">${n.date}</span></div>`;
-    }).join('');
+    if (!el) return;
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">Loading...</div>';
+    try {
+      const data = await apiFetch('notes/my/');
+      if (!data || !data.length) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">No materials uploaded yet</div>'; return; }
+      const icons = {pdf:'📄',ppt:'📊',pptx:'📊',doc:'📝',docx:'📝'};
+      el.innerHTML = data.map(n => {
+        const ext = (n.file||'').split('.').pop().toLowerCase();
+        const fileUrl = n.file_url || '';
+        return `<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;background:var(--bg);border-radius:10px;border:1px solid var(--border);">
+          <span style="font-size:20px;">${icons[ext]||'📁'}</span>
+          <div style="flex:1;min-width:0;"><div style="font-size:13px;font-weight:600;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;">${n.title}</div>
+          <div style="font-size:11px;color:var(--muted);">${n.subject_name||''} · ${new Date(n.uploaded_at).toLocaleDateString('en-IN')}</div></div>
+          ${fileUrl?`<a href="${fileUrl}" target="_blank" style="font-size:11px;color:var(--accent);font-weight:600;text-decoration:none;">⬇ View</a>`:''}
+        </div>`;
+      }).join('');
+    } catch(e) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">Could not load notes</div>'; }
   }
 
   window.noteDragOver = function(e) { e.preventDefault(); document.getElementById('noteDropArea').style.borderColor='var(--accent)'; }
@@ -685,36 +750,55 @@
   function setNoteFile(file) {
     selectedNoteFile = file;
     const label = document.getElementById('noteFileName');
-    label.style.display = 'block';
-    label.textContent = `📎 ${file.name} (${(file.size/1024/1024).toFixed(2)} MB)`;
+    label.style.display='block'; label.textContent=`📎 ${file.name} (${(file.size/1024/1024).toFixed(2)} MB)`;
   }
 
   window.uploadNote = async function() {
-    const branch   = document.getElementById('noteBranch').value;
-    const subjEl   = document.getElementById('noteSubject');
-    const subjName = subjEl.options[subjEl.selectedIndex]?.text || '';
-    const title    = document.getElementById('noteTitle').value.trim();
+    const branch = document.getElementById('noteBranch').value;
+    const subjEl = document.getElementById('noteSubject');
+    const title  = document.getElementById('noteTitle').value.trim();
     if (!branch || !subjEl.value || !title || !selectedNoteFile) { showNoteMsg('⚠️ Please fill all fields and select a file.','warn'); return; }
+    const subjectId = parseInt(subjEl.value);
+    if (isNaN(subjectId)) { showNoteMsg('⚠️ Invalid subject ID. Please re-select branch and subject.','warn'); return; }
+    const formData = new FormData();
+    formData.append('title', title);
+    formData.append('subject', subjectId);
+    formData.append('file', selectedNoteFile);
+    let token = localStorage.getItem('access_token');
     try {
-      const formData = new FormData();
-      formData.append('title', title); formData.append('subject', subjEl.value); formData.append('file', selectedNoteFile);
-      const token = localStorage.getItem('access_token');
-      await fetch(`${window.BACKEND_URL||'http://127.0.0.1:8000'}/api/notes/upload/`, {method:'POST', headers:{'Authorization':`Bearer ${token}`}, body:formData});
-    } catch(e) {}
-    const notes = getNotes();
-    notes.push({title, branch, subject:subjName, name:selectedNoteFile.name, date:new Date().toLocaleDateString('en-IN')});
-    saveNotes(notes); renderNotesList(branch);
-    showNoteMsg(`✅ "${title}" uploaded successfully!`, 'success');
-    document.getElementById('noteTitle').value = '';
-    document.getElementById('noteFileName').style.display = 'none';
-    document.getElementById('noteFileInput').value = '';
-    selectedNoteFile = null;
+      const res = await fetch(`${window.BACKEND_URL||'http://127.0.0.1:8000'}/api/notes/upload/`, {
+        method:'POST',
+        headers:{'Authorization':`Bearer ${token}`},
+        body:formData
+      });
+      if (res.status === 401) {
+        // Try refresh
+        const rr = await fetch(`${window.BACKEND_URL||'http://127.0.0.1:8000'}/api/auth/refresh/`, {
+          method:'POST', headers:{'Content-Type':'application/json'},
+          body: JSON.stringify({refresh: localStorage.getItem('refresh_token')})
+        });
+        if (rr.ok) { const rd = await rr.json(); token = rd.access; localStorage.setItem('access_token', token); }
+        else { logout(); return; }
+        // Retry
+        const res2 = await fetch(`${window.BACKEND_URL||'http://127.0.0.1:8000'}/api/notes/upload/`, {
+          method:'POST', headers:{'Authorization':`Bearer ${token}`}, body:formData
+        });
+        if (!res2.ok) { const e2=await res2.json(); throw new Error(e2.detail||JSON.stringify(e2)); }
+      } else if (!res.ok) {
+        const err = await res.json();
+        throw new Error(err.detail || err.subject?.[0] || JSON.stringify(err));
+      }
+      showNoteMsg(`✅ "${title}" uploaded! Students can now download it.`, 'success');
+      document.getElementById('noteTitle').value=''; document.getElementById('noteFileName').style.display='none';
+      document.getElementById('noteFileInput').value=''; selectedNoteFile=null; loadMyNotes();
+    } catch(e) { showNoteMsg(`❌ Upload failed: ${e.message}`, 'warn'); }
   }
 
   function showNoteMsg(text, type) {
     const msg = document.getElementById('noteMsg');
-    msg.style.display='block'; msg.style.background=type==='success'?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.1)'; msg.style.color=type==='success'?'var(--accent)':'var(--red)'; msg.textContent=text;
-    setTimeout(()=>msg.style.display='none', 4000);
+    msg.style.display='block'; msg.style.background=type==='success'?'rgba(34,197,94,0.1)':'rgba(239,68,68,0.1)';
+    msg.style.color=type==='success'?'var(--accent)':'var(--red)'; msg.textContent=text;
+    setTimeout(()=>msg.style.display='none', 5000);
   }
 
   // ── Announcements ───────────────────────────────────────────────────────────
@@ -755,12 +839,87 @@
     setTimeout(()=>msg.style.display='none', 4000);
   }
 
+  // ── Assignments ─────────────────────────────────────────────────────────────
+  async function loadAsgSubjects() {
+    const sel = document.getElementById('asgSubject');
+    if (!sel) return;
+    const subjects = await loadDbSubjects(branchCode);
+    sel.innerHTML = '<option value="">— Select Subject —</option>';
+    subjects.forEach(s => sel.innerHTML += `<option value="${s.id}">${s.name}</option>`);
+  }
+
+  let selectedAsgFile = null;
+  window.asgFileSelected = function(input) {
+    if (input.files[0]) {
+      selectedAsgFile = input.files[0];
+      const label = document.getElementById('asgFileName');
+      if (label) { label.style.display='block'; label.textContent=`📎 ${input.files[0].name}`; }
+    }
+  }
+
+  window.createAssignment = async function() {
+    const title    = document.getElementById('asgTitle').value.trim();
+    const subjEl   = document.getElementById('asgSubject');
+    const desc     = document.getElementById('asgDesc').value.trim();
+    const deadline = document.getElementById('asgDeadline').value;
+    const msg      = document.getElementById('asgMsg');
+    if (!title || !subjEl.value || !deadline) {
+      msg.style.display='block'; msg.style.background='rgba(239,68,68,0.1)'; msg.style.color='var(--red)';
+      msg.textContent='⚠️ Title, Subject and Due Date are required.';
+      setTimeout(()=>msg.style.display='none',3000); return;
+    }
+    const formData = new FormData();
+    formData.append('title', title); formData.append('subject', subjEl.value);
+    formData.append('description', desc); formData.append('deadline', new Date(deadline).toISOString());
+    if (selectedAsgFile) formData.append('file', selectedAsgFile);
+    const token = localStorage.getItem('access_token');
+    try {
+      const res = await fetch(`${window.BACKEND_URL||'http://127.0.0.1:8000'}/api/assignments/create/`, {method:'POST', headers:{'Authorization':`Bearer ${token}`}, body:formData});
+      if (!res.ok) { const err=await res.json(); throw new Error(JSON.stringify(err)); }
+      msg.style.display='block'; msg.style.background='rgba(34,197,94,0.1)'; msg.style.color='var(--accent)';
+      msg.textContent=`✅ Assignment "${title}" posted! Students will see it on their dashboard.`;
+      document.getElementById('asgTitle').value=''; document.getElementById('asgDesc').value='';
+      document.getElementById('asgDeadline').value=''; document.getElementById('asgFileName').style.display='none';
+      document.getElementById('asgFileInput').value=''; selectedAsgFile=null; loadMyAssignments();
+    } catch(e) {
+      msg.style.display='block'; msg.style.background='rgba(239,68,68,0.1)'; msg.style.color='var(--red)';
+      msg.textContent=`❌ Failed: ${e.message}`;
+    }
+    setTimeout(()=>msg.style.display='none', 6000);
+  }
+
+  window.loadMyAssignments = async function() {
+    const el = document.getElementById('myAssignmentsList');
+    if (!el) return;
+    el.innerHTML = '<div style="text-align:center;padding:20px;color:var(--muted);font-size:13px;">Loading...</div>';
+    try {
+      const data = await apiFetch('assignments/my/');
+      if (!data || !data.length) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">No assignments posted yet</div>'; return; }
+      el.innerHTML = data.map(a => {
+        const due = new Date(a.deadline);
+        const daysLeft = Math.ceil((due-new Date())/86400000);
+        const color = daysLeft<=2?'var(--red)':daysLeft<=5?'var(--orange)':'var(--accent)';
+        return `<div style="padding:14px;background:var(--bg);border-radius:12px;border:1px solid var(--border);border-left:3px solid ${color};">
+          <div style="display:flex;justify-content:space-between;align-items:start;">
+            <div><div style="font-size:13px;font-weight:700;">${a.title}</div>
+            <div style="font-size:11px;color:var(--muted);margin-top:3px;">${a.subject_name} · Due: ${due.toLocaleDateString('en-IN')}</div></div>
+            <span style="font-size:11px;font-weight:700;padding:3px 9px;border-radius:20px;background:rgba(34,197,94,0.1);color:var(--accent);white-space:nowrap;">${a.submission_count||0} submitted</span>
+          </div>
+          ${a.description?`<div style="font-size:12px;color:var(--muted);margin-top:6px;">${a.description}</div>`:''}
+        </div>`;
+      }).join('');
+    } catch(e) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">Could not load assignments</div>'; }
+  }
+
   // ── Pre-select faculty's own branch ────────────────────────────────────────
   if (branchCode) {
     document.getElementById('attBranch').value  = branchCode;
     document.getElementById('noteBranch').value = branchCode;
     window.loadSubjectsForBranch();
     window.loadSubjectsForNotes();
+    loadAsgSubjects();
+    loadMyAssignments();
+    loadMyNotes();
   }
 
   // ── Section switcher ────────────────────────────────────────────────────────
@@ -785,6 +944,8 @@
     document.getElementById('pageTitle').textContent = meta.title;
     document.getElementById('pageSub').textContent   = meta.sub;
     if (name==='announcements') loadAnnouncements();
+    if (name==='assignments')   loadMyAssignments();
+    if (name==='notes')         loadMyNotes();
   }
 
   document.querySelectorAll('.nav-item[data-section]').forEach(el=>{

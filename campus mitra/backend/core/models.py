@@ -128,10 +128,26 @@ class Announcement(models.Model):
 
 class Assignment(models.Model):
     title = models.CharField(max_length=200)
-    description = models.TextField()
+    description = models.TextField(blank=True)
     subject = models.ForeignKey(Subject, on_delete=models.CASCADE)
+    uploaded_by = models.ForeignKey(Faculty, on_delete=models.SET_NULL, null=True, blank=True)
+    file = models.FileField(upload_to='assignments/', null=True, blank=True)
     deadline = models.DateTimeField()
     created_at = models.DateTimeField(auto_now_add=True)
 
     def __str__(self):
         return self.title
+
+
+class AssignmentSubmission(models.Model):
+    assignment = models.ForeignKey(Assignment, on_delete=models.CASCADE, related_name='submissions')
+    student = models.ForeignKey(Student, on_delete=models.CASCADE)
+    file = models.FileField(upload_to='submissions/')
+    submitted_at = models.DateTimeField(auto_now_add=True)
+    remarks = models.TextField(blank=True)
+
+    class Meta:
+        unique_together = ('assignment', 'student')
+
+    def __str__(self):
+        return f"{self.student} → {self.assignment.title}"

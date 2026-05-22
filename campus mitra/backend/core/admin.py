@@ -1,7 +1,8 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from .models import (User, Department, Student, Faculty, Parent,
-                     Subject, Timetable, Attendance, Note, Announcement)
+                     Subject, Timetable, Attendance, Note, Announcement,
+                     Assignment, AssignmentSubmission)
 
 
 @admin.register(User)
@@ -79,3 +80,15 @@ class NoteAdmin(admin.ModelAdmin):
 class AnnouncementAdmin(admin.ModelAdmin):
     list_display = ('title', 'audience', 'urgency', 'posted_by', 'created_at')
     list_filter = ('audience', 'urgency')
+
+
+@admin.register(Assignment)
+class AssignmentAdmin(admin.ModelAdmin):
+    list_display = ('title', 'subject', 'uploaded_by', 'deadline', 'created_at')
+    list_filter = ('subject__department',)
+
+
+@admin.register(AssignmentSubmission)
+class AssignmentSubmissionAdmin(admin.ModelAdmin):
+    list_display = ('assignment', 'student', 'submitted_at')
+    list_filter = ('assignment__subject__department',)
