@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>RGPV 6th Sem Tracker</title>
+  <link rel="stylesheet" href="style (1).css" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+<!-- Sidebar -->
+<aside class="sidebar" id="sidebar">
+  <div class="sidebar-logo">
+    <div class="logo-icon">6</div>
+    <div class="logo-text">
+      <span class="logo-title">RGPV</span>
+      <span class="logo-sub">Sem Tracker</span>
+    </div>
+  </div>
+
+  <nav class="sidebar-nav">
+    <a href="#" class="nav-item active" data-page="dashboard">
+      <span class="nav-icon">⚡</span><span class="nav-label">Dashboard</span>
+    </a>
+    <a href="#" class="nav-item" data-page="subjects">
+      <span class="nav-icon">📚</span><span class="nav-label">Subjects</span>
+    </a>
+    <a href="#" class="nav-item" data-page="planner">
+      <span class="nav-icon">🗓</span><span class="nav-label">Planner</span>
+    </a>
+    <a href="#" class="nav-item" data-page="analytics">
+      <span class="nav-icon">📊</span><span class="nav-label">Analytics</span>
+    </a>
+    <a href="#" class="nav-item" data-page="settings">
+      <span class="nav-icon">⚙️</span><span class="nav-label">Settings</span>
+    </a>
+  </nav>
+
+  <div class="sidebar-footer">
+    <button class="theme-toggle" id="themeToggle">
+      <span id="themeIcon">☀️</span> <span id="themeLabel">Light Mode</span>
+    </button>
+  </div>
+</aside>
+
+<!-- Mobile Top Bar -->
+<div class="topbar">
+  <button class="hamburger" id="hamburger">☰</button>
+  <span class="topbar-title">RGPV 6th Sem</span>
+  <button class="theme-toggle-sm" id="themeToggleSm">🌙</button>
+</div>
+<div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+<!-- Main Content -->
+<main class="main-content" id="mainContent">
+
+  <!-- ==================== DASHBOARD PAGE ==================== -->
+  <div class="page active" id="page-dashboard">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Dashboard</h1>
+        <p class="page-sub" id="greetingText">Good morning, Engineer! 👋</p>
+      </div>
+      <div class="header-actions">
+        <button class="btn-pill" id="exportBtn">⬇ Export Report</button>
+      </div>
+    </div>
+
+    <!-- Stats Row -->
+    <div class="stats-grid">
+      <div class="stat-card accent-blue">
+        <div class="stat-icon">🎯</div>
+        <div class="stat-value" id="statOverall">0%</div>
+        <div class="stat-label">Overall Progress</div>
+        <div class="stat-bar"><div class="stat-bar-fill" id="statOverallBar" style="width:0%"></div></div>
+      </div>
+      <div class="stat-card accent-green">
+        <div class="stat-icon">✅</div>
+        <div class="stat-value" id="statCompleted">0</div>
+        <div class="stat-label">Topics Done</div>
+      </div>
+      <div class="stat-card accent-orange">
+        <div class="stat-icon">⏳</div>
+        <div class="stat-value" id="statPending">0</div>
+        <div class="stat-label">Pending Topics</div>
+      </div>
+      <div class="stat-card accent-purple">
+        <div class="stat-icon">🔥</div>
+        <div class="stat-value" id="statStreak">0</div>
+        <div class="stat-label">Day Streak</div>
+      </div>
+    </div>
+
+    <!-- Quote + Today Goal -->
+    <div class="two-col">
+      <div class="glass-card quote-card">
+        <div class="quote-mark">"</div>
+        <p class="quote-text" id="quoteText">Loading...</p>
+        <span class="quote-author" id="quoteAuthor">— Author</span>
+      </div>
+      <div class="glass-card goal-card">
+        <h3 class="card-title">📌 Today's Goal</h3>
+        <div class="goal-input-row">
+          <input type="text" id="todayGoalInput" class="goal-input" placeholder="Set your study goal..." />
+          <button class="btn-sm" id="saveGoalBtn">Save</button>
+        </div>
+        <div class="goal-display" id="goalDisplay"></div>
+        <div class="exam-countdown" id="examCountdown">
+          <span class="countdown-label">⏰ Exam in</span>
+          <span class="countdown-value" id="countdownVal">-- days</span>
+          <input type="date" id="examDate" class="date-input" />
+        </div>
+      </div>
+    </div>
+
+    <!-- Subject Overview Cards -->
+    <h2 class="section-title">Subject Overview</h2>
+    <div class="subject-overview-grid" id="subjectOverviewGrid"></div>
+  </div>
+
+  <!-- ==================== SUBJECTS PAGE ==================== -->
+  <div class="page" id="page-subjects">
+    <div class="page-header">
+      <div>
+        <h1 class="page-title">Subjects</h1>
+        <p class="page-sub">Track unit-wise progress for each subject</p>
+      </div>
+      <div class="search-bar-wrap">
+        <input type="text" id="searchInput" class="search-input" placeholder="🔍 Search subjects / topics..." />
+        <select id="filterSelect" class="filter-select">
+          <option value="all">All</option>
+          <option value="completed">Completed</option>
+          <option value="pending">Pending</option>
+        </select>
+      </div>
+    </div>
+
+    <div class="subjects-grid" id="subjectsGrid"></div>
+
+    <!-- Subject Detail Modal -->
+    <div class="modal-overlay" id="subjectModal">
+      <div class="modal-box">
+        <div class="modal-header">
+          <div>
+            <h2 class="modal-title" id="modalSubjectName"></h2>
+            <span class="modal-code" id="modalSubjectCode"></span>
+          </div>
+          <button class="modal-close" id="modalClose">✕</button>
+        </div>
+        <div class="modal-body" id="modalBody"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== PLANNER PAGE ==================== -->
+  <div class="page" id="page-planner">
+    <div class="page-header">
+      <h1 class="page-title">Study Planner</h1>
+      <p class="page-sub">Plan your study sessions and stay consistent</p>
+    </div>
+
+    <div class="planner-grid">
+      <!-- Pomodoro Timer -->
+      <div class="glass-card pomodoro-card">
+        <h3 class="card-title">🍅 Pomodoro Timer</h3>
+        <div class="timer-display" id="timerDisplay">25:00</div>
+        <div class="timer-label" id="timerLabel">Focus Session</div>
+        <div class="timer-controls">
+          <button class="btn-timer" id="timerStart">▶ Start</button>
+          <button class="btn-timer btn-secondary" id="timerPause">⏸ Pause</button>
+          <button class="btn-timer btn-secondary" id="timerReset">↺ Reset</button>
+        </div>
+        <div class="timer-options">
+          <button class="timer-opt active" data-mins="25">Focus 25</button>
+          <button class="timer-opt" data-mins="5">Break 5</button>
+          <button class="timer-opt" data-mins="15">Long 15</button>
+        </div>
+        <div class="pomodoro-count">Sessions today: <strong id="pomodoroCount">0</strong></div>
+      </div>
+
+      <!-- Daily Tasks -->
+      <div class="glass-card tasks-card">
+        <h3 class="card-title">✅ Daily Tasks</h3>
+        <div class="task-input-row">
+          <input type="text" id="taskInput" class="goal-input" placeholder="Add a task..." />
+          <button class="btn-sm" id="addTaskBtn">+</button>
+        </div>
+        <ul class="task-list" id="taskList"></ul>
+        <button class="btn-ghost" id="clearTasksBtn">Clear Completed</button>
+      </div>
+
+      <!-- Weekly Timetable -->
+      <div class="glass-card timetable-card full-width">
+        <h3 class="card-title">📅 Weekly Study Planner</h3>
+        <div class="week-grid" id="weekGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== ANALYTICS PAGE ==================== -->
+  <div class="page" id="page-analytics">
+    <div class="page-header">
+      <h1 class="page-title">Analytics</h1>
+      <p class="page-sub">Visualize your preparation progress</p>
+    </div>
+
+    <div class="analytics-grid">
+      <div class="glass-card chart-card full-width">
+        <h3 class="card-title">📊 Subject-wise Progress</h3>
+        <div class="chart-bars" id="chartBars"></div>
+      </div>
+
+      <div class="glass-card">
+        <h3 class="card-title">🏆 Top Subjects</h3>
+        <div class="top-subjects" id="topSubjects"></div>
+      </div>
+
+      <div class="glass-card">
+        <h3 class="card-title">📈 Stats Overview</h3>
+        <div class="stats-overview" id="statsOverview"></div>
+      </div>
+
+      <div class="glass-card full-width">
+        <h3 class="card-title">📝 Revision Tracker</h3>
+        <p class="card-sub">Mark topics you've revised before exam</p>
+        <div class="revision-grid" id="revisionGrid"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ==================== SETTINGS PAGE ==================== -->
+  <div class="page" id="page-settings">
+    <div class="page-header">
+      <h1 class="page-title">Settings</h1>
+      <p class="page-sub">Customize your experience</p>
+    </div>
+
+    <div class="settings-grid">
+      <div class="glass-card">
+        <h3 class="card-title">🎨 Appearance</h3>
+        <div class="setting-item">
+          <span>Dark / Light Mode</span>
+          <label class="toggle-switch">
+            <input type="checkbox" id="themeCheckbox" />
+            <span class="toggle-slider"></span>
+          </label>
+        </div>
+        <div class="setting-item">
+          <span>Accent Color</span>
+          <div class="color-swatches" id="colorSwatches">
+            <div class="swatch active" data-color="#6c63ff" style="background:#6c63ff"></div>
+            <div class="swatch" data-color="#00c9a7" style="background:#00c9a7"></div>
+            <div class="swatch" data-color="#ff6584" style="background:#ff6584"></div>
+            <div class="swatch" data-color="#ffa34d" style="background:#ffa34d"></div>
+            <div class="swatch" data-color="#4dabf7" style="background:#4dabf7"></div>
+          </div>
+        </div>
+      </div>
+
+      <div class="glass-card">
+        <h3 class="card-title">💾 Data Management</h3>
+        <div class="setting-actions">
+          <button class="btn-setting btn-danger" id="resetAllBtn">🗑 Reset All Progress</button>
+          <button class="btn-setting btn-success" id="backupBtn">⬇ Backup Data</button>
+          <button class="btn-setting" id="restoreBtn">⬆ Restore Data</button>
+          <input type="file" id="restoreFile" accept=".json" style="display:none" />
+        </div>
+      </div>
+
+      <div class="glass-card full-width">
+        <h3 class="card-title">ℹ️ About</h3>
+        <p class="about-text">RGPV 6th Semester Preparation Tracker — Built for AIML students at Indore Institute of Science and Technology. Track TOC, CN, Cloud Computing, and IVP progress seamlessly.</p>
+        <div class="about-tags">
+          <span class="tag">AL-601 TOC</span>
+          <span class="tag">AL-602 CN</span>
+          <span class="tag">AL-603 IVP</span>
+          <span class="tag">AL-604 Cloud Computing</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</main>
+
+<script src="script.js"></script>
+</body>
+</html>

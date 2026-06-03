@@ -362,10 +362,10 @@ class SubjectListView(generics.ListAPIView):
             s = user.student
             return Subject.objects.filter(department=s.department, semester=s.semester)
         elif hasattr(user, 'faculty'):
-            qs = Subject.objects.filter(department=user.faculty.department)
+            # Faculty can query any branch (for cross-branch teaching)
             if dept:
-                qs = qs.filter(department__code=dept)
-            return qs
+                return Subject.objects.filter(department__code=dept)
+            return Subject.objects.filter(department=user.faculty.department)
         if dept:
             return Subject.objects.filter(department__code=dept)
         return Subject.objects.all()
@@ -395,10 +395,86 @@ class FacultyStudentListView(generics.ListAPIView):
             return Student.objects.filter(
                 department__code=dept
             ).select_related('user', 'department').order_by('enrollment_no')
-        # Default: faculty's own department
         return Student.objects.filter(
             department=self.request.user.faculty.department
         ).select_related('user', 'department').order_by('enrollment_no')
+
+
+class FacultyStatsView(APIView):
+    """GET /api/faculty/stats/ — real-time stats for faculty dashboard hero"""
+    permission_classes = [IsFaculty]
+
+    def get(self, request):
+        faculty = request.user.faculty
+        dept = faculty.department
+
+        # Notes uploaded by this faculty
+        notes_count = Note.objects.filter(uploaded_by=faculty).count()
+
+        # Students in this department
+        students_count = Student.objects.filter(department=dept).count()
+
+        # Assignments created by this faculty
+        assignments_count = Assignment.objects.filter(uploaded_by=faculty).count()
+
+        # Average attendance across all subjects taught by this faculty
+        subjects = Subject.objects.filter(faculty=faculty)
+        avg_att = 0
+        if subjects.exists():
+            total_pct = 0
+            sub_count = 0
+            for sub in subjects:
+                total = Attendance.objects.filter(subject=sub).count()
+                present = Attendance.objects.filter(subject=sub, status='P').count()
+                if total > 0:
+                    total_pct += round((present / total * 100), 1)
+                    sub_count += 1
+            avg_att = round(total_pct / sub_count, 1) if sub_count else 0
+
+        return Response({
+            'notes_uploaded': notes_count,
+            'students_count': students_count,
+            'assignments_count': assignments_count,
+            'avg_attendance': avg_att,
+            'subjects_count': subjects.count(),
+        })
+
+
+class FacultyStudentAttendanceView(APIView):
+    """GET /api/students/attendance/?dept=AIML — faculty views student list with attendance"""
+    permission_classes = [IsFaculty]
+
+    def get(self, request):
+        dept_code = request.query_params.get('dept', '')
+        faculty = request.user.faculty
+        dept = faculty.department
+
+        if dept_code:
+            students = Student.objects.filter(
+                department__code=dept_code
+            ).select_related('user', 'department')
+        else:
+            students = Student.objects.filter(
+                department=dept
+            ).select_related('user', 'department')
+
+        data = []
+        for s in students:
+            total = Attendance.objects.filter(student=s).count()
+            present = Attendance.objects.filter(student=s, status='P').count()
+            pct = round((present / total * 100), 1) if total else 0
+            data.append({
+                'id': s.id,
+                'name': s.user.get_full_name(),
+                'enrollment_no': s.enrollment_no,
+                'department': s.department.name if s.department else '',
+                'branch_code': s.department.code if s.department else '',
+                'attendance_pct': pct,
+                'shortage': pct < 75,
+                'total_classes': total,
+                'present': present,
+            })
+        return Response(data)
 
 
 # ── Parent ────────────────────────────────────────────────────────────────────

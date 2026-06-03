@@ -37,8 +37,10 @@ urlpatterns = [
     path('subjects/',                       views.SubjectListView.as_view(),            name='subjects'),
 
     # ── Faculty / Students ─────────────────────────────────────────────────────
-    path('faculty/my/',                     views.StudentFacultyListView.as_view(),     name='student_faculty'),
-    path('students/by-dept/',               views.FacultyStudentListView.as_view(),     name='students_by_dept'),
+    path('faculty/my/',                     views.StudentFacultyListView.as_view(),         name='student_faculty'),
+    path('faculty/stats/',                  views.FacultyStatsView.as_view(),               name='faculty_stats'),
+    path('students/by-dept/',               views.FacultyStudentListView.as_view(),         name='students_by_dept'),
+    path('students/attendance/',            views.FacultyStudentAttendanceView.as_view(),   name='students_attendance'),
 
     # ── Departments ────────────────────────────────────────────────────────────
     path('departments/',                    views.DepartmentListView.as_view(),         name='departments'),

@@ -502,15 +502,32 @@
     <!-- STUDENTS SECTION -->
     <div class="section-page" id="sec-students">
       <div class="section-card">
-        <div class="section-header"><div class="section-title">📋 Student List � CSE 4B</div></div>
-        <table class="att-table">
-          <thead><tr><th>Name</th><th>Enroll No.</th><th>Attendance</th><th>Status</th></tr></thead>
-          <tbody>
-            <tr><td><strong>Rahul Sharma</strong></td><td>2022CSE045</td><td>75%</td><td><span class="status-pill pill-late">? Low</span></td></tr>
-            <tr><td><strong>Priya Patel</strong></td><td>2022CSE046</td><td>88%</td><td><span class="status-pill pill-present">? Good</span></td></tr>
-            <tr><td><strong>Aman Gupta</strong></td><td>2022CSE047</td><td>92%</td><td><span class="status-pill pill-present">? Good</span></td></tr>
-            <tr><td><strong>Sneha Verma</strong></td><td>2022CSE048</td><td>63%</td><td><span class="status-pill pill-absent">? Critical</span></td></tr>
-            <tr><td><strong>Karan Singh</strong></td><td>2022CSE049</td><td>85%</td><td><span class="status-pill pill-present">? Good</span></td></tr>
+        <div class="section-header">
+          <div class="section-title">👥 Student List</div>
+          <div style="display:flex;gap:8px;align-items:center;">
+            <select id="studentDeptFilter" onchange="loadStudentList()" style="padding:6px 10px;border:1px solid var(--border);border-radius:8px;font-family:'DM Sans',sans-serif;font-size:12px;outline:none;">
+              <option value="">My Department</option>
+              <option value="AIML">AIML</option>
+              <option value="CS">CS</option>
+              <option value="IT">IT</option>
+              <option value="ME">ME</option>
+            </select>
+          </div>
+        </div>
+        <div id="studentListMsg" style="display:none;padding:10px 14px;border-radius:10px;font-size:13px;font-weight:600;margin-bottom:12px;"></div>
+        <table class="att-table" id="studentListTable">
+          <thead>
+            <tr>
+              <th>#</th>
+              <th>Name</th>
+              <th>Enroll No.</th>
+              <th>Branch</th>
+              <th>Attendance</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="studentListBody">
+            <tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted);">Loading students...</td></tr>
           </tbody>
         </table>
       </div>
@@ -518,12 +535,23 @@
 
     <!-- REPORTS SECTION -->
     <div class="section-page" id="sec-reports">
-      <div class="section-card">
-        <div class="section-header"><div class="section-title">📋 Attendance Reports</div></div>
-        <div class="class-list">
-          <div class="class-item"><div class="class-time">OS � 4B</div><div class="class-info"><div class="class-name">Average Attendance: 82%</div><div class="class-meta">58 students � 24 classes held</div></div><span class="class-count">Good</span></div>
-          <div class="class-item"><div class="class-time">OS Lab � 4A</div><div class="class-info"><div class="class-name">Average Attendance: 91%</div><div class="class-meta">30 students � 12 labs held</div></div><span class="class-count">Excellent</span></div>
-          <div class="class-item"><div class="class-time">OS � 4A</div><div class="class-info"><div class="class-name">Average Attendance: 78%</div><div class="class-meta">60 students � 24 classes held</div></div><span class="class-count">Average</span></div>
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:18px;">
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">📈 Attendance Summary</div>
+          </div>
+          <div id="reportAttList" style="display:flex;flex-direction:column;gap:10px;">
+            <div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">Loading...</div>
+          </div>
+        </div>
+        <div class="section-card">
+          <div class="section-header">
+            <div class="section-title">⚠️ Low Attendance Alerts</div>
+            <span style="font-size:11px;color:var(--muted);">Below 75%</span>
+          </div>
+          <div id="reportAlertList" style="display:flex;flex-direction:column;gap:10px;">
+            <div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">Loading...</div>
+          </div>
         </div>
       </div>
     </div>
@@ -836,6 +864,7 @@
     msg.style.display='block'; msg.style.background='rgba(34,197,94,0.1)'; msg.style.color='var(--accent)'; msg.textContent='✅ Announcement posted!';
     document.getElementById('annTitle').value=''; document.getElementById('annContent').value='';
     loadAnnouncements();
+    loadFacultyStats();
     setTimeout(()=>msg.style.display='none', 4000);
   }
 
@@ -911,6 +940,115 @@
     } catch(e) { el.innerHTML='<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">Could not load assignments</div>'; }
   }
 
+  // ── Faculty Stats (hero card) ───────────────────────────────────────────────
+  async function loadFacultyStats() {
+    try {
+      const data = await apiFetch('faculty/stats/');
+      const heroStats = document.querySelectorAll('.hero-stat-val');
+      if (heroStats[1]) heroStats[1].textContent = data.students_count || '—';
+      if (heroStats[2]) heroStats[2].textContent = data.notes_uploaded || 0;
+      if (heroStats[3]) heroStats[3].textContent = (data.avg_attendance || 0) + '%';
+      // Update stat cards
+      const statCards = document.querySelectorAll('.stat-card');
+      if (statCards[2]) {
+        const val = statCards[2].querySelector('.stat-val');
+        if (val) val.textContent = data.assignments_count || 0;
+      }
+    } catch(e) { console.warn('Stats:', e.message); }
+  }
+
+  // ── Student List ────────────────────────────────────────────────────────────
+  window.loadStudentList = async function() {
+    const dept = document.getElementById('studentDeptFilter')?.value || '';
+    const tbody = document.getElementById('studentListBody');
+    if (!tbody) return;
+    tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:20px;color:var(--muted);">Loading...</td></tr>';
+    try {
+      const url = dept ? `students/attendance/?dept=${dept}` : 'students/attendance/';
+      const data = await apiFetch(url);
+      if (!data || !data.length) {
+        tbody.innerHTML = '<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted);">No students found</td></tr>';
+        return;
+      }
+      tbody.innerHTML = data.map((s, i) => {
+        const pct = s.attendance_pct;
+        const pillClass = pct >= 80 ? 'pill-present' : pct >= 75 ? 'pill-late' : 'pill-absent';
+        const pillText  = pct >= 80 ? '✓ Good' : pct >= 75 ? '⚠ Low' : '✗ Critical';
+        const color = pct >= 80 ? 'var(--green)' : pct >= 75 ? 'var(--orange)' : 'var(--red)';
+        return `<tr>
+          <td style="color:var(--muted);font-size:12px;">${i+1}</td>
+          <td><strong>${s.name}</strong></td>
+          <td style="font-size:12px;color:var(--muted);">${s.enrollment_no}</td>
+          <td style="font-size:12px;">${s.branch_code}</td>
+          <td style="font-weight:700;color:${color};">${pct > 0 ? pct + '%' : '—'}</td>
+          <td><span class="status-pill ${pillClass}">${pillText}</span></td>
+        </tr>`;
+      }).join('');
+    } catch(e) {
+      tbody.innerHTML = `<tr><td colspan="6" style="text-align:center;padding:32px;color:var(--muted);">Could not load students: ${e.message}</td></tr>`;
+    }
+  }
+
+  // ── Reports ─────────────────────────────────────────────────────────────────
+  async function loadReports() {
+    const attList   = document.getElementById('reportAttList');
+    const alertList = document.getElementById('reportAlertList');
+    if (!attList) return;
+
+    try {
+      // Subject-wise attendance summary
+      const students = await apiFetch('students/attendance/');
+      if (students && students.length) {
+        const total = students.length;
+        const below75 = students.filter(s => s.attendance_pct < 75 && s.attendance_pct > 0).length;
+        const above80 = students.filter(s => s.attendance_pct >= 80).length;
+        const avgPct  = students.filter(s => s.attendance_pct > 0).length
+          ? Math.round(students.filter(s=>s.attendance_pct>0).reduce((a,s)=>a+s.attendance_pct,0) / students.filter(s=>s.attendance_pct>0).length)
+          : 0;
+
+        attList.innerHTML = `
+          <div style="display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:14px;">
+            <div style="padding:16px;background:rgba(34,197,94,0.08);border-radius:12px;text-align:center;">
+              <div style="font-size:28px;font-weight:700;color:var(--accent);">${avgPct}%</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Dept. Avg Attendance</div>
+            </div>
+            <div style="padding:16px;background:rgba(79,142,247,0.08);border-radius:12px;text-align:center;">
+              <div style="font-size:28px;font-weight:700;color:var(--blue);">${total}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Total Students</div>
+            </div>
+            <div style="padding:16px;background:rgba(34,197,94,0.08);border-radius:12px;text-align:center;">
+              <div style="font-size:28px;font-weight:700;color:var(--accent);">${above80}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Above 80%</div>
+            </div>
+            <div style="padding:16px;background:rgba(239,68,68,0.08);border-radius:12px;text-align:center;">
+              <div style="font-size:28px;font-weight:700;color:var(--red);">${below75}</div>
+              <div style="font-size:12px;color:var(--muted);margin-top:4px;">Below 75% ⚠️</div>
+            </div>
+          </div>`;
+
+        // Low attendance alerts
+        const alerts = students.filter(s => s.attendance_pct < 75 && s.attendance_pct > 0);
+        if (alerts.length) {
+          alertList.innerHTML = alerts.map(s => `
+            <div style="display:flex;align-items:center;gap:12px;padding:12px 14px;background:rgba(239,68,68,0.06);border-radius:10px;border-left:3px solid var(--red);">
+              <div style="flex:1;">
+                <div style="font-size:13px;font-weight:700;">${s.name}</div>
+                <div style="font-size:11px;color:var(--muted);">${s.enrollment_no} · ${s.branch_code}</div>
+              </div>
+              <span style="font-size:14px;font-weight:700;color:var(--red);">${s.attendance_pct}%</span>
+            </div>`).join('');
+        } else {
+          alertList.innerHTML = '<div style="text-align:center;padding:32px;color:var(--green);font-size:13px;font-weight:600;">✅ All students above 75%</div>';
+        }
+      } else {
+        attList.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">No attendance data yet. Mark attendance first.</div>';
+        alertList.innerHTML = '<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">No data available</div>';
+      }
+    } catch(e) {
+      attList.innerHTML = `<div style="text-align:center;padding:32px;color:var(--muted);font-size:13px;">Could not load reports</div>`;
+    }
+  }
+
   // ── Pre-select faculty's own branch ────────────────────────────────────────
   if (branchCode) {
     document.getElementById('attBranch').value  = branchCode;
@@ -946,6 +1084,8 @@
     if (name==='announcements') loadAnnouncements();
     if (name==='assignments')   loadMyAssignments();
     if (name==='notes')         loadMyNotes();
+    if (name==='students')      loadStudentList();
+    if (name==='reports')       loadReports();
   }
 
   document.querySelectorAll('.nav-item[data-section]').forEach(el=>{
