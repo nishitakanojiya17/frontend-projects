@@ -152,3 +152,52 @@
 - The `faculty@iist.ac.in` demo account maps to Smita Marwadi (AIML, Computer Networks)
 - `parent@iist.ac.in` / `parent123` — monitors the demo student (Udit Rathod)
 - `admin@iist.ac.in` / `admin123` — full admin access
+
+---
+
+## Parents (Seeded via `python manage.py seed_parents`)
+
+### AIML Branch Parents
+
+| Parent ID | Parent Name | Email | Password | Child | Child Enroll |
+|-----------|-------------|-------|----------|-------|--------------|
+| PAR-AIML-001 | Rajesh Kanojiya | rajesh.kanojiya@gmail.com | rajesh@123 | Nishita Kanojiya | 2022AIML001 |
+| PAR-AIML-002 | Sunita Rathore | sunita.rathore@gmail.com | sunita@123 | Chanchal Rathore | 2022AIML002 |
+| PAR-AIML-003 | Arvind Punase | arvind.punase@gmail.com | arvind@123 | Anshika Punase | 2022AIML003 |
+| PAR-AIML-004 | Mahesh Rathore | mahesh.rathore@gmail.com | mahesh@123 | Udit Rathore | 2022AIML004 |
+| PAR-AIML-005 | Dinesh Chikhalikar | dinesh.chikhalikar@gmail.com | dinesh@123 | Keshav Chikhalikar | 2022AIML005 |
+| PAR-AIML-006 | Rekha Upadhya | rekha.upadhya@gmail.com | rekha@123 | Hitanshi Upadhya | 2022AIML006 |
+| PAR-AIML-007 | Ramesh Jain | ramesh.jain@gmail.com | ramesh@123 | Shyam Jain | 2022AIML007 |
+| PAR-AIML-008 | Geeta Malviya | geeta.malviya@gmail.com | geeta@123 | Sneha Malviya | 2022AIML008 |
+| PAR-AIML-009 | Suresh Adlak | suresh.adlak@gmail.com | suresh@123 | Nayan Adlak | 2022AIML009 |
+| PAR-AIML-010 | Kamlesh Joshi | kamlesh.joshi@gmail.com | kamlesh@123 | Yash Joshi | 2022AIML010 |
+
+### CS Branch Parents
+
+| Parent ID | Parent Name | Email | Password | Child | Child Enroll |
+|-----------|-------------|-------|----------|-------|--------------|
+| PAR-CS-001 | Vikram Sharma | vikram.sharma@gmail.com | vikram@123 | Riya Sharma | 2022CS001 |
+| PAR-CS-002 | Priya Gupta | priya.gupta@gmail.com | priya@123 | Rohan Gupta | 2022CS002 |
+| PAR-CS-003 | Anil Pardeshi | anil.pardeshi@gmail.com | anil@123 | Saakshi Pardeshi | 2022CS003 |
+| PAR-CS-004 | Rajani Tiwari | rajani.tiwari@gmail.com | rajani@123 | Sachin Tiwari | 2022CS004 |
+| PAR-CS-005 | Sanjay Patel | sanjay.patel@gmail.com | sanjay@123 | Sagar Patel | 2022CS005 |
+
+### IT Branch Parents
+
+| Parent ID | Parent Name | Email | Password | Child | Child Enroll |
+|-----------|-------------|-------|----------|-------|--------------|
+| PAR-IT-001 | Mohan Tolani | mohan.tolani@gmail.com | mohan@123 | Yash Tolani | 2022IT001 |
+| PAR-IT-002 | Lata Choure | lata.choure@gmail.com | lata@123 | Shivanand Choure | 2022IT002 |
+| PAR-IT-003 | Deepak Paliwal | deepak.paliwal@gmail.com | deepak@123 | Amish Paliwal | 2022IT003 |
+| PAR-IT-004 | Meena Shukla | meena.shukla@gmail.com | meena@123 | Palak Shukla | 2022IT008 |
+| PAR-IT-005 | Sunil Tiwari | sunil.tiwari@gmail.com | sunil@123 | Shreya Tiwari | 2022IT009 |
+
+### ME Branch Parents
+
+| Parent ID | Parent Name | Email | Password | Child | Child Enroll |
+|-----------|-------------|-------|----------|-------|--------------|
+| PAR-ME-001 | Rajeev Jaiswal | rajeev.jaiswal@gmail.com | rajeev@123 | Arpit Jaiswal | 2022ME001 |
+| PAR-ME-002 | Kavita Chouhan | kavita.chouhan@gmail.com | kavita@123 | Shivam Chouhan | 2022ME002 |
+| PAR-ME-003 | Hemant Prajapati | hemant.prajapati@gmail.com | hemant@123 | Sujal Prajapati | 2022ME003 |
+| PAR-ME-004 | Anita Verma | anita.verma@gmail.com | anita@123 | Ujjwal Verma | 2022ME004 |
+| PAR-ME-005 | Raju Yadav | raju.yadav@gmail.com | raju@123 | Yash Yadav | 2022ME007 |
