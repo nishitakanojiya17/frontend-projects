@@ -47,10 +47,16 @@ urlpatterns = [
 
     # ── Parent ─────────────────────────────────────────────────────────────────
     path('parent/children/',                views.ParentChildView.as_view(),            name='parent_children'),
+    path('parent/child-detail/',            views.ParentChildDetailView.as_view(),      name='parent_child_detail'),
 
     # ── Admin ──────────────────────────────────────────────────────────────────
-    path('admin/users/',                    views.UserListView.as_view(),               name='admin_users'),
-    path('admin/alerts/',                   views.AttendanceAlertView.as_view(),        name='admin_alerts'),
-    path('admin/students/',                 views.AdminStudentListView.as_view(),       name='admin_students'),
-    path('admin/faculty/',                  views.AdminFacultyListView.as_view(),       name='admin_faculty'),
+    path('admin/users/',                    views.UserListView.as_view(),                   name='admin_users'),
+    path('admin/users/create/',             views.AdminUserCreateView.as_view(),            name='admin_user_create'),
+    path('admin/users/<int:user_id>/',      views.AdminUserUpdateView.as_view(),            name='admin_user_update'),
+    path('admin/users/<int:user_id>/delete/', views.AdminUserDeleteView.as_view(),          name='admin_user_delete'),
+    path('admin/stats/',                    views.AdminStatsView.as_view(),                 name='admin_stats'),
+    path('admin/alerts/',                   views.AttendanceAlertView.as_view(),            name='admin_alerts'),
+    path('admin/students/',                 views.AdminStudentListView.as_view(),           name='admin_students'),
+    path('admin/faculty/',                  views.AdminFacultyListView.as_view(),           name='admin_faculty'),
+    path('admin/attendance/summary/',       views.AdminAttendanceSummaryView.as_view(),     name='admin_att_summary'),
 ]
