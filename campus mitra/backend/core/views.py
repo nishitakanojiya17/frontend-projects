@@ -920,17 +920,19 @@ class AIQueryView(APIView):
             'compare', 'example', 'type', 'classify', 'derivation', 'proof',
             'meaning', 'definition', 'work', 'calculate', 'solve', 'write about'
         ]
-        is_rag_query = notes_qs is not None and any(t in message for t in rag_triggers)
-
-        # Also trigger RAG if message mentions a subject topic not covered by rules
+        # Keywords that are handled by rule-based answers — don't go to RAG for these
         rule_keywords = ['attendance', 'present', 'absent', 'note', 'material', 'pdf',
                          'assignment', 'homework', 'due', 'deadline', 'announcement',
                          'notice', 'circular', 'timetable', 'schedule', 'cgpa', 'marks',
                          'result', 'hi', 'hello', 'hey', 'help', 'faculty', 'teacher',
                          'branch', 'department']
         hits_rule = any(k in message for k in rule_keywords)
-        if not hits_rule and notes_qs is not None and notes_qs.exists():
-            is_rag_query = True  # unknown query → try RAG
+        is_rag_query = (
+            notes_qs is not None and (
+                any(t in message for t in rag_triggers) or
+                not hits_rule  # any unknown question → try RAG
+            )
+        )  # unknown query → try RAG
 
         if is_rag_query and notes_qs is not None:
             from .rag_utils import retrieve_chunks, ask_gemini

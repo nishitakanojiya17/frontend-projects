@@ -232,20 +232,43 @@ Instructions:
         return _fallback_answer(question, context_chunks, user_name)
 
 
-def _fallback_answer(question: str, chunks: list[dict], name: str = '') -> str:
-    """Structured answer when Gemini is unavailable."""
+def _fallback_answer(question: str, chunks: list, name: str = '') -> str:
+    """Concise structured answer when Gemini is unavailable — shows key content from notes."""
     if not chunks:
-        return f"📚 I couldn't find relevant content in your uploaded notes for: **'{question}'**\n\nTry asking about topics covered in your uploaded materials, or check if your faculty has uploaded notes for this subject."
+        return f"📚 I couldn't find content about **'{question}'** in your uploaded notes.\n\nTry asking about topics your faculty has uploaded — check the **Study Materials** section."
 
-    lines = [f"📖 Here's what I found in your notes about **'{question}'**:\n"]
-    for c in chunks[:3]:
-        lines.append(f"**From: {c['note']} ({c['subject']})**")
-        # Show first 400 chars of the chunk
-        snippet = c['text'][:400].strip()
-        if len(c['text']) > 400:
+    # Find the best chunk (highest score)
+    best = chunks[0]
+    text = best['text']
+
+    # Extract the most relevant sentence(s) containing the query keywords
+    import re
+    sentences = re.split(r'(?<=[.!?])\s+', text)
+    query_words = [w.lower() for w in re.findall(r'\b\w{3,}\b', question)]
+    scored_sentences = []
+    for s in sentences:
+        s_lower = s.lower()
+        score = sum(1 for w in query_words if w in s_lower)
+        if score > 0 and len(s.strip()) > 20:
+            scored_sentences.append((score, s.strip()))
+    scored_sentences.sort(reverse=True)
+
+    lines = [f"📖 **From {best['note']} ({best['subject']}):**\n"]
+
+    if scored_sentences:
+        # Show top 3 most relevant sentences
+        shown = [s for _, s in scored_sentences[:3]]
+        lines.append('\n'.join(shown))
+    else:
+        # Show first 300 chars of best chunk
+        snippet = text[:300].strip()
+        if len(text) > 300:
             snippet += '…'
         lines.append(snippet)
-        lines.append('')
 
-    lines.append("💡 *For a detailed AI explanation, add your Gemini API key in the `.env` file as `GEMINI_API_KEY=your_key`*")
+    # If more chunks found, show brief mentions
+    if len(chunks) > 1:
+        lines.append(f"\n📌 Also found in: {', '.join(c['note'] for c in chunks[1:3])}")
+
+    lines.append(f"\n💡 *Add `GEMINI_API_KEY` in `.env` for full AI explanations.*")
     return '\n'.join(lines)
