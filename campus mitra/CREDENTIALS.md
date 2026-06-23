@@ -16,6 +16,17 @@
 
 ---
 
+## Admin Accounts
+
+> Seeded via `python manage.py seed_admins`
+
+| Admin ID | Name | Email | Password | Access Level |
+|----------|------|-------|----------|--------------|
+| ADMIN-001 | Lokesh Aurangabadkar | lokesh.aurangabadkar@iist.ac.in | lokesh@123 | Super Admin (HOD ME) |
+| ADMIN-002 | Keshav Patidar | keshav.patidar@iist.ac.in | keshav@123 | Admin (Principal) |
+
+---
+
 ## Students
 
 ### AIML Branch (Sem 6)
