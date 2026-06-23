@@ -153,7 +153,14 @@ class NoteUploadView(generics.CreateAPIView):
     parser_classes = [MultiPartParser, FormParser]
 
     def perform_create(self, serializer):
-        serializer.save(uploaded_by=self.request.user.faculty)
+        note = serializer.save(uploaded_by=self.request.user.faculty)
+        # Auto-index the note for RAG
+        try:
+            from .rag_utils import index_note
+            count = index_note(note)
+            print(f'[RAG] Indexed {count} chunks for note: {note.title}')
+        except Exception as e:
+            print(f'[RAG] Indexing failed: {e}')
 
     def get_serializer_context(self):
         return {'request': self.request}
@@ -811,3 +818,237 @@ class AdminAttendanceSummaryView(APIView):
                 'below_75':      below75,
             })
         return Response(result)
+
+
+# ── AI Agent ──────────────────────────────────────────────────────────────────
+
+class AIQueryView(APIView):
+    """
+    POST /api/ai/query/
+    Body: { "message": "What is my attendance in CN?" }
+    Returns context-aware answers using real student/faculty data.
+    No external AI API needed — rule-based NLP with real DB data.
+    """
+
+    def post(self, request):
+        message = request.data.get('message', '').strip().lower()
+        user    = request.user
+
+        if not message:
+            return Response({'reply': 'Please ask me something!'})
+
+        # ── Gather context based on role ──────────────────────────────────────
+        context = {}
+        role    = user.role
+        notes_qs = None   # queryset of notes accessible to this user
+
+        if hasattr(user, 'student'):
+            student = user.student
+            context['name']    = user.get_full_name()
+            context['branch']  = student.department.code if student.department else ''
+            context['sem']     = student.semester
+            context['enroll']  = student.enrollment_no
+            context['role']    = 'student'
+
+            # Notes queryset for RAG
+            notes_qs = Note.objects.filter(
+                subject__department=student.department,
+                subject__semester=student.semester
+            )
+
+            # Attendance data
+            subjects = Subject.objects.filter(department=student.department, semester=student.semester)
+            att_data = []
+            for sub in subjects:
+                total   = Attendance.objects.filter(student=student, subject=sub).count()
+                present = Attendance.objects.filter(student=student, subject=sub, status='P').count()
+                pct     = round((present / total * 100), 1) if total else 0
+                att_data.append({'subject': sub.name, 'code': sub.code, 'pct': pct, 'total': total, 'present': present})
+            context['attendance'] = att_data
+
+            # Notes metadata
+            notes = notes_qs.order_by('-uploaded_at')[:10]
+            context['notes'] = [{'title': n.title, 'subject': n.subject.name, 'date': n.uploaded_at.strftime('%d %b')} for n in notes]
+
+            # Assignments
+            assignments = Assignment.objects.filter(subject__department=student.department, subject__semester=student.semester).order_by('deadline')
+            submitted_ids = set(AssignmentSubmission.objects.filter(student=student).values_list('assignment_id', flat=True))
+            context['assignments'] = [{'title': a.title, 'subject': a.subject.name, 'deadline': a.deadline.strftime('%d %b %Y'), 'submitted': a.id in submitted_ids} for a in assignments]
+
+            # Announcements
+            ann = Announcement.objects.filter(
+                Q(audience='all') | Q(audience='students')
+            ).filter(Q(department__isnull=True) | Q(department=student.department)).order_by('-created_at')[:5]
+            context['announcements'] = [{'title': a.title, 'urgency': a.urgency, 'date': a.created_at.strftime('%d %b')} for a in ann]
+
+        elif hasattr(user, 'faculty'):
+            faculty = user.faculty
+            context['name']   = user.get_full_name()
+            context['branch'] = faculty.department.code if faculty.department else ''
+            context['fid']    = faculty.faculty_id
+            context['role']   = 'faculty'
+
+            # Notes queryset for RAG
+            notes_qs = Note.objects.filter(uploaded_by=faculty)
+
+            # Subjects taught
+            subjects = Subject.objects.filter(faculty=faculty)
+            context['subjects'] = [{'name': s.name, 'code': s.code} for s in subjects]
+
+            # Students in dept
+            context['student_count'] = Student.objects.filter(department=faculty.department).count()
+
+            # My assignments
+            assignments = Assignment.objects.filter(uploaded_by=faculty).order_by('-created_at')[:5]
+            context['assignments'] = [{'title': a.title, 'subject': a.subject.name, 'deadline': a.deadline.strftime('%d %b %Y'), 'submissions': a.submissions.count()} for a in assignments]
+
+            # My notes
+            notes = notes_qs.order_by('-uploaded_at')[:5]
+            context['notes'] = [{'title': n.title, 'subject': n.subject.name, 'date': n.uploaded_at.strftime('%d %b')} for n in notes]
+
+            # Announcements
+            ann = Announcement.objects.filter(Q(audience='all') | Q(audience='faculty')).filter(
+                Q(department__isnull=True) | Q(department=faculty.department)
+            ).order_by('-created_at')[:5]
+            context['announcements'] = [{'title': a.title, 'urgency': a.urgency, 'date': a.created_at.strftime('%d %b')} for a in ann]
+
+        # ── Check if this is a RAG/content question ───────────────────────────
+        rag_triggers = [
+            'explain', 'what is', 'define', 'describe', 'how does', 'how do',
+            'tell me about', 'summarize', 'summary', 'concept', 'theory',
+            'algorithm', 'formula', 'law', 'theorem', 'process', 'difference',
+            'compare', 'example', 'type', 'classify', 'derivation', 'proof',
+            'meaning', 'definition', 'work', 'calculate', 'solve', 'write about'
+        ]
+        is_rag_query = notes_qs is not None and any(t in message for t in rag_triggers)
+
+        # Also trigger RAG if message mentions a subject topic not covered by rules
+        rule_keywords = ['attendance', 'present', 'absent', 'note', 'material', 'pdf',
+                         'assignment', 'homework', 'due', 'deadline', 'announcement',
+                         'notice', 'circular', 'timetable', 'schedule', 'cgpa', 'marks',
+                         'result', 'hi', 'hello', 'hey', 'help', 'faculty', 'teacher',
+                         'branch', 'department']
+        hits_rule = any(k in message for k in rule_keywords)
+        if not hits_rule and notes_qs is not None and notes_qs.exists():
+            is_rag_query = True  # unknown query → try RAG
+
+        if is_rag_query and notes_qs is not None:
+            from .rag_utils import retrieve_chunks, ask_gemini
+            chunks = retrieve_chunks(message, notes_qs, top_k=4)
+            if chunks:
+                answer = ask_gemini(
+                    question=message,
+                    context_chunks=chunks,
+                    user_name=context.get('name', '').split()[0],
+                    role=role
+                )
+                return Response({'reply': answer, 'role': role, 'rag': True})
+
+        # ── Rule-based answer engine ──────────────────────────────────────────
+        reply = self._answer(message, context, role)
+        return Response({'reply': reply, 'role': role})
+
+    def _answer(self, msg, ctx, role):
+        name   = ctx.get('name', 'you').split()[0]
+        branch = ctx.get('branch', '')
+
+        # ── ATTENDANCE queries ────────────────────────────────────────────────
+        if any(w in msg for w in ['attendance', 'present', 'absent', 'percentage', '%', 'shortag', 'below 75', 'shortage']):
+            att = ctx.get('attendance', [])
+            if not att:
+                return f"Hi {name}! I don't have attendance data for you yet. Faculty will mark attendance and it'll appear here."
+
+            if role == 'student':
+                # Check for specific subject
+                for sub in att:
+                    if sub['code'].lower() in msg or sub['subject'].lower().split()[0] in msg:
+                        pct   = sub['pct']
+                        color = '🟢' if pct >= 80 else '🟡' if pct >= 75 else '🔴'
+                        warn  = ' ⚠️ You are below 75% — attend more classes!' if pct < 75 else (' ✅ Good attendance!' if pct >= 80 else ' 🟡 Just above 75%, be careful.')
+                        return f"{color} **{sub['subject']} ({sub['code']})** — {pct}% attendance ({sub['present']}/{sub['total']} classes){warn}"
+
+                # Overall summary
+                if not att:
+                    return "No attendance data found yet."
+                avg      = round(sum(s['pct'] for s in att) / len(att), 1)
+                shortage = [s for s in att if s['pct'] < 75]
+                lines    = [f"📊 **Your Attendance Summary, {name}:**\n"]
+                for s in att:
+                    icon = '🟢' if s['pct'] >= 80 else '🟡' if s['pct'] >= 75 else '🔴'
+                    lines.append(f"{icon} {s['subject']} ({s['code']}): **{s['pct']}%**")
+                lines.append(f"\n📈 Overall Average: **{avg}%**")
+                if shortage:
+                    lines.append(f"\n⚠️ Shortage in: {', '.join(s['code'] for s in shortage)} — below 75%!")
+                return '\n'.join(lines)
+
+        # ── NOTES queries ─────────────────────────────────────────────────────
+        if any(w in msg for w in ['note', 'material', 'pdf', 'upload', 'download', 'study', 'resource', 'file']):
+            notes = ctx.get('notes', [])
+            if not notes:
+                return f"Hi {name}! No study materials have been uploaded yet for your branch. Check back after your faculty uploads notes."
+            lines = [f"📚 **Study Materials for {branch}:**\n"]
+            for n in notes:
+                lines.append(f"📄 **{n['title']}** — {n.get('subject','')} ({n.get('date','')})")
+            if role == 'student':
+                lines.append("\n➡️ Go to **Study Materials** section to download them.")
+            else:
+                lines.append("\n➡️ Go to **Upload Notes** section to add more.")
+            return '\n'.join(lines)
+
+        # ── ASSIGNMENT queries ────────────────────────────────────────────────
+        if any(w in msg for w in ['assignment', 'homework', 'submit', 'due', 'deadline', 'pending', 'task']):
+            assignments = ctx.get('assignments', [])
+            if not assignments:
+                return f"No assignments found for {branch} yet. Faculty will post assignments and they'll appear here."
+            lines = [f"📝 **Assignments for {branch}:**\n"]
+            for a in assignments:
+                if role == 'student':
+                    status = '✅ Submitted' if a['submitted'] else f"⏰ Due: {a['deadline']}"
+                    lines.append(f"• **{a['title']}** ({a['subject']}) — {status}")
+                else:
+                    lines.append(f"• **{a['title']}** ({a['subject']}) — Due: {a['deadline']} | {a['submissions']} submitted")
+            pending = [a for a in assignments if role == 'student' and not a['submitted']]
+            if pending:
+                lines.append(f"\n⚠️ You have **{len(pending)} pending** assignment(s)!")
+            return '\n'.join(lines)
+
+        # ── ANNOUNCEMENT / NOTICE / CIRCULAR queries ──────────────────────────
+        if any(w in msg for w in ['announcement', 'notice', 'circular', 'news', 'update', 'notification', 'event', 'exam', 'holiday']):
+            ann = ctx.get('announcements', [])
+            if not ann:
+                return "No announcements right now. I'll let you know when something is posted!"
+            icons = {'urgent': '🔴', 'event': '📢', 'general': '📌'}
+            lines = [f"🔔 **Latest Announcements for {branch}:**\n"]
+            for a in ann:
+                icon = icons.get(a['urgency'], '📌')
+                lines.append(f"{icon} **{a['title']}** ({a['date']})")
+            lines.append("\n➡️ Go to **Notices** section to read full details.")
+            return '\n'.join(lines)
+
+        # ── TIMETABLE queries ─────────────────────────────────────────────────
+        if any(w in msg for w in ['timetable', 'schedule', 'class', 'today', 'tomorrow', 'time table', 'period']):
+            return f"📅 Hi {name}! Go to the **Timetable** section in your dashboard to see your full {branch} week schedule."
+
+        # ── CGPA / MARKS queries ──────────────────────────────────────────────
+        if any(w in msg for w in ['cgpa', 'marks', 'result', 'grade', 'score', 'gpa']):
+            return f"🎓 Hi {name}! Check the **Results** section for your CGPA and marks. Results are updated by the admin after each exam."
+
+        # ── FACULTY queries (from student) ────────────────────────────────────
+        if any(w in msg for w in ['faculty', 'teacher', 'professor', 'hod', 'lecturer', 'sir', 'mam', 'ma\'am']):
+            return f"👩‍🏫 Your faculty details are listed in your **Student Profile** section under 'Faculty Assigned'. You can also see faculty names in the timetable."
+
+        # ── BRANCH / DEPARTMENT queries ───────────────────────────────────────
+        if any(w in msg for w in ['branch', 'department', 'aiml', 'cse', 'cs', 'it', 'me', 'mechanical']):
+            return f"🏫 You are enrolled in the **{branch}** branch at IIST Indore, Semester {ctx.get('sem', '')}."
+
+        # ── GREETING ─────────────────────────────────────────────────────────
+        if any(w in msg for w in ['hi', 'hello', 'hey', 'namaste', 'good morning', 'good afternoon', 'good evening']):
+            role_hint = "attendance, notes, assignments, announcements, and timetable" if role == 'student' else "attendance, uploaded notes, assignments, and announcements"
+            return f"👋 Hello {name}! I'm your Campus Mitra AI assistant.\n\nI can help you with:\n• 📊 Attendance — ask 'What is my attendance?'\n• 📚 Notes — ask 'Show my study materials'\n• 📝 Assignments — ask 'What are my pending assignments?'\n• 🔔 Announcements — ask 'Any new notices?'\n• 📅 Timetable — ask 'Show my schedule'\n\nWhat would you like to know?"
+
+        # ── HELP ──────────────────────────────────────────────────────────────
+        if any(w in msg for w in ['help', 'what can you', 'what do you', 'how to', 'guide']):
+            return f"🤖 **Campus Mitra AI — What I can help with:**\n\n📊 **Attendance** — 'What is my CN attendance?', 'Show attendance summary'\n📚 **Notes** — 'Show study materials', 'Any new notes?'\n📝 **Assignments** — 'What assignments are due?', 'Show pending tasks'\n🔔 **Notices** — 'Any new announcements?', 'Show circulars'\n📅 **Timetable** — 'Show my schedule'\n🎓 **Results** — 'What is my CGPA?'\n\nJust ask naturally and I'll answer using your real data!"
+
+        # ── DEFAULT ───────────────────────────────────────────────────────────
+        return f"🤔 I'm not sure about that, {name}. Try asking about:\n• Your **attendance** (e.g. 'What is my attendance?')\n• **Study materials** (e.g. 'Show notes')\n• **Assignments** (e.g. 'What are my pending assignments?')\n• **Announcements** (e.g. 'Any new notices?')\n• **Timetable** (e.g. 'Show my schedule')"

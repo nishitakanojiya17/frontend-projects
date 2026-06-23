@@ -108,6 +108,19 @@ class Note(models.Model):
         return self.title
 
 
+class NoteChunk(models.Model):
+    """Stores extracted text chunks from uploaded notes for RAG search"""
+    note       = models.ForeignKey(Note, on_delete=models.CASCADE, related_name='chunks')
+    chunk_text = models.TextField()
+    chunk_index = models.IntegerField(default=0)  # order within note
+
+    class Meta:
+        ordering = ['note', 'chunk_index']
+
+    def __str__(self):
+        return f"{self.note.title} — chunk {self.chunk_index}"
+
+
 class Announcement(models.Model):
     AUDIENCE = [
         ('all', 'All'), ('students', 'Students'),

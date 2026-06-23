@@ -3,6 +3,9 @@ from rest_framework_simplejwt.views import TokenRefreshView
 from . import views
 
 urlpatterns = [
+    # ── AI Agent ───────────────────────────────────────────────────────────────
+    path('ai/query/',                       views.AIQueryView.as_view(),                name='ai_query'),
+
     # ── Auth ──────────────────────────────────────────────────────────────────
     path('auth/login/',                     views.LoginView.as_view(),                  name='login'),
     path('auth/refresh/',                   TokenRefreshView.as_view(),                 name='token_refresh'),

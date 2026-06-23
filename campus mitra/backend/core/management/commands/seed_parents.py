@@ -12,7 +12,7 @@ User = get_user_model()
 
 PARENTS = [
     # AIML
-    {'email':'rajesh.kanojiya@gmail.com',    'password':'rajesh@123',   'first':'Rajesh',   'last':'Kanojiya',    'child':'2022AIML001'},
+    {'email':'praveen.kanojiya@gmail.com',   'password':'praveen@123',  'first':'Praveen',  'last':'Kanojiya',    'child':'2022AIML001'},
     {'email':'sunita.rathore@gmail.com',     'password':'sunita@123',   'first':'Sunita',   'last':'Rathore',     'child':'2022AIML002'},
     {'email':'arvind.punase@gmail.com',      'password':'arvind@123',   'first':'Arvind',   'last':'Punase',      'child':'2022AIML003'},
     {'email':'mahesh.rathore@gmail.com',     'password':'mahesh@123',   'first':'Mahesh',   'last':'Rathore',     'child':'2022AIML004'},
