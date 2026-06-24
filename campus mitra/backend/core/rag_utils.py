@@ -137,7 +137,7 @@ def retrieve_chunks(query: str, notes_qs, top_k: int = 4) -> list[dict]:
     stop_words = {'the','a','an','is','are','was','were','what','how','why',
                   'when','where','explain','describe','tell','me','about','please',
                   'can','you','i','my','and','or','in','of','to','do','does'}
-    words = [w.lower() for w in re.findall(r'\b\w+\b', query) if w.lower() not in stop_words and len(w) > 2]
+    words = [w.lower() for w in re.findall(r'\b\w+\b', query) if w.lower() not in stop_words and len(w) >= 2]
 
     if not words:
         # No keywords — return most recent chunks

@@ -172,7 +172,7 @@
 
 | Parent ID | Parent Name | Email | Password | Child | Child Enroll |
 |-----------|-------------|-------|----------|-------|--------------|
-| PAR-AIML-001 | Rajesh Kanojiya | rajesh.kanojiya@gmail.com | rajesh@123 | Nishita Kanojiya | 2022AIML001 |
+| PAR-AIML-001 | Praveen Kanojiya | praveen.kanojiya@gmail.com | praveen@123 | Nishita Kanojiya | 2022AIML001 |
 | PAR-AIML-002 | Sunita Rathore | sunita.rathore@gmail.com | sunita@123 | Chanchal Rathore | 2022AIML002 |
 | PAR-AIML-003 | Arvind Punase | arvind.punase@gmail.com | arvind@123 | Anshika Punase | 2022AIML003 |
 | PAR-AIML-004 | Mahesh Rathore | mahesh.rathore@gmail.com | mahesh@123 | Udit Rathore | 2022AIML004 |
