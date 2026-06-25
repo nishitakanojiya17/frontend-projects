@@ -73,10 +73,16 @@ def _extract_pptx(path: str) -> str:
         lines = []
         for slide in prs.slides:
             for shape in slide.shapes:
-                if hasattr(shape, 'text') and shape.text.strip():
-                    lines.append(shape.text.strip())
+                try:
+                    if hasattr(shape, 'text') and shape.text and shape.text.strip():
+                        lines.append(shape.text.strip())
+                except Exception:
+                    continue
         return '\n'.join(lines)
     except ImportError:
+        return ''
+    except Exception as e:
+        print(f'[RAG] PPTX error: {e}')
         return ''
 
 
