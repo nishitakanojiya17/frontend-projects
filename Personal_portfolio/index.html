@@ -1,0 +1,681 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Nishita Kanojiya | AI/ML Engineer</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet" />
+</head>
+<body>
+
+  <!-- ========== NAVBAR ========== -->
+  <nav class="navbar" id="navbar">
+    <div class="nav-container">
+      <a href="#home" class="nav-logo">NK<span class="dot">.</span></a>
+      <ul class="nav-links" id="navLinks">
+        <li><a href="#about">About</a></li>
+        <li><a href="#skills">Skills</a></li>
+        <li><a href="#experience">Experience</a></li>
+        <li><a href="#projects">Projects</a></li>
+        <li><a href="#research">Research</a></li>
+        <li><a href="#certifications">Certifications</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+      <a href="#contact" class="btn-nav">Hire Me</a>
+      <a href="resume\NISHITA KANOJIYA.pdf" download="Nishita_Kanojiya_Resume.pdf" class="btn-nav btn-nav-resume" title="Download Resume">
+        <i class="fas fa-file-arrow-down"></i>
+      </a>
+      <button class="hamburger" id="hamburger" aria-label="Toggle menu">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </nav>
+
+  <!-- ========== HERO ========== -->
+  <section class="hero" id="home">
+    <div class="hero-bg">
+      <div class="grid-overlay"></div>
+      <div class="blob blob-1"></div>
+      <div class="blob blob-2"></div>
+      <div class="blob blob-3"></div>
+    </div>
+    <div class="hero-content">
+      <p class="hero-greeting">👋 Hello, I'm</p>
+      <h1 class="hero-name">Nishita <span class="highlight">Kanojiya</span></h1>
+      <div class="hero-roles">
+        <span class="role-prefix">I'm a </span>
+        <span class="typed-text" id="typedText"></span>
+        <span class="cursor">|</span>
+      </div>
+      <p class="hero-desc">
+        B.Tech AI/ML student &amp; Research Intern at IIT Indore, building intelligent systems 
+        that solve real-world problems through Machine Learning, Deep Learning, and NLP.
+      </p>
+      <div class="hero-cta">
+        <a href="#projects" class="btn-primary">View My Work</a>
+        <a href="#contact" class="btn-outline">Get In Touch</a>
+        <a href="resume/Nishita_Kanojiya_Resume.pdf" download="Nishita_Kanojiya_Resume.pdf" class="btn-resume">
+          <i class="fas fa-download"></i> Resume
+        </a>
+      </div>
+      <div class="hero-socials">
+        <a href="https://github.com/nishitakanojiya17" target="_blank" aria-label="GitHub"><i class="fab fa-github"></i></a>
+        <a href="https://linkedin.com/in/nishita-kanojiya-63124a298" target="_blank" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+        <a href="mailto:nishitakanojiya26@gmail.com" aria-label="Email"><i class="fas fa-envelope"></i></a>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="profile-card">
+        <div class="profile-img-wrap">
+          <!-- Replace src with your actual photo -->
+          <img src="NISHITA KANOJIYA.png" alt="Nishita Kanojiya" class="profile-img" onerror="this.style.display='none'; this.nextElementSibling.style.display='flex';" />
+          <div class="profile-fallback" style="display:none;">
+            <i class="fas fa-user"></i>
+          </div>
+        </div>
+        <div class="profile-status">
+          <span class="status-dot"></span> Open to Opportunities
+        </div>
+        <div class="profile-tags">
+          <span class="tag"> AI/ML</span>
+          <span class="tag"> Deep Learning</span>
+          <span class="tag"> NLP</span>
+          <span class="tag">  Data Analytics</span>
+        </div>
+      </div>
+    </div>
+    <div class="scroll-indicator">
+      <div class="scroll-mouse"><div class="scroll-wheel"></div></div>
+      <span>Scroll Down</span>
+    </div>
+  </section>
+
+  <!-- ========== ABOUT ========== -->
+  <section class="section" id="about">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Get to know me</p>
+        <h2 class="section-title">About <span class="highlight">Me</span></h2>
+      </div>
+      <div class="about-grid">
+        <div class="about-text fade-in">
+          <p>
+            I'm a motivated <strong>AI/ML Engineer</strong> and B.Tech student specializing in 
+            Artificial Intelligence &amp; Machine Learning at RGPV University – Indore Institute of 
+            Science and Technology, with a CGPA of <strong>8.21</strong>.
+          </p>
+          <p>
+            Currently working as a <strong>Research Intern at IIT Indore</strong>, I contribute to 
+            NLP research, data annotation, web scraping, data preprocessing, model experimentation, 
+            and research documentation. I assist in training and fine-tuning SOTA models for 
+            advanced research tasks.
+          </p>
+          <p>
+            I'm passionate about developing AI-driven solutions to solve real-world problems through 
+            research, innovation, and collaborative teamwork.
+          </p>
+          <div class="about-stats">
+            <div class="stat">
+              <h3>8.21</h3>
+              <p>CGPA</p>
+            </div>
+            <div class="stat">
+              <h3>5+</h3>
+              <p>Projects</p>
+            </div>
+            <div class="stat">
+              <h3>2×</h3>
+              <p>Best Paper Awards</p>
+            </div>
+            <div class="stat">
+              <h3>7+</h3>
+              <p>Certifications</p>
+            </div>
+          </div>
+          <div class="about-info">
+            <div class="info-item"><i class="fas fa-map-marker-alt"></i> Indore, Madhya Pradesh</div>
+            <div class="info-item"><i class="fas fa-phone"></i> +91 8770266294</div>
+            <div class="info-item"><i class="fas fa-envelope"></i> nishitakanojiya26@gmail.com</div>
+            <div class="info-item"><i class="fas fa-graduation-cap"></i> B.Tech AI/ML | 2023 – Present</div>
+          </div>
+          <a href="resume/Nishita_Kanojiya_Resume.pdf" download="Nishita_Kanojiya_Resume.pdf" class="btn-resume-about">
+            <i class="fas fa-file-arrow-down"></i>
+            <span>Download Resume</span>
+            <span class="resume-pulse"></span>
+          </a>
+        </div>
+        <div class="about-education fade-in">
+          <h3 class="sub-title">Education</h3>
+          <div class="edu-timeline">
+            <div class="edu-card">
+              <div class="edu-icon"><i class="fas fa-university"></i></div>
+              <div class="edu-details">
+                <h4>B.Tech – AI &amp; Machine Learning</h4>
+                <p class="edu-org">RGPV University – IIST, Indore</p>
+                <p class="edu-year">2023 – Present</p>
+                <span class="edu-badge">CGPA: 8.21</span>
+              </div>
+            </div>
+            <div class="edu-card">
+              <div class="edu-icon"><i class="fas fa-school"></i></div>
+              <div class="edu-details">
+                <h4>Class XII – CBSE</h4>
+                <p class="edu-org">Central Board of Secondary Education</p>
+                <span class="edu-badge">72.5%</span>
+              </div>
+            </div>
+            <div class="edu-card">
+              <div class="edu-icon"><i class="fas fa-book"></i></div>
+              <div class="edu-details">
+                <h4>Class X – MP Board</h4>
+                <p class="edu-org">Board of Secondary Education, MP</p>
+                <span class="edu-badge">85%</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== SKILLS ========== -->
+  <section class="section section-alt" id="skills">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">What I work with</p>
+        <h2 class="section-title">Technical <span class="highlight">Skills</span></h2>
+      </div>
+      <div class="skills-grid fade-in">
+
+        <div class="skill-category">
+          <div class="skill-cat-icon"><i class="fas fa-code"></i></div>
+          <h3>Languages</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">Python</span>
+            <span class="skill-tag">C</span>
+            <span class="skill-tag">C++</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-icon"><i class="fas fa-brain"></i></div>
+          <h3>ML/AI Frameworks</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">TensorFlow</span>
+            <span class="skill-tag">Keras</span>
+            <span class="skill-tag">Scikit-learn</span>
+            <span class="skill-tag">NumPy</span>
+            <span class="skill-tag">Pandas</span>
+            <span class="skill-tag">Matplotlib</span>
+            <span class="skill-tag">Seaborn</span>
+            <span class="skill-tag">Gradio</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-icon"><i class="fas fa-robot"></i></div>
+          <h3>AI Domains</h3>
+          <div class="skill-tags">
+            <span class="skill-tag accent">Deep Learning</span>
+            <span class="skill-tag accent">Machine Learning</span>
+            <span class="skill-tag accent">NLP</span>
+            <span class="skill-tag accent">Computer Vision</span>
+            <span class="skill-tag accent">Agentic AI</span>
+            <span class="skill-tag accent">Multimodal AI</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-icon"><i class="fas fa-globe"></i></div>
+          <h3>Web &amp; Tools</h3>
+          <div class="skill-tags">
+            <span class="skill-tag">HTML5</span>
+            <span class="skill-tag">CSS3</span>
+            <span class="skill-tag">JavaScript</span>
+            <span class="skill-tag">Bootstrap</span>
+            <span class="skill-tag">Power BI</span>
+            <span class="skill-tag">Git/GitHub</span>
+          </div>
+        </div>
+
+        <div class="skill-category">
+          <div class="skill-cat-icon"><i class="fas fa-users"></i></div>
+          <h3>Soft Skills</h3>
+          <div class="skill-tags">
+            <span class="skill-tag soft">Leadership</span>
+            <span class="skill-tag soft">Project Management</span>
+            <span class="skill-tag soft">Team Collaboration</span>
+            <span class="skill-tag soft">Communication</span>
+            <span class="skill-tag soft">Time Management</span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== EXPERIENCE ========== -->
+  <section class="section" id="experience">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Where I've worked</p>
+        <h2 class="section-title">Internship <span class="highlight">Experience</span></h2>
+      </div>
+      <div class="experience-card fade-in">
+        <div class="exp-left">
+          <div class="exp-logo"><i class="fas fa-flask"></i></div>
+          <div class="exp-line"></div>
+        </div>
+        <div class="exp-right">
+          <div class="exp-header">
+            <div>
+              <h3>Research Intern</h3>
+              <p class="exp-org">Indian Institute of Technology (IIT) Indore</p>
+            </div>
+            <div class="exp-meta">
+              <span class="exp-date"><i class="far fa-calendar-alt"></i> March 2026 – Present</span>
+              <span class="exp-type remote">Remote</span>
+            </div>
+          </div>
+          <ul class="exp-bullets">
+            <li>Working on NLP, data annotation, and web scraping for research-based AI/ML applications.</li>
+            <li>Contributing to research paper writing, literature review, and experimentation.</li>
+            <li>Assisting in training and fine-tuning SOTA (State-of-the-Art) models for advanced research tasks.</li>
+            <li>Handling data preprocessing and model evaluation pipelines for large-scale datasets.</li>
+          </ul>
+          <div class="exp-skills">
+            <span>NLP</span><span>Web Scraping</span><span>Data Annotation</span>
+            <span>Model Fine-tuning</span><span>Research Writing</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== PROJECTS ========== -->
+  <section class="section section-alt" id="projects">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Things I've built</p>
+        <h2 class="section-title">Featured <span class="highlight">Projects</span></h2>
+      </div>
+      <div class="projects-grid">
+
+        <div class="project-card fade-in featured">
+          <div class="project-top">
+            <div class="project-icon"><i class="fas fa-graduation-cap"></i></div>
+            <div class="project-links">
+              <a href="https://github.com/nishitakanojiya17" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <span class="project-badge">Featured</span>
+          <h3>Campus Mitra</h3>
+          <p class="project-subtitle">AI-Powered Student Assistance Platform</p>
+          <p class="project-desc">
+            Developed an AI-powered campus assistance system to streamline student support 
+            and academic information access using Python, ML, and NLP.
+          </p>
+          <div class="project-tech">
+            <span>Python</span><span>ML</span><span>NLP</span><span>Django</span>
+          </div>
+          <p class="project-date"><i class="far fa-clock"></i> Sep 2025 – Jun 2026</p>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-top">
+            <div class="project-icon"><i class="fas fa-heart-pulse"></i></div>
+            <div class="project-links">
+              <a href="https://github.com/nishitakanojiya17" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3>Heart Disease Prediction</h3>
+          <p class="project-subtitle">Using Machine Learning</p>
+          <p class="project-desc">
+            Developed and compared SVM, Decision Tree, and ANN models for heart disease 
+            prediction with preprocessing, feature engineering, and hyperparameter tuning.
+          </p>
+          <div class="project-tech">
+            <span>Python</span><span>Scikit-learn</span><span>TensorFlow</span><span>ANN</span>
+          </div>
+          <p class="project-date"><i class="far fa-clock"></i> Oct – Dec 2025</p>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-top">
+            <div class="project-icon"><i class="fas fa-comments"></i></div>
+            <div class="project-links">
+              <a href="https://github.com/nishitakanojiya17" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3>Sentiment Analysis</h3>
+          <p class="project-subtitle">Using NLP</p>
+          <p class="project-desc">
+            Built an end-to-end sentiment classification pipeline using TF-IDF vectorization 
+            and NLP preprocessing techniques with Scikit-learn and NLTK.
+          </p>
+          <div class="project-tech">
+            <span>Python</span><span>Scikit-learn</span><span>NLTK</span><span>TF-IDF</span>
+          </div>
+          <p class="project-date"><i class="far fa-clock"></i> Jan – Feb 2026</p>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-top">
+            <div class="project-icon"><i class="fas fa-seedling"></i></div>
+            <div class="project-links">
+              <a href="https://github.com/nishitakanojiya17" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3>Agricultural Export Analysis</h3>
+          <p class="project-subtitle">Global Data Analysis</p>
+          <p class="project-desc">
+            Conducted EDA on agricultural export datasets to identify trade patterns and 
+            trends through statistical visualization using Pandas, Matplotlib, and Seaborn.
+          </p>
+          <div class="project-tech">
+            <span>Python</span><span>Pandas</span><span>Matplotlib</span><span>Seaborn</span>
+          </div>
+          <p class="project-date"><i class="far fa-clock"></i> Oct – Dec 2024</p>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-top">
+            <div class="project-icon"><i class="fas fa-eye"></i></div>
+            <div class="project-links">
+              <a href="https://github.com/nishitakanojiya17" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3>CIFAR-10 Image Classifier</h3>
+          <p class="project-subtitle">CNN with TensorFlow &amp; Keras</p>
+          <p class="project-desc">
+            Achieved <strong>70% test accuracy</strong> on CIFAR-10 using a CNN model 
+            developed with TensorFlow and Keras with custom architecture design.
+          </p>
+          <div class="project-tech">
+            <span>Python</span><span>TensorFlow</span><span>Keras</span><span>CNN</span>
+          </div>
+        </div>
+
+        <div class="project-card fade-in">
+          <div class="project-top">
+            <div class="project-icon"><i class="fas fa-user-circle"></i></div>
+            <div class="project-links">
+              <a href="https://github.com/nishitakanojiya17" target="_blank" title="GitHub"><i class="fab fa-github"></i></a>
+            </div>
+          </div>
+          <h3>Personal Portfolio Website</h3>
+          <p class="project-subtitle">Responsive Web Design</p>
+          <p class="project-desc">
+            Designed and deployed a responsive portfolio website showcasing projects, 
+            skills, and certifications using HTML5, CSS3, and JavaScript.
+          </p>
+          <div class="project-tech">
+            <span>HTML5</span><span>CSS3</span><span>JavaScript</span>
+          </div>
+          <p class="project-date"><i class="far fa-clock"></i> Oct 2025</p>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== RESEARCH ========== -->
+  <section class="section" id="research">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Academic contributions</p>
+        <h2 class="section-title">Research &amp; <span class="highlight">Publications</span></h2>
+      </div>
+      <div class="research-grid">
+
+        <div class="research-card fade-in">
+          <div class="research-top">
+            <div class="research-icon"><i class="fas fa-brain"></i></div>
+            <span class="award-badge"><i class="fas fa-trophy"></i> Best Paper – 1st Place</span>
+          </div>
+          <h3>From Unimodal to Multimodal AI-Driven Mental Health Prediction</h3>
+          <p class="research-type">Review Paper</p>
+          <p class="research-desc">
+            Reviewed AI-based mental health prediction models, analyzing the transition from 
+            unimodal to multimodal approaches integrating text, speech, and behavioral data.
+          </p>
+          <div class="research-venue">
+            <i class="fas fa-microphone-alt"></i>
+            <span>Presented at <strong>IgniteX 2026</strong></span>
+          </div>
+        </div>
+
+        <div class="research-card fade-in">
+          <div class="research-top">
+            <div class="research-icon"><i class="fas fa-leaf"></i></div>
+            <span class="award-badge"><i class="fas fa-trophy"></i> Best Paper – 1st Place</span>
+          </div>
+          <h3>KrishiMitra – A Hybrid Multi-Modal AI System for Visual Soil Health Assessment</h3>
+          <p class="research-type">Conference Paper</p>
+          <p class="research-desc">
+            Presented a hybrid multimodal AI system designed for visual assessment of soil 
+            health, combining computer vision and machine learning techniques.
+          </p>
+          <div class="research-venue">
+            <i class="fas fa-microphone-alt"></i>
+            <span>Presented at <strong>CDGI 2026</strong></span>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CERTIFICATIONS ========== -->
+  <section class="section section-alt" id="certifications">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Credentials</p>
+        <h2 class="section-title">Certifications &amp; <span class="highlight">Achievements</span></h2>
+      </div>
+      <div class="cert-achievements-grid">
+        <div class="cert-col fade-in">
+          <h3 class="sub-title"><i class="fas fa-certificate"></i> Certifications</h3>
+          <div class="cert-list">
+            <div class="cert-item">
+              <div class="cert-icon aws"><i class="fab fa-aws"></i></div>
+              <div>
+                <h4>AWS Cloud Foundations</h4>
+                <p>AWS Academy Graduate</p>
+              </div>
+            </div>
+            <div class="cert-item">
+              <div class="cert-icon ai"><i class="fas fa-robot"></i></div>
+              <div>
+                <h4>Agentic AI Certification</h4>
+                <p>Neuratantra AI</p>
+              </div>
+            </div>
+            <div class="cert-item">
+              <div class="cert-icon bi"><i class="fas fa-chart-bar"></i></div>
+              <div>
+                <h4>Power BI Micro Course</h4>
+                <p>Skill Course</p>
+              </div>
+            </div>
+            <div class="cert-item">
+              <div class="cert-icon cisco"><i class="fas fa-network-wired"></i></div>
+              <div>
+                <h4>Introduction to Data Science</h4>
+                <p>Cisco Networking Academy</p>
+              </div>
+            </div>
+            <div class="cert-item">
+              <div class="cert-icon google"><i class="fab fa-google"></i></div>
+              <div>
+                <h4>Introduction to Generative AI Studio</h4>
+                <p>Google Cloud</p>
+              </div>
+            </div>
+            <div class="cert-item">
+              <div class="cert-icon nvidia"><i class="fas fa-microchip"></i></div>
+              <div>
+                <h4>AI for Anomaly Detection</h4>
+                <p>NVIDIA</p>
+              </div>
+            </div>
+            <div class="cert-item">
+              <div class="cert-icon cisco"><i class="fab fa-python"></i></div>
+              <div>
+                <h4>Python Essentials</h4>
+                <p>Cisco Networking Academy</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="achieve-col fade-in">
+          <h3 class="sub-title"><i class="fas fa-trophy"></i> Achievements &amp; Leadership</h3>
+          <div class="achieve-list">
+            <div class="achieve-item">
+              <span class="achieve-icon vp"><i class="fas fa-crown"></i></span>
+              <div>
+                <h4>President, Arts Club</h4>
+                <p>IIST, Indore</p>
+              </div>
+            </div>
+            <div class="achieve-item">
+              <span class="achieve-icon gold"><i class="fas fa-medal"></i></span>
+              <div>
+                <h4>Best Paper Award – 1st Place</h4>
+                <p>IgniteX 2026</p>
+              </div>
+            </div>
+            <div class="achieve-item">
+              <span class="achieve-icon gold"><i class="fas fa-medal"></i></span>
+              <div>
+                <h4>Best Paper Award – 1st Place</h4>
+                <p>CDGI 2026</p>
+              </div>
+            </div>
+            <div class="achieve-item">
+              <span class="achieve-icon silver"><i class="fas fa-award"></i></span>
+              <div>
+                <h4>Semi-Finalist</h4>
+                <p>Smart India Hackathon (Internal Round) 2025</p>
+              </div>
+            </div>
+            <div class="achieve-item">
+              <span class="achieve-icon bronze"><i class="fas fa-laptop-code"></i></span>
+              <div>
+                <h4>Hackathon Participant</h4>
+                <p>24-Hour Hackathon 2025</p>
+              </div>
+            </div>
+            <div class="achieve-item">
+              <span class="achieve-icon iit"><i class="fas fa-university"></i></span>
+              <div>
+                <h4>Participant – Symposium 4.0</h4>
+                <p>IIT Indore</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== CONTACT ========== -->
+  <section class="section" id="contact">
+    <div class="container">
+      <div class="section-header">
+        <p class="section-label">Let's connect</p>
+        <h2 class="section-title">Get In <span class="highlight">Touch</span></h2>
+      </div>
+      <div class="contact-grid">
+        <div class="contact-info fade-in">
+          <p class="contact-intro">
+            I'm currently open to internship opportunities, research collaborations, 
+            and exciting AI/ML projects. Feel free to reach out!
+          </p>
+          <div class="contact-items">
+            <a href="mailto:nishitakanojiya26@gmail.com" class="contact-item">
+              <div class="contact-item-icon"><i class="fas fa-envelope"></i></div>
+              <div>
+                <h4>Email</h4>
+                <p>nishitakanojiya26@gmail.com</p>
+              </div>
+            </a>
+            <a href="tel:+918770266294" class="contact-item">
+              <div class="contact-item-icon"><i class="fas fa-phone"></i></div>
+              <div>
+                <h4>Phone</h4>
+                <p>+91 8770266294</p>
+              </div>
+            </a>
+            <div class="contact-item">
+              <div class="contact-item-icon"><i class="fas fa-map-marker-alt"></i></div>
+              <div>
+                <h4>Location</h4>
+                <p>Indore, Madhya Pradesh, India</p>
+              </div>
+            </div>
+          </div>
+          <div class="contact-socials">
+            <a href="https://github.com/nishitakanojiya17" target="_blank" class="social-btn github">
+              <i class="fab fa-github"></i> GitHub
+            </a>
+            <a href="https://linkedin.com/in/nishita-kanojiya-63124a298" target="_blank" class="social-btn linkedin">
+              <i class="fab fa-linkedin-in"></i> LinkedIn
+            </a>
+          </div>
+        </div>
+        <div class="contact-form-wrap fade-in">
+          <form class="contact-form" id="contactForm">
+            <div class="form-group">
+              <label for="name">Your Name</label>
+              <input type="text" id="name" name="name" placeholder="John Doe" required />
+            </div>
+            <div class="form-group">
+              <label for="email">Your Email</label>
+              <input type="email" id="email" name="email" placeholder="john@example.com" required />
+            </div>
+            <div class="form-group">
+              <label for="subject">Subject</label>
+              <input type="text" id="subject" name="subject" placeholder="Internship Opportunity" required />
+            </div>
+            <div class="form-group">
+              <label for="message">Message</label>
+              <textarea id="message" name="message" rows="5" placeholder="Hi Nishita, I'd love to discuss..." required></textarea>
+            </div>
+            <button type="submit" class="btn-primary btn-full">
+              <i class="fas fa-paper-plane"></i> Send Message
+            </button>
+            <p class="form-note" id="formNote"></p>
+          </form>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- ========== FOOTER ========== -->
+  <footer class="footer">
+    <div class="container">
+      <div class="footer-content">
+        <a href="#home" class="footer-logo">NK<span class="dot">.</span></a>
+        <p>Designed &amp; Built by <span class="highlight">Nishita Kanojiya</span></p>
+        <div class="footer-links">
+          <a href="#about">About</a>
+          <a href="#projects">Projects</a>
+          <a href="#contact">Contact</a>
+        </div>
+      </div>
+      <p class="footer-copy">© 2026 Nishita Kanojiya. All rights reserved.</p>
+    </div>
+  </footer>
+
+  <!-- Back to top -->
+  <button class="back-to-top" id="backToTop" aria-label="Back to top">
+    <i class="fas fa-chevron-up"></i>
+  </button>
+
+  <script src="script.js"></script>
+</body>
+</html>
