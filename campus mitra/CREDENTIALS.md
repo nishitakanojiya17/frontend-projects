@@ -33,7 +33,9 @@
 
 | Enroll No. | Name | Email | Password |
 |------------|------|-------|----------|
-| 2022AIML001 | Nishita Kanojiya | nishita.kanojiya@iist.ac.in | nishita@123 |
+| 2022AIML001 | Nishita Kanojiya | nishita.kanojiya@iist.ac.in | 
+
+ |
 | 2022AIML002 | Chanchal Rathore | chanchal.rathore@iist.ac.in | chanchal@123 |
 | 2022AIML003 | Anshika Punase | anshika.punase@iist.ac.in | anshika@123 |
 | 2022AIML004 | Udit Rathore | udit.rathore@iist.ac.in | udit@123 |
